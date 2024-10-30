@@ -7,7 +7,32 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
   <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition/>
+      <ColumnDefinition/>
+    </Grid.ColumnDefinitions>
 
-    <ProgressBar HorizontalAlignment="Left" Height="10" Margin="40,366,0,0" VerticalAlignment="Top" Width="700"/>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="40"/>
+      <RowDefinition/>
+      <RowDefinition Height="75"/>
+    </Grid.RowDefinitions>
+
+    <Label Content="Income" Grid.Column="0"/>
+    <Label Content="Expenses" Grid.Column="1"/>
+
+    <DataGrid Grid.Column="0" Grid.Row="1">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="kategorie"/>
+        <DataGridTextColumn Header="name"/>
+        <DataGridTextColumn Header="moni"/>
+        <DataGridTextColumn Header="wiederholt?"/>
+      </DataGrid.Columns>
+    </DataGrid>
+    <!--letzten row einfügen, wo alle ausgaben/einnahmen im monat stehen-->    
+    <DataGrid Grid.Column="1" Grid.Row="1"/>
+
+    <Button  Grid.Column="0" Grid.Row="2"/>
+    <Button Grid.Column="1" Grid.Row="2"/>
   </Grid>
 </Window>
