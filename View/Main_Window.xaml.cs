@@ -20,6 +20,9 @@ namespace ReturnToStonks
     public MainWindow()
     {
       InitializeComponent();
+
+      TransactionsViewModel viewModel = new TransactionsViewModel();
+      DataContext = viewModel;
     }
   }
 }
