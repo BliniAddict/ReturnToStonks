@@ -11,17 +11,13 @@ using System.Windows.Shapes;
 
 namespace ReturnToStonks
 {
-  /// <summary>
-  /// Interaction logic for MainWindow.xaml
-  /// </summary>
-  public partial class MainWindow : Window
+  public partial class MainWindow : Window, IView
   {
-
     public MainWindow()
     {
       InitializeComponent();
 
-      MainViewModel viewModel = new MainViewModel();
+      MainViewModel viewModel = new MainViewModel(this, new Model());
       DataContext = viewModel;
     }
   }

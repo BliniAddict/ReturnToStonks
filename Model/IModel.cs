@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace ReturnToStonks
 {
-  public interface IView
+  public interface IModel
   {
-
   }
 }

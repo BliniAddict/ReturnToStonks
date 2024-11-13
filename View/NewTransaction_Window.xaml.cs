@@ -14,14 +14,15 @@ using System.Windows.Shapes;
 
 namespace ReturnToStonks.View
 {
-    /// <summary>
-    /// Interaction logic for NewTransaction_Window.xaml
-    /// </summary>
-    public partial class NewTransaction_Window : Window
+  public partial class NewTransaction_Window : Window, IView
+  {
+    public NewTransaction_Window(IModel model, Transaction transaction)
     {
-        public NewTransaction_Window()
-        {
-            InitializeComponent();
-        }
+      InitializeComponent();
+
+      TransactionViewModel viewModel = new TransactionViewModel(this, model, transaction);
+      DataContext = viewModel;
     }
+
+  }
 }

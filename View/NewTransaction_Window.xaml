@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:local="clr-namespace:ReturnToStonks.View"
         mc:Ignorable="d"
         Title="NewTransaction_Window" Height="250" Width="450">
@@ -10,8 +11,31 @@
     <Grid.RowDefinitions>
       <RowDefinition/>
       <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
     </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition/>
+      <ColumnDefinition/>
+      <ColumnDefinition/>
+    </Grid.ColumnDefinitions>
 
-    <Button Grid.Row="1" Content="Save"/>
+    <TextBox Text="{Binding ChosenTransaction.Purpose}" Grid.ColumnSpan="2"/>
+
+    <metro:ToggleSwitch IsOn="False" OnContent="+" OffContent="-" Grid.Row="1"/>
+    <TextBox Text="{Binding ChosenTransaction.Amount}" Grid.Row="1" Grid.Column="1"/>
+    <ComboBox Grid.Row="1" Grid.Column="2"/>
+
+    <metro:ToggleSwitch IsOn="{Binding ChosenTransaction.IsRecurring}" OnContent="recurring" OffContent="recurring" Grid.Row="2"/>
+
+    <Grid Grid.Row="3" Grid.ColumnSpan="3" MinHeight="60">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+      </Grid.ColumnDefinitions>
+      
+      <Button Command="{Binding SaveCommand}" Content="Save"/>
+      <Button Content="Cancel" Grid.Column="1"/>
+    </Grid>
   </Grid>
 </Window>

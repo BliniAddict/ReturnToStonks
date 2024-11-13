@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using ReturnToStonks.View;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,19 +12,15 @@ using System.Windows.Input;
 
 namespace ReturnToStonks
 {
-  public class MainViewModel : INotifyPropertyChanged
+  public class MainViewModel : ViewModelBase
   {
-    #region essential 4 properties
-    public event PropertyChangedEventHandler? PropertyChanged;
+    private IView _view;
+    private IModel _model;
 
-    protected void OnPropertyChanged([CallerMemberName] string name = null)
+    public MainViewModel(IView view, IModel model)
     {
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-    }
-    #endregion
-
-    public MainViewModel()
-    {
+      _view = view;
+      _model = model;
 
       AddTransactionCommand = new RelayCommand(AddTransaction);
     }
@@ -32,7 +29,8 @@ namespace ReturnToStonks
 
     private void AddTransaction()
     {
-
+      NewTransaction_Window newTransaction = new NewTransaction_Window(_model, new Transaction(0.0, "", false, DateTime.Now, ""));
+      newTransaction.ShowDialog();
     }
   }
 }
