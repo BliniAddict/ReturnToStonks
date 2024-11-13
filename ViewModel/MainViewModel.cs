@@ -29,7 +29,7 @@ namespace ReturnToStonks
 
     private void AddTransaction()
     {
-      NewTransaction_Window newTransaction = new NewTransaction_Window(_model, new Transaction(0.0, "", false, DateTime.Now, ""));
+      NewTransactionWindow newTransaction = new NewTransactionWindow(_model, new Transaction(0.0, "", false, DateTime.Now, ""));
       newTransaction.ShowDialog();
     }
   }
