@@ -1,12 +1,17 @@
-﻿<Window x:Class="ReturnToStonks.View.NewExpense"
+﻿<Window x:Class="ReturnToStonks.View.NewTransaction_Window"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ReturnToStonks.View"
         mc:Ignorable="d"
-        Title="NewExpense" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="NewTransaction_Window" Height="250" Width="450">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition/>
+      <RowDefinition/>
+    </Grid.RowDefinitions>
+
+    <Button Grid.Row="1" Content="Save"/>
+  </Grid>
 </Window>

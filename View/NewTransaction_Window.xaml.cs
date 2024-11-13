@@ -10,19 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace ReturnToStonks.View
 {
-  /// <summary>
-  /// Interaction logic for Dashboard.xaml
-  /// </summary>
-  public partial class Dashboard : UserControl
-  {
-    public Dashboard()
+    /// <summary>
+    /// Interaction logic for NewTransaction_Window.xaml
+    /// </summary>
+    public partial class NewTransaction_Window : Window
     {
-      InitializeComponent();
+        public NewTransaction_Window()
+        {
+            InitializeComponent();
+        }
     }
-  }
 }

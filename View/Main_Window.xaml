@@ -23,15 +23,18 @@
 
     <DataGrid Grid.Column="0" Grid.Row="1">
       <DataGrid.Columns>
-        <DataGridTextColumn Header="kategorie"/>
-        <DataGridTextColumn Header="name"/>
-        <DataGridTextColumn Header="moni"/>
-        <DataGridTextColumn Header="wiederholt?"/>
+        <DataGridTextColumn Header="(ID)"/>
+        <DataGridTextColumn Header="category"/>
+        <DataGridTextColumn Header="is_recurring"/>
+        <DataGridTextColumn Header="date (wird mit der funktion ''julianday(datetime.now)'' im insert gespeichert"/>
+        <DataGridTextColumn Header="purpose"/>
+        <DataGridTextColumn Header="already paid?"/>
+        <DataGridTextColumn Header="amount"/>
       </DataGrid.Columns>
     </DataGrid>
     <!--letzten row einfügen, wo alle ausgaben/einnahmen im monat stehen-->    
     <DataGrid Grid.Column="1" Grid.Row="1"/>
 
-    <Button Command="{Binding AddTransactionCommand}" Content="+ Transaction" Grid.ColumnSpan="2" Grid.Row="2"/>
+    <Button Command="{Binding AddTransactionCommand}" Content="+ new transaction" Grid.ColumnSpan="2" Grid.Row="2"/>
   </Grid>
 </Window>

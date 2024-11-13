@@ -21,7 +21,7 @@ namespace ReturnToStonks
     {
       InitializeComponent();
 
-      TransactionsViewModel viewModel = new TransactionsViewModel();
+      MainViewModel viewModel = new MainViewModel();
       DataContext = viewModel;
     }
   }
