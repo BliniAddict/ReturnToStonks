@@ -1,10 +1,10 @@
-﻿<Window x:Class="ReturnToStonks.View.NewTransactionWindow"
+﻿<Window x:Class="ReturnToStonks.NewTransactionWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
-        xmlns:local="clr-namespace:ReturnToStonks.View"
+        xmlns:local="clr-namespace:ReturnToStonks"
         mc:Ignorable="d"
         Title="NewTransactionWindow" Height="250" Width="450">
   <Grid>
@@ -22,11 +22,20 @@
 
     <TextBox Text="{Binding ChosenTransaction.Purpose}" Grid.ColumnSpan="2"/>
 
-    <metro:ToggleSwitch IsOn="False" OnContent="+" OffContent="-" Grid.Row="1"/>
+    <local:ToggleSwitch IsChecked="False" CheckedText="+" UncheckedText="-" Grid.Row="1"/>
     <TextBox Text="{Binding ChosenTransaction.Amount}" Grid.Row="1" Grid.Column="1"/>
-    <ComboBox Grid.Row="1" Grid.Column="2"/>
+    <ComboBox Grid.Row="1" Grid.Column="2">
+      <ComboBox.ItemTemplate>
+        <DataTemplate>
+          <StackPanel>
+            <Image/>
+            <TextBlock/>
+          </StackPanel>
+        </DataTemplate>
+      </ComboBox.ItemTemplate>
+    </ComboBox>
 
-    <metro:ToggleSwitch IsOn="{Binding ChosenTransaction.IsRecurring}" OnContent="recurring" OffContent="recurring" Grid.Row="2"/>
+    <local:ToggleSwitch IsChecked="{Binding ChosenTransaction.IsRecurring}" CheckedText="recurring" UncheckedText="not recurring" Grid.Row="2"/>
 
     <Grid Grid.Row="3" Grid.ColumnSpan="3" MinHeight="60">
       <Grid.ColumnDefinitions>
