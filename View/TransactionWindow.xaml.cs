@@ -14,9 +14,9 @@ using System.Windows.Shapes;
 
 namespace ReturnToStonks
 {
-  public partial class NewTransactionWindow : Window, IView
+  public partial class TransactionWindow : Window, IView
   {
-    public NewTransactionWindow(IModel model, Transaction transaction)
+    public TransactionWindow(IModel model, Transaction transaction)
     {
       InitializeComponent();
 

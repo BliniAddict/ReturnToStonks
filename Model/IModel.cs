@@ -8,5 +8,7 @@ namespace ReturnToStonks
 {
   public interface IModel
   {
+    List<Category> GetCategories();
+    Category GetCategory(string name);
   }
 }
