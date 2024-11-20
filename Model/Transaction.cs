@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ReturnToStonks
+﻿namespace ReturnToStonks
 {
-  public class Transaction : IModel
+  public class Transaction
   {
     public Transaction(double amount, string category, bool isRecurring, DateTime date, string purpose)
     {
