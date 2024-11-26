@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:local="clr-namespace:ReturnToStonks"
-        mc:Ignorable="d" Height="250" Width="450">
+        xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
+        mc:Ignorable="d" Height="250" Width="500">
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition/>
@@ -27,17 +28,18 @@
     <ComboBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Categories}">
       <ComboBox.ItemTemplate>
         <DataTemplate>
-          <StackPanel Orientation="Horizontal">
-            <TextBlock Text="{Binding Symbol}" Margin="0,0,5,0"/>
-            <TextBlock Text="{Binding Name}" />
-          </StackPanel>
+          <DockPanel>
+            <emoji:TextBlock Text="{Binding Symbol}" Margin="0,0,10,5" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+            <!--<Button Command="{Binding ChangeCategoryCommand}" Content="✎" Margin="1"/>-->
+          </DockPanel>
         </DataTemplate>
       </ComboBox.ItemTemplate>
     </ComboBox>
 
     <local:ToggleSwitch IsChecked="{Binding ChosenTransaction.IsRecurring}" CheckedText="recurring" UncheckedText="not recurring" Grid.Row="2"/>
 
-    <Grid Grid.Row="3" Grid.ColumnSpan="3" MinHeight="60">
+    <Grid MinHeight="60" Grid.Row="3" Grid.ColumnSpan="3">
       <Grid.ColumnDefinitions>
         <ColumnDefinition/>
         <ColumnDefinition/>
