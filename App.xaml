@@ -15,9 +15,6 @@
           </Setter.Value>
         </Setter>
       </Style>
-      <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
-      <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
-      <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
       <!--#region Combobox-->
       <SolidColorBrush x:Key="TextBox.Static.Background" Color="#FFFFFFFF"/>
       <Style x:Key="ComboBoxEditableTextBox" TargetType="{x:Type TextBox}">
@@ -277,7 +274,6 @@
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
-        <!--<Setter Property="Padding" Value="6,3,5,3"/>-->
         <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
         <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
         <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
@@ -295,8 +291,11 @@
         </Style.Triggers>
       </Style>
       <!--#endregion-->
-      
+
       <!--#region Button-->
+      <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+      <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+      <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
       <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
       <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
       <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>

@@ -10,5 +10,7 @@ namespace ReturnToStonks
   {
     List<Category> GetCategories();
     Category GetCategory(string name);
+    string SaveCategory(Category selectedCategory, Category oldCategory = null);
+    string DeleteCategory(Category selectedCategory);
   }
 }

@@ -35,6 +35,6 @@
     <!--letzten row einfügen, wo alle ausgaben/einnahmen im monat stehen-->    
     <DataGrid Grid.Column="1" Grid.Row="1"/>
 
-    <Button Command="{Binding AddTransactionCommand}" Content="+ new transaction" Grid.ColumnSpan="2" Grid.Row="2"/>
+    <Button Content="+ new transaction" Command="{Binding AddTransactionCommand}" Grid.ColumnSpan="2" Grid.Row="2"/>
   </Grid>
 </Window>

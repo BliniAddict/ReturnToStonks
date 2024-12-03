@@ -16,13 +16,36 @@ namespace ReturnToStonks
 {
   public partial class TransactionWindow : Window, IView
   {
+    private TransactionViewModel _viewModel;
     public TransactionWindow(IModel model, Transaction transaction)
     {
       InitializeComponent();
 
-      TransactionViewModel viewModel = new TransactionViewModel(this, model, transaction);
-      DataContext = viewModel;
+      _viewModel = new TransactionViewModel(this, model, transaction);
+      DataContext = _viewModel;
     }
 
+
+
+    public void OpenCategoryPopup()
+    {
+      NewCategoryPopup.IsOpen = true;
+    }
+    public void CloseCategoryPopup()
+    {
+      NewCategoryPopup.IsOpen = false;
+      _viewModel.InitCategories();
+    }
+
+    private void CancelButton_Click(object sender, RoutedEventArgs e)
+    {
+      if (sender is Button btn)
+      {
+        if (btn.Name == "CancelNewCategory")
+          CloseCategoryPopup();
+        else
+          Close();
+      }
+    }
   }
 }

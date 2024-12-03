@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ReturnToStonks
@@ -14,49 +15,85 @@ namespace ReturnToStonks
       _view = view;
       _model = model;
 
-      ChosenTransaction = transaction;
-      InitWindow();
+      SelectedTransaction = transaction;
+      InitCategories();
 
-      SaveCommand = new RelayCommand(Save);
+      SaveTransactionCommand = new RelayCommand(SaveTransaction);
+      SaveCategoryCommand = new RelayCommand(SaveCategory);
+      ChangeCategoryCommand = new RelayCommand<Category>(InitCategoryPopup);
+      DeleteCategoryCommand = new RelayCommand(DeleteCategory);
     }
 
 
-    public ICommand SaveCommand { get; }
+    public ICommand SaveTransactionCommand { get; }
+    public ICommand SaveCategoryCommand { get; }
+    public ICommand ChangeCategoryCommand { get; }
+    public ICommand DeleteCategoryCommand { get; }
 
 
-    public Transaction ChosenTransaction { get; private set; }
-    public ObservableCollection<Category> Categories { get; private set; }
+    public Transaction SelectedTransaction { get; private set; }
 
-    private Category _chosenCategory;
-    public Category ChosenCategory
+    public ObservableCollection<Category> _categories;
+    public ObservableCollection<Category> Categories
     {
-      get => _chosenCategory;
+      get => _categories;
       set
       {
-        if (value.Name == "Add new category")
-        {
-
-        }
-        else
-          _chosenCategory = value;
+        _categories = value;
         OnPropertyChanged();
       }
     }
 
+    private Category _selectedCategory;
+    public Category SelectedCategory
+    {
+      get => _selectedCategory;
+      set
+      {
+        _selectedCategory = value;
+        OnPropertyChanged();
 
-    private void InitWindow()
+        if (value?.Symbol == '✚')
+          InitCategoryPopup();
+      }
+    }
+    private Category _oldCategory;
+
+    public void InitCategories()
     {
       Categories = new ObservableCollection<Category>();
       foreach (var category in _model.GetCategories())
         Categories.Add(category);
-      Categories.Add(new Category("Add new category", '➕'));
 
-      ChosenCategory = _model.GetCategory(ChosenTransaction.Category);
+      SelectedCategory = _model.GetCategory(SelectedTransaction.Category);
+
+      Categories.Add(new Category("Add new category", '✚'));
+    }
+    private void InitCategoryPopup(Category cat = null)
+    {
+      if (cat != null)
+        SelectedCategory = cat;
+      if (SelectedCategory?.Symbol == '✚')
+        SelectedCategory = new Category(string.Empty, '❓');
+      _view.OpenCategoryPopup();
     }
 
-    private void Save()
+    private void SaveTransaction()
     {
       throw new NotImplementedException();
+    }
+    private void SaveCategory()
+    {
+      //TODO: Kontrolle, dass wenigstens eins von denen nicht NULL/empty sind
+      string msg = _model.SaveCategory(SelectedCategory);
+      _view.CloseCategoryPopup();
+      SelectedCategory = Categories[^2];
+    }
+    private void DeleteCategory()
+    {
+      //TODO: Bei geänderten Categories, die nicht in der DB vorhanden sind: delete button disablen
+      string msg = _model.DeleteCategory(SelectedCategory);
+      _view.CloseCategoryPopup();
     }
   }
 }
