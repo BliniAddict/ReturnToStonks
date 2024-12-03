@@ -34,7 +34,7 @@ namespace ReturnToStonks
     public void CloseCategoryPopup()
     {
       NewCategoryPopup.IsOpen = false;
-      _viewModel.InitCategories();
+      _viewModel.GetCategories();
     }
 
     private void CancelButton_Click(object sender, RoutedEventArgs e)

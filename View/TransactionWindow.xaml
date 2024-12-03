@@ -67,7 +67,7 @@
 
         <StackPanel Orientation="Horizontal" Height="45" Grid.Row="1" Grid.ColumnSpan="2">
           <Button Content="Cancel" Click="CancelButton_Click" Name="CancelNewCategory" FontSize="17" Width="70" Margin="10"/>
-          <Button Content="Delete" Command="{Binding DeleteCategoryCommand}" IsEnabled="False" FontSize="17" Width="70" Margin="10"/>
+          <Button Content="Delete" Command="{Binding DeleteCategoryCommand}" IsEnabled="{Binding IsDeleteButtonEnabled}" FontSize="17" Width="70" Margin="10"/>
           <Button Content="Save" Command="{Binding SaveCategoryCommand}" FontSize="17" Width="70" Margin="10"/>
         </StackPanel>
       </Grid>

@@ -47,20 +47,25 @@ namespace ReturnToStonks
     }
 
 
-    public string SaveCategory(Category selectedCategory, Category oldCategory = null)
+    public string SaveCategory(Category selectedCategory, Category? oldCategory)
     {
       string result;
 
       using (var command = _connection.CreateCommand())
       {
-        #region INSERT
-        command.CommandText = "INSERT INTO Categories (name, symbol) VALUES (@name, @symbol)";
-        command.Parameters.AddWithValue("@name", selectedCategory.Name);
-        command.Parameters.AddWithValue("@symbol", selectedCategory.Symbol);
+        if (oldCategory == null) //INSERT
+          command.CommandText = "INSERT INTO Categories (name, symbol) VALUES (@newName, @newSymbol)";
+        else //UPDATE
+        {
+          command.CommandText = "UPDATE Categories SET name=@newName, symbol=@newSymbol WHERE name=@oldName AND symbol=@oldSymbol";
+          command.Parameters.AddWithValue("@oldName", oldCategory.Name);
+          command.Parameters.AddWithValue("@oldSymbol", oldCategory.Symbol);
+        }
+        command.Parameters.AddWithValue("@newName", selectedCategory.Name);
+        command.Parameters.AddWithValue("@newSymbol", selectedCategory.Symbol);
 
         int rowsAffected = command.ExecuteNonQuery();
         result = rowsAffected > 0 ? "Category saved successfully" : "No rows affected. Save failed.";
-        #endregion
       }
 
       return result;
