@@ -14,39 +14,14 @@ namespace ReturnToStonks
       _connection.Open();
     }
 
-
-    public List<Category> GetCategories()
+    #region Transactions
+    public string SaveTransaction(Transaction selectedTransaction, Transaction? oldTransaction)
     {
-      List<Category> res = new();
-
-      using var command = _connection.CreateCommand();
-      command.CommandText = "SELECT name, symbol FROM Categories";
-
-      using (var reader = command.ExecuteReader())
-      {
-        while (reader.Read())
-          res.Add(new Category(reader.GetString(0), Convert.ToChar(reader.GetString(1))));
-      }
-
-      return res;
+      throw new NotImplementedException();
     }
+    #endregion
 
-    public Category GetCategory(string name)
-    {
-      using var command = _connection.CreateCommand();
-      command.CommandText = "SELECT name, symbol FROM Categories WHERE name = @name";
-
-      command.Parameters.AddWithValue("@name", name);
-
-      using var reader = command.ExecuteReader();
-
-      if (reader.Read())
-        return new Category(reader.GetString(0), Convert.ToChar(reader.GetString(1)));
-
-      return null;
-    }
-
-
+    #region Categories
     public string SaveCategory(Category selectedCategory, Category? oldCategory)
     {
       string result;
@@ -71,6 +46,36 @@ namespace ReturnToStonks
       return result;
     }
 
+    public List<Category> GetCategories()
+    {
+      List<Category> res = new();
+
+      using var command = _connection.CreateCommand();
+      command.CommandText = "SELECT name, symbol FROM Categories";
+
+      using (var reader = command.ExecuteReader())
+      {
+        while (reader.Read())
+          res.Add(new Category(reader.GetString(0), reader.GetString(1)));
+      }
+
+      return res;
+    }
+    public Category GetCategory(string name)
+    {
+      using var command = _connection.CreateCommand();
+      command.CommandText = "SELECT name, symbol FROM Categories WHERE name = @name";
+
+      command.Parameters.AddWithValue("@name", name);
+
+      using var reader = command.ExecuteReader();
+
+      if (reader.Read())
+        return new Category(reader.GetString(0), reader.GetString(1));
+
+      return null;
+    }
+
     public string DeleteCategory(Category selectedCategory)
     {
       string result;
@@ -87,5 +92,6 @@ namespace ReturnToStonks
 
       return result;
     }
+    #endregion
   }
 }

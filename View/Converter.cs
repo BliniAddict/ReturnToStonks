@@ -13,9 +13,9 @@ namespace ReturnToStonks
   {
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
-      if (values.Length == 2 && values[0] is char symbol && values[1] is bool isMouseOver)
+      if (values.Length == 2 && values[0] is string symbol && values[1] is bool isMouseOver)
       {
-        if (symbol != '✚' && isMouseOver)
+        if (symbol != "✚" && isMouseOver)
           return Visibility.Visible;
       }        
       return Visibility.Collapsed;

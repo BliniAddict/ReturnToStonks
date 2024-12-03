@@ -10,7 +10,10 @@ namespace ReturnToStonks
   {
     List<Category> GetCategories();
     Category GetCategory(string name);
+
+    string SaveTransaction(Transaction selectedTransaction, Transaction? oldTransaction);
     string SaveCategory(Category selectedCategory, Category? oldCategory);
+
     string DeleteCategory(Category selectedCategory);
   }
 }
