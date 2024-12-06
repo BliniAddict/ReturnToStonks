@@ -60,7 +60,7 @@ namespace ReturnToStonks
         _selectedCategory = value;
         OnPropertyChanged();
 
-        if (value?.Symbol == "✚")
+        if (value?.Symbol == " ✚")
           InitCategoryPopup();
       }
     }
@@ -86,7 +86,7 @@ namespace ReturnToStonks
         _oldCategory = new Category(cat.Name, cat.Symbol);
         SelectedCategory = cat;
       }
-      else if (SelectedCategory?.Symbol == "✚") //new category
+      else if (SelectedCategory?.Symbol == " ✚") //new category
         SelectedCategory = new Category(string.Empty, "❓");
 
       _view.OpenCategoryPopup();
@@ -112,7 +112,7 @@ namespace ReturnToStonks
       _oldCategory = null;
       SelectedCategory = _model.GetCategory(SelectedTransaction.Category);
 
-      Categories.Add(new Category("Add new category", "✚"));
+      Categories.Add(new Category("Add new category", " ✚"));
     }
 
     private void DeleteCategory()

@@ -5,10 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ReturnToStonks"
              mc:Ignorable="d">
-  <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+  <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10, 7, 10, 0">
     <TextBlock Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                   VerticalAlignment="Center" HorizontalAlignment="Right" Margin="20,10,10,10"
-                   FontFamily="Arial" FontSize="15"/>
+                   VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10"
+                   FontFamily="Arial" FontSize="15" TextAlignment="Right"
+                   Width="75" TextWrapping="Wrap"/>
 
     <ToggleButton x:Name="PART_ToggleButton"
                       Width="50" Height="25"
