@@ -5,33 +5,54 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ReturnToStonks"
              mc:Ignorable="d">
-  <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10, 7, 10, 0">
+  <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
     <TextBlock Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                   VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10"
+                   VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,7,0,0"
                    FontFamily="Arial" FontSize="15" TextAlignment="Right"
                    Width="75" TextWrapping="Wrap"/>
 
-    <ToggleButton x:Name="PART_ToggleButton"
-                      Width="50" Height="25"
+    <ToggleButton x:Name="PART_ToggleButton" Margin="10,7,10,0"
+                      Width="50" Height="26"
                       IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}">
       <ToggleButton.Style>
         <Style TargetType="ToggleButton">
           <Setter Property="Template">
             <Setter.Value>
               <ControlTemplate TargetType="ToggleButton">
-                <Grid Width="50" Height="25">
-                  <Border x:Name="SwitchBackground" CornerRadius="15" Background="LightGray"/>
-                  <Border x:Name="Switch" Width="20" Height="20" Background="White" CornerRadius="13" HorizontalAlignment="Left" Margin="2"/>
+                <Grid Width="50" Height="26">
+                  <Border x:Name="SwitchBackground" CornerRadius="13" Background="LightGray"/>
+                  <Border x:Name="Switch" Width="20" Height="20" Background="White" CornerRadius="12" HorizontalAlignment="Left" Margin="2"/>
                 </Grid>
                 <ControlTemplate.Triggers>
                   <Trigger Property="IsChecked" Value="True">
                     <Setter TargetName="Switch" Property="HorizontalAlignment" Value="Right"/>
-                    <Setter TargetName="SwitchBackground" Property="Background" Value="Green"/>
+                    <Setter TargetName="SwitchBackground" Property="Background" Value="#38d6ca"/>
                   </Trigger>
                   <Trigger Property="IsChecked" Value="False">
                     <Setter TargetName="Switch" Property="HorizontalAlignment" Value="Left"/>
-                    <Setter TargetName="SwitchBackground" Property="Background" Value="Red"/>
+                    <Setter TargetName="SwitchBackground" Property="Background" Value="#d63844"/>
                   </Trigger>
+
+                  <EventTrigger RoutedEvent="ToggleButton.Checked">
+                    <BeginStoryboard>
+                      <Storyboard>
+                        <ThicknessAnimation Storyboard.TargetName="Switch" 
+                                        Storyboard.TargetProperty="Margin" 
+                                        From="2,0,28,0" To="28,0,2,0" 
+                                        Duration="0:0:0.075" />
+                      </Storyboard>
+                    </BeginStoryboard>
+                  </EventTrigger>
+                  <EventTrigger RoutedEvent="ToggleButton.Unchecked">
+                    <BeginStoryboard>
+                      <Storyboard>
+                        <ThicknessAnimation Storyboard.TargetName="Switch" 
+                                        Storyboard.TargetProperty="Margin" 
+                                        From="28,0,2,0" To="2,0,28,0" 
+                                        Duration="0:0:0.075" />
+                      </Storyboard>
+                    </BeginStoryboard>
+                  </EventTrigger>
                 </ControlTemplate.Triggers>
               </ControlTemplate>
             </Setter.Value>
