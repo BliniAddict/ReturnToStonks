@@ -28,7 +28,7 @@ namespace ReturnToStonks
 
     private void AddTransaction()
     {
-      TransactionWindow newTransaction = new TransactionWindow(_model, new Transaction(0.0, "", false, DateTime.Now, ""));
+      TransactionWindow newTransaction = new TransactionWindow(_model, new Transaction(0.00, "", false, DateTime.Now, ""));
       newTransaction.ShowDialog();
     }
   }

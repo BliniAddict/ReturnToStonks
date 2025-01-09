@@ -5,6 +5,7 @@ using System.Windows.Input;
 
 namespace ReturnToStonks
 {
+
   public class TransactionViewModel : ViewModelBase
   {
     private IView _view;
@@ -24,7 +25,6 @@ namespace ReturnToStonks
       DeleteCategoryCommand = new RelayCommand(DeleteCategory);
     }
 
-
     public ICommand SaveTransactionCommand { get; }
 
     public ICommand SaveCategoryCommand { get; }
@@ -34,7 +34,6 @@ namespace ReturnToStonks
     #region Properties
     public Transaction SelectedTransaction { get; private set; }
     private Transaction? _oldTransaction;
-
 
     public ObservableCollection<Category> _categories;
     public ObservableCollection<Category> Categories
@@ -94,7 +93,7 @@ namespace ReturnToStonks
 
     private void SaveTransaction()
     {
-      string msg = _model.SaveTransaction(SelectedTransaction, _oldTransaction);
+      //string msg = _model.SaveTransaction(SelectedTransaction, _oldTransaction);
     }
     private void SaveCategory()
     {

@@ -20,7 +20,6 @@ namespace ReturnToStonks
       set { SetValue(IsCheckedProperty, value); }
     }
 
-    #region Text
     private static readonly DependencyPropertyKey TextPropertyKey =
         DependencyProperty.RegisterReadOnly("Text", typeof(string), typeof(ToggleSwitch), new PropertyMetadata(string.Empty));
 
@@ -60,6 +59,5 @@ namespace ReturnToStonks
     {
       Text = IsChecked ? CheckedText : UncheckedText;
     }
-    #endregion
   }
 }

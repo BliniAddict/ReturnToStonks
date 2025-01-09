@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,8 +25,6 @@ namespace ReturnToStonks
       _viewModel = new TransactionViewModel(this, model, transaction);
       DataContext = _viewModel;
     }
-
-
 
     public void OpenCategoryPopup()
     {
