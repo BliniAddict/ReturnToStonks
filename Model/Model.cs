@@ -52,9 +52,20 @@ namespace ReturnToStonks
 
       using (var reader = command.ExecuteReader())
       {
-        throw new NotImplementedException();
-        //while (reader.Read())
-        //  res.Add(new Transaction(reader.GetString(0), GetCategory(reader.GetString(1)));
+        while (reader.Read())
+        {
+          Transaction tr = new(
+            reader.GetString(0),
+            GetCategory(reader.GetString(1)),
+            reader.GetDouble(2),
+            DateTime.ParseExact(reader.GetString(3), "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture),
+            reader.GetInt32(4) != 0);
+
+          if (tr.IsRecurring)
+            tr.Recurrence = new(reader.GetString(5), reader.GetInt32(4));
+
+          res.Add(tr);            
+        }
       }
 
       return res;

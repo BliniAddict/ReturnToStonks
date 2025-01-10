@@ -16,6 +16,9 @@ namespace ReturnToStonks
       _model = model;
 
       SelectedTransaction = transaction;
+      if (SelectedTransaction.Recurrence == null)
+        SelectedTransaction.Recurrence = new("month", 1);
+
       GetCategories();
 
       SaveTransactionCommand = new RelayCommand(SaveTransaction);
@@ -45,6 +48,7 @@ namespace ReturnToStonks
       }
     }
 
+    private Category? _oldCategory;
     private Category? _selectedCategory;
     public Category? SelectedCategory
     {
@@ -62,7 +66,6 @@ namespace ReturnToStonks
           InitCategoryPopup();
       }
     }
-    private Category? _oldCategory;
 
     public bool IsIncome { get; set; } = false;
 

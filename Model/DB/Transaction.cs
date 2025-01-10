@@ -9,7 +9,7 @@
       Amount = amount;
       Date = date;
       IsRecurring = isRecurring;
-      Recurrence = recurrence ?? new Recurrence("month", 1);
+      Recurrence = recurrence;
     }
 
     public string Purpose { get; set; }

@@ -22,13 +22,15 @@ namespace ReturnToStonks
       _model = model;
 
       AddTransactionCommand = new RelayCommand(OpenTransactionWindow);
+
+      //List<Transaction> test = _model.GetTransactions();
     }
 
     public ICommand AddTransactionCommand { get; }
 
     private void OpenTransactionWindow()
     {
-      TransactionWindow newTransaction = new(_model, new Transaction(0.00, null, false, DateTime.Now, ""));
+      TransactionWindow newTransaction = new(_model, new Transaction(string.Empty, null, 0, DateTime.Now, false));
       newTransaction.ShowDialog();
     }
   }
