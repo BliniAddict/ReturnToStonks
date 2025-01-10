@@ -237,6 +237,7 @@
                 <Style TargetType="TextBlock">
                   <Setter Property="FontFamily" Value="Arial" />
                   <Setter Property="FontSize" Value="18"/>
+                  <Setter Property="VerticalAlignment" Value="Center"/>
                 </Style>
               </ContentPresenter.Resources>
             </ContentPresenter>
@@ -296,7 +297,7 @@
         <Setter Property="FontSize" Value="18"/>
         <Setter Property="MinHeight" Value="25"/>
       </Style>
-      
+
       <!--#endregion-->
 
       <!--#region Button-->
@@ -388,7 +389,7 @@
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
-        <Setter Property="VerticalContentAlignment" Value="Bottom"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="AllowDrop" Value="true"/>
         <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>

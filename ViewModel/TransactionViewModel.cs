@@ -5,7 +5,6 @@ using System.Windows.Input;
 
 namespace ReturnToStonks
 {
-
   public class TransactionViewModel : ViewModelBase
   {
     private IView _view;
@@ -65,6 +64,8 @@ namespace ReturnToStonks
     }
     private Category? _oldCategory;
 
+    public bool IsIncome { get; set; } = false;
+
     private bool _isDeleteButtonEnabled;
     public bool IsDeleteButtonEnabled
     {
@@ -93,7 +94,16 @@ namespace ReturnToStonks
 
     private void SaveTransaction()
     {
-      //string msg = _model.SaveTransaction(SelectedTransaction, _oldTransaction);
+      SelectedTransaction.Category = SelectedCategory;
+
+      if (!IsIncome)
+        SelectedTransaction.Amount = SelectedTransaction.Amount * -1;
+
+      if (!SelectedTransaction.IsRecurring)
+        SelectedTransaction.Recurrence = null;
+
+      string msg = _model.SaveTransaction(SelectedTransaction, _oldTransaction);
+      _view.CloseWindow();
     }
     private void SaveCategory()
     {
@@ -109,7 +119,8 @@ namespace ReturnToStonks
         Categories.Add(category);
 
       _oldCategory = null;
-      SelectedCategory = _model.GetCategory(SelectedTransaction.Category);
+      if (SelectedTransaction.Category != null)
+        SelectedCategory = _model.GetCategory(SelectedTransaction.Category.Name);
 
       Categories.Add(new Category("Add new category", " ✚"));
     }

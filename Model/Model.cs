@@ -10,21 +10,61 @@ namespace ReturnToStonks
     private readonly SqliteConnection _connection;
     public Model()
     {
-      _connection = new SqliteConnection(@"Data Source=..\..\..\Model\Data.db");
+      _connection = new SqliteConnection(@"Data Source=..\..\..\Model\DB\Data.db");
       _connection.Open();
     }
 
     #region Transactions
     public string SaveTransaction(Transaction selectedTransaction, Transaction? oldTransaction)
     {
-      throw new NotImplementedException();
+      string result = string.Empty;
+
+      using (var command = _connection.CreateCommand())
+      {
+        if (oldTransaction == null) //INSERT
+          command.CommandText = "INSERT INTO Transactions (purpose, category, amount, date, recurrence_span, recurrence_unit) " +
+            "VALUES (@newPurpose, @newCategory, @newAmount, @newDate, @newRecurrence_Span, @newRecurence_Unit)";
+        //else //UPDATE
+        //{
+        //  command.CommandText = "UPDATE Transactions SET name=@newName, symbol=@newSymbol WHERE name=@oldName AND symbol=@oldSymbol";
+        //  command.Parameters.AddWithValue("@oldName", oldCategory.Name);
+        //  command.Parameters.AddWithValue("@oldSymbol", oldCategory.Symbol);
+        //}
+        command.Parameters.AddWithValue("@newPurpose", selectedTransaction.Purpose);
+        command.Parameters.AddWithValue("@newCategory", selectedTransaction.Category?.Name ?? string.Empty);
+        command.Parameters.AddWithValue("@newAmount", selectedTransaction.Amount);
+        command.Parameters.AddWithValue("@newDate", selectedTransaction.Date.ToString("yyyy-MM-dd"));
+        command.Parameters.AddWithValue("@newRecurrence_Span", selectedTransaction.Recurrence?.SelectedSpan ?? 0);
+        command.Parameters.AddWithValue("@newRecurence_Unit", selectedTransaction.Recurrence?.SelectedUnit ?? string.Empty);
+
+        int rowsAffected = command.ExecuteNonQuery();
+        result = rowsAffected > 0 ? "Transaction saved successfully" : "No rows affected. Save failed.";
+      }
+
+      return result;
+    }
+    public List<Transaction> GetTransactions()
+    {
+      List<Transaction> res = new();
+
+      using var command = _connection.CreateCommand();
+      command.CommandText = "SELECT purpose, category, amount, date, recurrence_span, recurrence_unit FROM Transactions";
+
+      using (var reader = command.ExecuteReader())
+      {
+        throw new NotImplementedException();
+        //while (reader.Read())
+        //  res.Add(new Transaction(reader.GetString(0), GetCategory(reader.GetString(1)));
+      }
+
+      return res;
     }
     #endregion
 
     #region Categories
     public string SaveCategory(Category selectedCategory, Category? oldCategory)
     {
-      string result;
+      string result = string.Empty;
 
       using (var command = _connection.CreateCommand())
       {
@@ -78,13 +118,12 @@ namespace ReturnToStonks
 
     public string DeleteCategory(Category selectedCategory)
     {
-      string result;
+      string result = string.Empty;
 
       using (var command = _connection.CreateCommand())
       {
         command.CommandText = "DELETE FROM Categories WHERE name=@name";
         command.Parameters.AddWithValue("@name", selectedCategory.Name);
-        //TODO: vielleicht kann man ja beide columns zum PK machen?
 
         int rowsAffected = command.ExecuteNonQuery();
         result = rowsAffected > 0 ? "Category deleted successfully" : "No rows affected. Save failed.";

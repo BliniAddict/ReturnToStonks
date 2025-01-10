@@ -11,6 +11,8 @@ namespace ReturnToStonks
   {
     virtual void CloseCategoryPopup() { }
 
+    void CloseWindow();
+
     virtual void OpenCategoryPopup() { }
   }
 }

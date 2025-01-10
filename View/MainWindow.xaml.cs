@@ -20,5 +20,7 @@ namespace ReturnToStonks
       MainViewModel viewModel = new MainViewModel(this, new Model());
       DataContext = viewModel;
     }
+
+    public void CloseWindow() => Close();
   }
 }

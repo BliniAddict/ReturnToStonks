@@ -21,14 +21,14 @@ namespace ReturnToStonks
       _view = view;
       _model = model;
 
-      AddTransactionCommand = new RelayCommand(AddTransaction);
+      AddTransactionCommand = new RelayCommand(OpenTransactionWindow);
     }
 
     public ICommand AddTransactionCommand { get; }
 
-    private void AddTransaction()
+    private void OpenTransactionWindow()
     {
-      TransactionWindow newTransaction = new TransactionWindow(_model, new Transaction(0.00, "", false, DateTime.Now, ""));
+      TransactionWindow newTransaction = new(_model, new Transaction(0.00, null, false, DateTime.Now, ""));
       newTransaction.ShowDialog();
     }
   }
