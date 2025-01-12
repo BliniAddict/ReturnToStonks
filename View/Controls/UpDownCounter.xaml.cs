@@ -22,12 +22,14 @@ namespace ReturnToStonks
 
     private void AddButton_Click(object sender, RoutedEventArgs e)
     {
-      Text++;
+      if (Text < 999999999)
+        Text++;
     }
 
     private void SubtractButton_Click(object sender, RoutedEventArgs e)
     {
-      Text--;
+      if (Text > 1)
+        Text--;
     }
 
     private void txtValue_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
