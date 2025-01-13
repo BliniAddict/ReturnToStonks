@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Xml.Linq;
 
@@ -58,7 +59,7 @@ namespace ReturnToStonks
             reader.GetString(0),
             GetCategory(reader.GetString(1)),
             reader.GetDouble(2),
-            DateTime.ParseExact(reader.GetString(3), "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture),
+            DateTime.ParseExact(reader.GetString(3), "yyyy-MM-dd", CultureInfo.InvariantCulture),
             reader.GetInt32(4) != 0);
 
           if (tr.IsRecurring)

@@ -44,7 +44,7 @@ namespace ReturnToStonks
   }
   #endregion
 
-  #region Visual Converters
+  #region Output
   public class DateOutputConverter : IValueConverter
   {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -98,7 +98,7 @@ namespace ReturnToStonks
     }
   }
 
-  public class ControlsVisibilityConverter : IValueConverter
+  public class IsTrueVisibilityConverter : IValueConverter
   {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {

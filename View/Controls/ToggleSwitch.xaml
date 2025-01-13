@@ -25,34 +25,31 @@
                 </Grid>
                 <ControlTemplate.Triggers>
                   <Trigger Property="IsChecked" Value="True">
-                    <Setter TargetName="Switch" Property="HorizontalAlignment" Value="Right"/>
                     <Setter TargetName="SwitchBackground" Property="Background" Value="#38d6ca"/>
                   </Trigger>
                   <Trigger Property="IsChecked" Value="False">
-                    <Setter TargetName="Switch" Property="HorizontalAlignment" Value="Left"/>
                     <Setter TargetName="SwitchBackground" Property="Background" Value="#d63844"/>
+                    <Trigger.EnterActions>
+                      <BeginStoryboard>
+                        <Storyboard>
+                          <ThicknessAnimation Storyboard.TargetName="Switch" 
+                                              Storyboard.TargetProperty="Margin" 
+                                              From="28,0,2,0" To="2,0,28,0" 
+                                              Duration="0:0:0.075" />
+                        </Storyboard>
+                      </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                      <BeginStoryboard>
+                        <Storyboard>
+                          <ThicknessAnimation Storyboard.TargetName="Switch" 
+                                              Storyboard.TargetProperty="Margin" 
+                                              From="2,0,28,0" To="28,0,2,0" 
+                                              Duration="0:0:0.075" />
+                        </Storyboard>
+                      </BeginStoryboard>
+                    </Trigger.ExitActions>
                   </Trigger>
-
-                  <EventTrigger RoutedEvent="ToggleButton.Checked">
-                    <BeginStoryboard>
-                      <Storyboard>
-                        <ThicknessAnimation Storyboard.TargetName="Switch" 
-                                        Storyboard.TargetProperty="Margin" 
-                                        From="2,0,28,0" To="28,0,2,0" 
-                                        Duration="0:0:0.075" />
-                      </Storyboard>
-                    </BeginStoryboard>
-                  </EventTrigger>
-                  <EventTrigger RoutedEvent="ToggleButton.Unchecked">
-                    <BeginStoryboard>
-                      <Storyboard>
-                        <ThicknessAnimation Storyboard.TargetName="Switch" 
-                                        Storyboard.TargetProperty="Margin" 
-                                        From="28,0,2,0" To="2,0,28,0" 
-                                        Duration="0:0:0.075" />
-                      </Storyboard>
-                    </BeginStoryboard>
-                  </EventTrigger>
                 </ControlTemplate.Triggers>
               </ControlTemplate>
             </Setter.Value>

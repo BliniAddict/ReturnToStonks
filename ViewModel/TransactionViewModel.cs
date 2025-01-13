@@ -118,12 +118,12 @@ namespace ReturnToStonks
     public void GetCategories()
     {
       Categories = new ObservableCollection<Category>();
-      foreach (var category in _model.GetCategories())
+      foreach (Category category in _model.GetCategories())
         Categories.Add(category);
 
       _oldCategory = null;
       if (SelectedTransaction.Category != null)
-        SelectedCategory = _model.GetCategory(SelectedTransaction.Category.Name);
+        SelectedCategory = Categories.FirstOrDefault(name => SelectedTransaction.Category.Name == name.Name);
 
       Categories.Add(new Category("Add new category", " ✚"));
     }

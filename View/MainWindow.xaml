@@ -3,10 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
         xmlns:local="clr-namespace:ReturnToStonks"
+        xmlns:i="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
   <Grid>
+    <Grid.Resources>
+      <local:DateOutputConverter x:Key="DateOutputConverter"/>
+      <local:IsTrueVisibilityConverter x:Key="IsTrueVisibilityConverter"/>
+    </Grid.Resources>
     <Grid.ColumnDefinitions>
       <ColumnDefinition/>
       <ColumnDefinition/>
@@ -18,22 +24,45 @@
       <RowDefinition Height="75"/>
     </Grid.RowDefinitions>
 
-    <Label Content="Income" Grid.Column="0"/>
+    <Label Content="Incomes" Grid.Column="0"/>
     <Label Content="Expenses" Grid.Column="1"/>
 
-    <DataGrid Grid.Column="0" Grid.Row="1">
+    <DataGrid ItemsSource="{Binding Incomes}" AutoGenerateColumns="True" IsReadOnly="True" Grid.Column="0" Grid.Row="1">
+      <!--<DataGrid.Columns>
+        
+      </DataGrid.Columns>-->
+    </DataGrid>
+    <DataGrid ItemsSource="{Binding Expenses}" MouseDoubleClick="DataGrid_MouseDoubleClick"
+              AutoGenerateColumns="False" HeadersVisibility="None"
+              Grid.Column="1" Grid.Row="1">
       <DataGrid.Columns>
-        <DataGridTextColumn Header="(ID)"/>
-        <DataGridTextColumn Header="category"/>
-        <DataGridTextColumn Header="is_recurring"/>
-        <DataGridTextColumn Header="date (wird mit der funktion ''julianday(datetime.now)'' im insert gespeichert"/>
-        <DataGridTextColumn Header="purpose"/>
-        <DataGridTextColumn Header="already paid?"/>
-        <DataGridTextColumn Header="amount"/>
+        <DataGridTemplateColumn Width="15">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <emoji:TextBlock Text="{Binding Category.Symbol}"/>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn Width="16">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <TextBlock Visibility="{Binding IsRecurring, Converter={StaticResource IsTrueVisibilityConverter}}"
+                         Text="&#10227;" FontSize="20" HorizontalAlignment="Center" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTextColumn Binding="{Binding Date, Converter={StaticResource DateOutputConverter}}"/>
+        <DataGridTextColumn Binding="{Binding Purpose}"/>
+        <DataGridTextColumn Binding="{Binding Amount, StringFormat={}{0:C2}}"/>
       </DataGrid.Columns>
     </DataGrid>
-    <!--letzten row einfügen, wo alle ausgaben/einnahmen im monat stehen-->    
-    <DataGrid Grid.Column="1" Grid.Row="1"/>
+
+    <DataGridCell>
+      
+    </DataGridCell>
+
+    <!--zukünfitge Transaktionen werden mit visuellen auffälligkeiten (also halb unsichtbar) unter den bereits bezahlten transaktionen dargestellt-->
+    <!--letzten row einfügen, wo alle ausgaben/einnahmen im monat stehen-->
 
     <Button Content="+ new transaction" Command="{Binding AddTransactionCommand}" Grid.ColumnSpan="2" Grid.Row="2"/>
   </Grid>

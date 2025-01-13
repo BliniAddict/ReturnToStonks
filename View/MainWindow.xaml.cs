@@ -13,14 +13,21 @@ namespace ReturnToStonks
 {
   public partial class MainWindow : Window, IView
   {
+    private MainViewModel _viewModel;
     public MainWindow()
     {
       InitializeComponent();
 
-      MainViewModel viewModel = new MainViewModel(this, new Model());
-      DataContext = viewModel;
+      _viewModel = new MainViewModel(this, new Model());
+      DataContext = _viewModel;
     }
 
     public void CloseWindow() => Close();
+
+    private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+      if (sender is DataGrid dataGrid && dataGrid.SelectedItem is Transaction transaction)
+        _viewModel.OpenTransactionWindow(transaction);
+    }
   }
 }

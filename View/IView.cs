@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ReturnToStonks
+﻿namespace ReturnToStonks
 {
   public interface IView
   {
-    virtual void CloseCategoryPopup() { }
-
     void CloseWindow();
 
+    virtual void CloseCategoryPopup() { }
     virtual void OpenCategoryPopup() { }
   }
 }

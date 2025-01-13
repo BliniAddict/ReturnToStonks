@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -21,17 +22,38 @@ namespace ReturnToStonks
       _view = view;
       _model = model;
 
-      AddTransactionCommand = new RelayCommand(OpenTransactionWindow);
+      GetTransactions();
 
-      //List<Transaction> test = _model.GetTransactions();
+      AddTransactionCommand = new RelayCommand<Transaction?>(OpenTransactionWindow);
     }
 
     public ICommand AddTransactionCommand { get; }
 
-    private void OpenTransactionWindow()
+    public ObservableCollection<Transaction> Incomes { get; set; } = new ObservableCollection<Transaction>();
+    public ObservableCollection<Transaction> Expenses { get; set; } = new ObservableCollection<Transaction>();
+
+    private void GetTransactions()
     {
-      TransactionWindow newTransaction = new(_model, new Transaction(string.Empty, null, 0, DateTime.Now, false));
+      Incomes.Clear();
+      Expenses.Clear();
+
+      List<Transaction> transactions = _model.GetTransactions();
+      foreach (Transaction transaction in transactions)
+      {
+        if (transaction.Amount > 0)
+          Incomes.Add(transaction);
+        else
+          Expenses.Add(transaction);
+      }
+    }
+
+    public void OpenTransactionWindow(Transaction? transaction = null)
+    {
+      transaction ??= new Transaction(string.Empty, null, 0, DateTime.Now, false);
+      TransactionWindow newTransaction = new(_model, transaction);
       newTransaction.ShowDialog();
+
+      GetTransactions();
     }
   }
 }
