@@ -24,19 +24,24 @@ namespace ReturnToStonks
       {
         if (oldTransaction == null) //INSERT
           command.CommandText = "INSERT INTO Transactions (purpose, category, amount, date, recurrence_span, recurrence_unit) " +
-            "VALUES (@newPurpose, @newCategory, @newAmount, @newDate, @newRecurrence_Span, @newRecurence_Unit)";
-        //else //UPDATE
-        //{
-        //  command.CommandText = "UPDATE Transactions SET name=@newName, symbol=@newSymbol WHERE name=@oldName AND symbol=@oldSymbol";
-        //  command.Parameters.AddWithValue("@oldName", oldCategory.Name);
-        //  command.Parameters.AddWithValue("@oldSymbol", oldCategory.Symbol);
-        //}
+            "VALUES (@newPurpose, @newCategory, @newAmount, @newDate, @newRecurrence_Span, @newRecurrence_Unit)";
+        else //UPDATE
+        {
+          command.CommandText = "UPDATE Transactions SET purpose=@newPurpose, category=@newCategory, amount=@newAmount, date=@newDate, recurrence_span=@newRecurrence_Span, recurrence_Unit=@newRecurrence_Unit " +
+            "WHERE purpose=@oldPurpose AND category=@oldCategory AND amount=@oldAmount AND date=@oldDate AND recurrence_span=@oldRecurrence_Span AND recurrence_Unit=@oldRecurrence_Unit";
+          command.Parameters.AddWithValue("@oldPurpose", oldTransaction.Purpose);
+          command.Parameters.AddWithValue("@oldCategory", oldTransaction.Category?.Name ?? string.Empty);
+          command.Parameters.AddWithValue("@oldAmount", oldTransaction.Amount);
+          command.Parameters.AddWithValue("@oldDate", oldTransaction.Date.ToString("yyyy-MM-dd"));
+          command.Parameters.AddWithValue("@oldRecurrence_Span", oldTransaction.Recurrence?.SelectedSpan ?? 0);
+          command.Parameters.AddWithValue("@oldRecurrence_Unit", oldTransaction.Recurrence?.SelectedUnit ?? string.Empty);
+        }
         command.Parameters.AddWithValue("@newPurpose", selectedTransaction.Purpose);
         command.Parameters.AddWithValue("@newCategory", selectedTransaction.Category?.Name ?? string.Empty);
         command.Parameters.AddWithValue("@newAmount", selectedTransaction.Amount);
         command.Parameters.AddWithValue("@newDate", selectedTransaction.Date.ToString("yyyy-MM-dd"));
         command.Parameters.AddWithValue("@newRecurrence_Span", selectedTransaction.Recurrence?.SelectedSpan ?? 0);
-        command.Parameters.AddWithValue("@newRecurence_Unit", selectedTransaction.Recurrence?.SelectedUnit ?? string.Empty);
+        command.Parameters.AddWithValue("@newRecurrence_Unit", selectedTransaction.Recurrence?.SelectedUnit ?? string.Empty);
 
         int rowsAffected = command.ExecuteNonQuery();
         result = rowsAffected > 0 ? "Transaction saved successfully" : "No rows affected. Save failed.";

@@ -36,10 +36,10 @@
               AutoGenerateColumns="False" HeadersVisibility="None"
               Grid.Column="1" Grid.Row="1">
       <DataGrid.Columns>
-        <DataGridTemplateColumn Width="15">
+        <DataGridTemplateColumn Width="16">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
-              <emoji:TextBlock Text="{Binding Category.Symbol}"/>
+              <emoji:TextBlock Text="{Binding Category.Symbol}" Margin="0,0,-5,1"/>
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
@@ -47,19 +47,15 @@
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <TextBlock Visibility="{Binding IsRecurring, Converter={StaticResource IsTrueVisibilityConverter}}"
-                         Text="&#10227;" FontSize="20" HorizontalAlignment="Center" />
+                         Text="&#10227;" FontSize="20" FontWeight="ExtraBold" HorizontalAlignment="Center" Margin="5,0,-5,0"/>
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
         <DataGridTextColumn Binding="{Binding Date, Converter={StaticResource DateOutputConverter}}"/>
-        <DataGridTextColumn Binding="{Binding Purpose}"/>
+        <DataGridTextColumn Binding="{Binding Purpose}" Width="*"/>
         <DataGridTextColumn Binding="{Binding Amount, StringFormat={}{0:C2}}"/>
       </DataGrid.Columns>
     </DataGrid>
-
-    <DataGridCell>
-      
-    </DataGridCell>
 
     <!--zukünfitge Transaktionen werden mit visuellen auffälligkeiten (also halb unsichtbar) unter den bereits bezahlten transaktionen dargestellt-->
     <!--letzten row einfügen, wo alle ausgaben/einnahmen im monat stehen-->

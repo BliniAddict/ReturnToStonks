@@ -2,6 +2,16 @@
 {
   public class Transaction
   {
+    public Transaction(Transaction transaction)
+    {
+      Purpose = transaction.Purpose;
+      Category = transaction.Category;
+      Amount = transaction.Amount;
+      Date = transaction.Date;
+      IsRecurring = transaction.IsRecurring;
+      Recurrence = transaction.Recurrence;
+    }
+
     public Transaction(string purpose, Category? category, double amount, DateTime date, bool isRecurring, Recurrence recurrence = null)
     {
       Purpose = purpose;

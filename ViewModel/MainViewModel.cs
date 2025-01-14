@@ -49,7 +49,6 @@ namespace ReturnToStonks
 
     public void OpenTransactionWindow(Transaction? transaction = null)
     {
-      transaction ??= new Transaction(string.Empty, null, 0, DateTime.Now, false);
       TransactionWindow newTransaction = new(_model, transaction);
       newTransaction.ShowDialog();
 

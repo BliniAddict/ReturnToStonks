@@ -16,25 +16,11 @@
           </Setter.Value>
         </Setter>
       </Style>
+      <SolidColorBrush x:Key="PositiveColor" Color="#38d6ca" />
+      <SolidColorBrush x:Key="NegativeColor" Color="#d63844"/>
 
       <!--#region Combobox-->
       <SolidColorBrush x:Key="TextBox.Static.Background" Color="#FFFFFFFF"/>
-      <!--<Style x:Key="ComboBoxEditableTextBox" TargetType="{x:Type TextBox}">
-        <Setter Property="OverridesDefaultStyle" Value="true"/>
-        <Setter Property="AllowDrop" Value="true"/>
-        <Setter Property="MinWidth" Value="0"/>
-        <Setter Property="MinHeight" Value="0"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
-        <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
-        <Setter Property="Template">
-          <Setter.Value>
-            <ControlTemplate TargetType="{x:Type TextBox}">
-              <ScrollViewer x:Name="PART_ContentHost" Background="Transparent" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
-            </ControlTemplate>
-          </Setter.Value>
-        </Setter>
-      </Style>-->
       <SolidColorBrush x:Key="ComboBox.Static.Background" Color="Transparent"/>
       <SolidColorBrush x:Key="ComboBox.Static.Border" Color="Transparent"/>
       <SolidColorBrush x:Key="ComboBox.Static.Glyph" Color="#FF606060"/>
@@ -157,58 +143,6 @@
           </Setter.Value>
         </Setter>
       </Style>
-      <!--<ControlTemplate x:Key="ComboBoxEditableTemplate" TargetType="{x:Type ComboBox}">
-        <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Width="0"/>
-          </Grid.ColumnDefinitions>
-          <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource Mode=TemplatedParent}}" Placement="Bottom" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}">
-            <theme:SystemDropShadowChrome x:Name="shadow" Color="Transparent" MinWidth="{Binding ActualWidth, ElementName=templateRoot}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
-              <Border x:Name="dropDownBorder" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1">
-                <ScrollViewer x:Name="DropDownScrollViewer">
-                  <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
-                    <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="0" VerticalAlignment="Bottom" Width="0">
-                      <Rectangle x:Name="opaqueRect" Fill="{Binding Background, ElementName=dropDownBorder}" Height="{Binding ActualHeight, ElementName=dropDownBorder}" Width="{Binding ActualWidth, ElementName=dropDownBorder}"/>
-                    </Canvas>
-                    <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                  </Grid>
-                </ScrollViewer>
-              </Border>
-            </theme:SystemDropShadowChrome>
-          </Popup>
-          <ToggleButton x:Name="toggleButton" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Grid.ColumnSpan="2" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" Style="{StaticResource ComboBoxToggleButton}"/>
-          <Border x:Name="border" Background="{StaticResource TextBox.Static.Background}" Margin="{TemplateBinding BorderThickness}">
-            <TextBox x:Name="PART_EditableTextBox" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource Mode=TemplatedParent}}" Margin="{TemplateBinding Padding}" Style="{StaticResource ComboBoxEditableTextBox}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-          </Border>
-        </Grid>
-        <ControlTemplate.Triggers>
-          <Trigger Property="IsEnabled" Value="false">
-            <Setter Property="Opacity" TargetName="border" Value="0.56"/>
-          </Trigger>
-          <Trigger Property="IsKeyboardFocusWithin" Value="true">
-            <Setter Property="Foreground" Value="Black"/>
-          </Trigger>
-          <Trigger Property="HasDropShadow" SourceName="PART_Popup" Value="true">
-            <Setter Property="Margin" TargetName="shadow" Value="0,0,5,5"/>
-            <Setter Property="Color" TargetName="shadow" Value="#71000000"/>
-          </Trigger>
-          <Trigger Property="HasItems" Value="false">
-            <Setter Property="Height" TargetName="dropDownBorder" Value="95"/>
-          </Trigger>
-          <MultiTrigger>
-            <MultiTrigger.Conditions>
-              <Condition Property="IsGrouping" Value="true"/>
-              <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
-            </MultiTrigger.Conditions>
-            <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
-          </MultiTrigger>
-          <Trigger Property="ScrollViewer.CanContentScroll" SourceName="DropDownScrollViewer" Value="false">
-            <Setter Property="Canvas.Top" TargetName="opaqueRect" Value="{Binding VerticalOffset, ElementName=DropDownScrollViewer}"/>
-            <Setter Property="Canvas.Left" TargetName="opaqueRect" Value="{Binding HorizontalOffset, ElementName=DropDownScrollViewer}"/>
-          </Trigger>
-        </ControlTemplate.Triggers>
-      </ControlTemplate>-->
       <ControlTemplate x:Key="ComboBoxTemplate" TargetType="{x:Type ComboBox}">
         <GroupBox x:Name="groupBox" Header="{TemplateBinding Name}" FontSize="13" Padding="-5" BorderBrush="{TemplateBinding BorderBrush}">
           <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
@@ -287,7 +221,6 @@
           <Trigger Property="IsEditable" Value="true">
             <Setter Property="IsTabStop" Value="false"/>
             <Setter Property="Padding" Value="2"/>
-            <!--<Setter Property="Template" Value="{StaticResource ComboBoxEditableTemplate}"/>-->
           </Trigger>
         </Style.Triggers>
       </Style>
@@ -297,7 +230,6 @@
         <Setter Property="FontSize" Value="18"/>
         <Setter Property="MinHeight" Value="25"/>
       </Style>
-
       <!--#endregion-->
 
       <!--#region Button-->
@@ -893,6 +825,132 @@
         </Setter>
       </Style>
       <!--#endregion-->
+
+
+      <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" Color="#FF000000"/>
+      <Style TargetType="{x:Type DataGridCell}">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="FontFamily" Value="Arial"/>
+        <Setter Property="Height" Value="28"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type DataGridCell}">
+              <Border Padding="3" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+              </Border>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+          <Trigger Property="IsSelected" Value="True">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+          </Trigger>
+          <Trigger Property="IsKeyboardFocusWithin" Value="True">
+            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static DataGrid.FocusBorderBrushKey}}"/>
+          </Trigger>
+          <MultiTrigger>
+            <MultiTrigger.Conditions>
+              <Condition Property="IsSelected" Value="true"/>
+              <Condition Property="Selector.IsSelectionActive" Value="false"/>
+            </MultiTrigger.Conditions>
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
+          </MultiTrigger>
+          <Trigger Property="IsEnabled" Value="false">
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+          </Trigger>
+        </Style.Triggers>
+      </Style>
+
+      <Style x:Key="{ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}" TargetType="{x:Type Button}">
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type Button}">
+              <Grid>
+                <Rectangle x:Name="Border" Fill="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" SnapsToDevicePixels="True"/>
+                <Polygon x:Name="Arrow" Fill="Black" HorizontalAlignment="Right" Margin="8,8,3,3" Opacity="0.15" Points="0,10 10,10 10,0" Stretch="Uniform" VerticalAlignment="Bottom"/>
+              </Grid>
+              <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                  <Setter Property="Stroke" TargetName="Border" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                  <Setter Property="Fill" TargetName="Border" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                  <Setter Property="Visibility" TargetName="Arrow" Value="Collapsed"/>
+                </Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <Style TargetType="{x:Type DataGrid}">
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="SelectionUnit" Value="FullRow"/>
+        <Setter Property="GridLinesVisibility" Value="None"/>
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="BorderBrush" Value="#FF688CAF"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="RowDetailsVisibilityMode" Value="VisibleWhenSelected"/>
+        <!--<Setter Property="ScrollViewer.CanContentScroll" Value="true"/>-->
+        <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
+        <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+        <!--<Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type DataGrid}">
+              <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+                <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false">
+                  <ScrollViewer.Template>
+                    <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                      <Grid>
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="Auto"/>
+                          <ColumnDefinition Width="*"/>
+                          <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                          <RowDefinition Height="Auto"/>
+                          <RowDefinition Height="*"/>
+                          <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Button Command="{x:Static DataGrid.SelectAllCommand}" Focusable="false" Style="{DynamicResource {ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}}" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.All}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Width="{Binding CellsPanelHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
+                        <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Column="1" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
+                        <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" CanContentScroll="{TemplateBinding CanContentScroll}" Grid.ColumnSpan="2" Grid.Row="1"/>
+                        <ScrollBar x:Name="PART_VerticalScrollBar" Grid.Column="2" Maximum="{TemplateBinding ScrollableHeight}" Orientation="Vertical" Grid.Row="1" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                        <Grid Grid.Column="1" Grid.Row="2">
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{Binding NonFrozenColumnsViewportHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
+                            <ColumnDefinition Width="*"/>
+                          </Grid.ColumnDefinitions>
+                          <ScrollBar x:Name="PART_HorizontalScrollBar" Grid.Column="1" Maximum="{TemplateBinding ScrollableWidth}" Orientation="Horizontal" Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" ViewportSize="{TemplateBinding ViewportWidth}" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
+                        </Grid>
+                      </Grid>
+                    </ControlTemplate>
+                  </ScrollViewer.Template>
+                  <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                </ScrollViewer>
+              </Border>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>-->
+        <Style.Triggers>
+          <MultiTrigger>
+            <MultiTrigger.Conditions>
+              <Condition Property="IsGrouping" Value="true"/>
+              <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
+            </MultiTrigger.Conditions>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+          </MultiTrigger>
+        </Style.Triggers>
+      </Style>
     </ResourceDictionary>
   </Application.Resources>
 </Application>

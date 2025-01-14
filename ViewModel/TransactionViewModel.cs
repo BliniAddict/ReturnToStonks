@@ -10,16 +10,12 @@ namespace ReturnToStonks
     private IView _view;
     private IModel _model;
 
-    public TransactionViewModel(IView view, IModel model, Transaction transaction)
+    public TransactionViewModel(IView view, IModel model, Transaction? transaction)
     {
       _view = view;
       _model = model;
 
-      SelectedTransaction = transaction;
-      if (SelectedTransaction.Recurrence == null)
-        SelectedTransaction.Recurrence = new("month", 1);
-
-      GetCategories();
+      InitTransactionWindow(transaction);
 
       SaveTransactionCommand = new RelayCommand(SaveTransaction);
       SaveCategoryCommand = new RelayCommand(SaveCategory);
@@ -82,6 +78,25 @@ namespace ReturnToStonks
     #endregion
 
     #region Methods
+    private void InitTransactionWindow(Transaction? transaction = null)
+    {
+      if (transaction == null)
+        transaction = new Transaction(string.Empty, null, 0, DateTime.Now, false);
+      else
+        _oldTransaction = new Transaction(transaction);
+
+      SelectedTransaction = transaction;
+
+      if (SelectedTransaction.Amount < 0)
+        SelectedTransaction.Amount = SelectedTransaction.Amount * -1;
+      else
+        IsIncome = false;
+
+      if (SelectedTransaction.Recurrence == null)
+        SelectedTransaction.Recurrence = new("month", 1);
+
+      GetCategories();
+    }
     private void InitCategoryPopup(Category cat = null)
     {
       if (cat != null) //change (not yet) selected category
