@@ -242,7 +242,7 @@
       <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
       <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
       <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
-      <Style TargetType="{x:Type Button}">
+      <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
@@ -282,6 +282,8 @@
           </Setter.Value>
         </Setter>
       </Style>
+
+      <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonStyle}"/>
       <!--#endregion-->
 
       <!--#region Label-->
@@ -827,6 +829,7 @@
       <!--#endregion-->
 
 
+      <!--#region DataGrid-->
       <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" Color="#FF000000"/>
       <Style TargetType="{x:Type DataGridCell}">
         <Setter Property="FontSize" Value="15"/>
@@ -848,7 +851,7 @@
           <Trigger Property="IsSelected" Value="True">
             <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
           </Trigger>
           <Trigger Property="IsKeyboardFocusWithin" Value="True">
             <Setter Property="BorderBrush" Value="{DynamicResource {x:Static DataGrid.FocusBorderBrushKey}}"/>
@@ -951,6 +954,7 @@
           </MultiTrigger>
         </Style.Triggers>
       </Style>
+      <!--#endregion-->
     </ResourceDictionary>
   </Application.Resources>
 </Application>

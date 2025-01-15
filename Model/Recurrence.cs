@@ -13,10 +13,10 @@ namespace ReturnToStonks
   {
     public event PropertyChangedEventHandler PropertyChanged;
 
-    public Recurrence(string selectedUnit, int selectedNumber)
+    public Recurrence(string selectedUnit, int selectedSpan)
     {
       SelectedUnit = selectedUnit;
-      SelectedSpan = selectedNumber;
+      SelectedSpan = selectedSpan;
     }
 
     public ObservableCollection<string> UnitsList { get; } = new ObservableCollection<string> { "day", "week", "month", "year" };

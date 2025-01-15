@@ -76,6 +76,28 @@ namespace ReturnToStonks
 
       return res;
     }
+    public string DeleteTransaction(Transaction selectedTransaction)
+    {
+      string result = string.Empty;
+
+      using (var command = _connection.CreateCommand())
+      {
+        command.CommandText = "DELETE FROM Transactions WHERE " +
+          "purpose=@Purpose AND category=@Category AND amount=@Amount AND date=@Date AND recurrence_span=@Recurrence_Span AND recurrence_unit=@Recurrence_Unit";
+
+        command.Parameters.AddWithValue("@Purpose", selectedTransaction.Purpose);
+        command.Parameters.AddWithValue("@Category", selectedTransaction.Category?.Name ?? string.Empty);
+        command.Parameters.AddWithValue("@Amount", selectedTransaction.Amount);
+        command.Parameters.AddWithValue("@Date", selectedTransaction.Date.ToString("yyyy-MM-dd"));
+        command.Parameters.AddWithValue("@Recurrence_Span", selectedTransaction.Recurrence?.SelectedSpan ?? 0);
+        command.Parameters.AddWithValue("@Recurrence_Unit", selectedTransaction.Recurrence?.SelectedUnit ?? string.Empty);
+
+        int rowsAffected = command.ExecuteNonQuery();
+        result = rowsAffected > 0 ? "Transaction deleted successfully" : "No rows affected. Save failed.";
+      }
+
+      return result;
+    }
     #endregion
 
     #region Categories

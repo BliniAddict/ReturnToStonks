@@ -5,11 +5,11 @@
     public Transaction(Transaction transaction)
     {
       Purpose = transaction.Purpose;
-      Category = transaction.Category;
+      Category = transaction.Category == null ? null : new(transaction.Category.Name, transaction.Category.Symbol);
       Amount = transaction.Amount;
       Date = transaction.Date;
       IsRecurring = transaction.IsRecurring;
-      Recurrence = transaction.Recurrence;
+      Recurrence = transaction.Recurrence == null ? null : new(transaction.Recurrence.SelectedUnit, transaction.Recurrence.SelectedSpan);
     }
 
     public Transaction(string purpose, Category? category, double amount, DateTime date, bool isRecurring, Recurrence recurrence = null)
