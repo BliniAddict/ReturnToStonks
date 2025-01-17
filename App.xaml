@@ -836,6 +836,16 @@
       <!--#endregion-->
 
       <!--#region DataGrid-->
+      <Style x:Key="DataGridTextBoxStyle" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="{StaticResource PrimaryColor_Light}"/>
+        <Setter Property="FontFamily" Value="Arial"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="TextAlignment" Value="Right"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="5"/>
+      </Style>
+
       <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" Color="#FF000000"/>
       <Style x:Key="DataGridCellStyle" TargetType="{x:Type DataGridCell}">
         <Setter Property="FontSize" Value="15"/>
@@ -904,7 +914,8 @@
         <Setter Property="SelectionMode" Value="Single"/>
         <Setter Property="SelectionUnit" Value="FullRow"/>
         <Setter Property="GridLinesVisibility" Value="None"/>
-        <Setter Property="Background" Value="#f9f9f9"/>
+        <Setter Property="Margin" Value="-2"/>
+        <Setter Property="Background" Value="{StaticResource TertiaryColor_Light}"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="BorderBrush" Value="White"/>
         <Setter Property="BorderThickness" Value="2"/>

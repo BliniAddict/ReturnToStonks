@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using System.Windows;
 using System.Windows.Input;
 
 namespace ReturnToStonks
@@ -39,7 +38,10 @@ namespace ReturnToStonks
     {
       get
       {
-        IsDeleteTransactionButtonEnabled = ArePropertiesEqual(_selectedTransaction, _oldTransaction);
+        Transaction? tempTransaction = _oldTransaction == null ? null : new Transaction(_oldTransaction) 
+        { Amount = Math.Abs(_oldTransaction.Amount) };
+        IsDeleteTransactionButtonEnabled = ArePropertiesEqual(_selectedTransaction, tempTransaction);
+
         return _selectedTransaction;
       }
       set
@@ -65,8 +67,10 @@ namespace ReturnToStonks
     {
       get
       {
+        Transaction? tempTransaction = _oldTransaction == null ? null : new Transaction(_oldTransaction)
+        { Amount = Math.Abs(_oldTransaction.Amount) };
+        IsDeleteTransactionButtonEnabled = ArePropertiesEqual(_selectedTransaction, tempTransaction);
         IsDeleteCategoryButtonEnabled = ArePropertiesEqual(_selectedCategory, _oldCategory);
-        IsDeleteTransactionButtonEnabled = ArePropertiesEqual(_selectedCategory, _oldTransaction?.Category);
         return _selectedCategory;
       }
       set
@@ -121,16 +125,16 @@ namespace ReturnToStonks
     private void InitTransactionWindow(Transaction? transaction = null)
     {
       if (transaction == null)
-        transaction = new Transaction(string.Empty, null, 0, DateTime.Now, false);
+        transaction = new Transaction(string.Empty, null, 0, DateTime.Now, false, new("month", 1));
       else
       {
+        transaction.Recurrence ??= new("month", 1);
+        _oldTransaction = new Transaction(transaction);
+
         if (transaction.Amount < 0)
           transaction.Amount *= -1;
         else
           IsIncome = false;
-
-        transaction.Recurrence ??= new("month", 1);
-        _oldTransaction = new Transaction(transaction);
       }
 
       SelectedTransaction = transaction;

@@ -64,12 +64,12 @@ namespace ReturnToStonks
   {
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
-      if (values[1] is int selectedSpan)
+      if (values[1] is int span)
       {
         if (values[0] is ObservableCollection<string> wordsList)
-          return wordsList.Select(unit => selectedSpan > 1 ? unit + "s" : unit).ToList();
+          return wordsList.Select(unit => span > 1 ? unit + "s" : unit).ToList();
         if (values[0] is string word)
-          return selectedSpan > 1 ? word + "s" : word.Replace("s", string.Empty);
+          return span > 1 ? word + "s" : word.Replace("s", string.Empty);
       }
       return values[0];
     }

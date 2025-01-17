@@ -63,19 +63,7 @@
         <DataGridTextColumn Binding="{Binding Amount, StringFormat={}{0:C2}}"/>
       </DataGrid.Columns>      
     </DataGrid>
-    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ExpensesSum, StringFormat=Sum: {0:C2} }">
-      <TextBlock.Style>
-        <Style TargetType="{x:Type TextBlock}">
-          <Setter Property="Foreground" Value="White"/>
-          <Setter Property="Background" Value="{StaticResource PrimaryColor_Light}"/>
-          <Setter Property="FontFamily" Value="Arial"/>
-          <Setter Property="FontSize" Value="15"/>
-          <Setter Property="TextAlignment" Value="Right"/>
-          <Setter Property="Margin" Value="0"/>
-          <Setter Property="Padding" Value="5"/>
-        </Style>
-      </TextBlock.Style>
-    </TextBlock>
+    <TextBlock Text="{Binding ExpensesSum, StringFormat=Sum: {0:C2}}" Grid.Row="2" Grid.Column="1" Style="{StaticResource DataGridTextBoxStyle}"/>
 
     <!--zukünfitge Transaktionen werden mit visuellen auffälligkeiten (also halb unsichtbar) unter den bereits bezahlten transaktionen dargestellt-->
 

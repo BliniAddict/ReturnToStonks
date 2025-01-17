@@ -90,20 +90,20 @@
 
     <local:ToggleSwitch IsChecked="{Binding SelectedTransaction.IsRecurring, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         CheckedText="recurring" UncheckedText="not recurring" Grid.Row="2"/>
-    <local:UpDownCounter x:Name="Every" Text="{Binding SelectedTransaction.Recurrence.SelectedSpan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+    <local:UpDownCounter x:Name="Every" Text="{Binding SelectedTransaction.Recurrence.Span, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          Visibility="{Binding SelectedTransaction.IsRecurring, Converter={StaticResource IsTrueVisibilityConverter}}" Grid.Row="2" Grid.Column="1"/>
     <ComboBox Visibility="{Binding SelectedTransaction.IsRecurring, Converter={StaticResource IsTrueVisibilityConverter}}"
               Grid.Row="2" Grid.Column="2">
       <ComboBox.SelectedItem>
         <MultiBinding Converter="{StaticResource PluralWordingConverter}">
-          <Binding Path="SelectedTransaction.Recurrence.SelectedUnit" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
-          <Binding Path="SelectedTransaction.Recurrence.SelectedSpan" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+          <Binding Path="SelectedTransaction.Recurrence.Unit" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+          <Binding Path="SelectedTransaction.Recurrence.Span" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
         </MultiBinding>
       </ComboBox.SelectedItem>
       <ComboBox.ItemsSource>
         <MultiBinding Converter="{StaticResource PluralWordingConverter}">
           <Binding Path="SelectedTransaction.Recurrence.UnitsList"/>
-          <Binding Path="SelectedTransaction.Recurrence.SelectedSpan"/>
+          <Binding Path="SelectedTransaction.Recurrence.Span"/>
         </MultiBinding>
       </ComboBox.ItemsSource>
     </ComboBox>
