@@ -31,13 +31,15 @@ namespace ReturnToStonks
 
     public ObservableCollection<Transaction> Incomes { get; set; } = new ObservableCollection<Transaction>();
     public ObservableCollection<Transaction> Expenses { get; set; } = new ObservableCollection<Transaction>();
+    public double IncomesSum { get; set; }
+    public double ExpensesSum { get; set; }
 
     private void GetTransactions()
     {
       Incomes.Clear();
       Expenses.Clear();
 
-      List<Transaction> transactions = _model.GetTransactions();
+      List<Transaction> transactions = _model.GetTransactions().OrderBy(a => a.Amount).OrderBy(d => d.Date).ToList();
       foreach (Transaction transaction in transactions)
       {
         if (transaction.Amount > 0)
@@ -45,6 +47,8 @@ namespace ReturnToStonks
         else
           Expenses.Add(transaction);
       }
+      IncomesSum = Incomes.Sum(amount => amount.Amount);
+      ExpensesSum = Expenses.Sum(amount => amount.Amount);
     }
 
     public void OpenTransactionWindow(Transaction? transaction = null)

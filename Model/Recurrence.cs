@@ -13,23 +13,24 @@ namespace ReturnToStonks
   {
     public event PropertyChangedEventHandler PropertyChanged;
 
-    public Recurrence(string selectedUnit, int selectedSpan)
+    public Recurrence(string unit, int span)
     {
-      SelectedUnit = selectedUnit;
-      SelectedSpan = selectedSpan;
+      Unit = unit;
+      Span = span;
     }
 
     public ObservableCollection<string> UnitsList { get; } = new ObservableCollection<string> { "day", "week", "month", "year" };
 
-    public string SelectedUnit { get; set; }
-    private int _selectedSpan;
-    public int SelectedSpan
+    public string Unit { get; set; }
+
+    private int _span;
+    public int Span
     {
-      get => _selectedSpan;
+      get => _span;
       set
       {
-        _selectedSpan = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedSpan)));
+        _span = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Span)));
       }
     }
   }

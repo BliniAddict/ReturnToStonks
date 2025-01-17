@@ -1,7 +1,9 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.Diagnostics;
+using System.DirectoryServices.ActiveDirectory;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Xml.Linq;
 
 namespace ReturnToStonks
@@ -13,6 +15,41 @@ namespace ReturnToStonks
     {
       _connection = new SqliteConnection(@"Data Source=..\..\..\Model\DB\Data.db");
       _connection.Open();
+    }
+    private static SqliteParameter CreateParameter(string name, object? value)
+    {
+      return new SqliteParameter(name, value ?? DBNull.Value);
+    }
+    private List<string> GetDeleteConditions<T>(T row)
+    {
+      List<string> conditions = new();
+
+      using (var command = _connection.CreateCommand())
+      {
+        PropertyInfo[] properties = row.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+        foreach (PropertyInfo property in properties.Where(noClass => noClass.PropertyType == typeof(string) || !noClass.PropertyType.IsClass))
+        {
+          object value = property.GetValue(row);
+
+          if (value == null)
+            conditions.Add(property.Name.ToLower() + " is NULL");
+
+          else if (property.PropertyType == typeof(string))
+            conditions.Add($"{property.Name.ToLower()}='{value}'");
+
+          else if (property.PropertyType == typeof(DateTime))
+            conditions.Add($"{property.Name.ToLower()}='{Convert.ToDateTime(value):yyyy-MM-dd}'");
+
+          else if (property.PropertyType == typeof(double))
+            conditions.Add($"{property.Name.ToLower()}={Convert.ToDouble(value).ToString("0.0", CultureInfo.InvariantCulture)}");
+
+          else if (property.PropertyType.IsPrimitive)
+            conditions.Add($"{property.Name.ToLower()}={value}");
+        }
+      }
+
+      return conditions;
     }
 
     #region Transactions
@@ -29,19 +66,19 @@ namespace ReturnToStonks
         {
           command.CommandText = "UPDATE Transactions SET purpose=@newPurpose, category=@newCategory, amount=@newAmount, date=@newDate, recurrence_span=@newRecurrence_Span, recurrence_Unit=@newRecurrence_Unit " +
             "WHERE purpose=@oldPurpose AND category=@oldCategory AND amount=@oldAmount AND date=@oldDate AND recurrence_span=@oldRecurrence_Span AND recurrence_Unit=@oldRecurrence_Unit";
-          command.Parameters.AddWithValue("@oldPurpose", oldTransaction.Purpose);
-          command.Parameters.AddWithValue("@oldCategory", oldTransaction.Category?.Name ?? string.Empty);
-          command.Parameters.AddWithValue("@oldAmount", oldTransaction.Amount);
-          command.Parameters.AddWithValue("@oldDate", oldTransaction.Date.ToString("yyyy-MM-dd"));
-          command.Parameters.AddWithValue("@oldRecurrence_Span", oldTransaction.Recurrence?.SelectedSpan ?? 0);
-          command.Parameters.AddWithValue("@oldRecurrence_Unit", oldTransaction.Recurrence?.SelectedUnit ?? string.Empty);
+          command.Parameters.Add(CreateParameter("@oldPurpose", oldTransaction.Purpose));
+          command.Parameters.Add(CreateParameter("@oldCategory", oldTransaction.Category?.Name));
+          command.Parameters.Add(CreateParameter("@oldAmount", oldTransaction.Amount));
+          command.Parameters.Add(CreateParameter("@oldDate", oldTransaction.Date.ToString("yyyy-MM-dd")));
+          command.Parameters.Add(CreateParameter("@oldRecurrence_Span", oldTransaction.Recurrence?.Span ?? 0));
+          command.Parameters.Add(CreateParameter("@oldRecurrence_Unit", oldTransaction.Recurrence?.Unit));
         }
-        command.Parameters.AddWithValue("@newPurpose", selectedTransaction.Purpose);
-        command.Parameters.AddWithValue("@newCategory", selectedTransaction.Category?.Name ?? string.Empty);
-        command.Parameters.AddWithValue("@newAmount", selectedTransaction.Amount);
-        command.Parameters.AddWithValue("@newDate", selectedTransaction.Date.ToString("yyyy-MM-dd"));
-        command.Parameters.AddWithValue("@newRecurrence_Span", selectedTransaction.Recurrence?.SelectedSpan ?? 0);
-        command.Parameters.AddWithValue("@newRecurrence_Unit", selectedTransaction.Recurrence?.SelectedUnit ?? string.Empty);
+        command.Parameters.Add(CreateParameter("@newPurpose", selectedTransaction.Purpose));
+        command.Parameters.Add(CreateParameter("@newCategory", selectedTransaction.Category?.Name));
+        command.Parameters.Add(CreateParameter("@newAmount", selectedTransaction.Amount));
+        command.Parameters.Add(CreateParameter("@newDate", selectedTransaction.Date.ToString("yyyy-MM-dd")));
+        command.Parameters.Add(CreateParameter("@newRecurrence_Span", selectedTransaction.Recurrence?.Span ?? 0));
+        command.Parameters.Add(CreateParameter("@newRecurrence_Unit", selectedTransaction.Recurrence?.Unit));
 
         int rowsAffected = command.ExecuteNonQuery();
         result = rowsAffected > 0 ? "Transaction saved successfully" : "No rows affected. Save failed.";
@@ -62,7 +99,7 @@ namespace ReturnToStonks
         {
           Transaction tr = new(
             reader.GetString(0),
-            GetCategory(reader.GetString(1)),
+            reader.IsDBNull(1) ? null : GetCategory(reader.GetString(1)),
             reader.GetDouble(2),
             DateTime.ParseExact(reader.GetString(3), "yyyy-MM-dd", CultureInfo.InvariantCulture),
             reader.GetInt32(4) != 0);
@@ -70,7 +107,7 @@ namespace ReturnToStonks
           if (tr.IsRecurring)
             tr.Recurrence = new(reader.GetString(5), reader.GetInt32(4));
 
-          res.Add(tr);            
+          res.Add(tr);
         }
       }
 
@@ -82,22 +119,31 @@ namespace ReturnToStonks
 
       using (var command = _connection.CreateCommand())
       {
-        command.CommandText = "DELETE FROM Transactions WHERE " +
-          "purpose=@Purpose AND category=@Category AND amount=@Amount AND date=@Date AND recurrence_span=@Recurrence_Span AND recurrence_unit=@Recurrence_Unit";
+        List<string> conditions = GetDeleteConditions(selectedTransaction);
 
-        command.Parameters.AddWithValue("@Purpose", selectedTransaction.Purpose);
-        command.Parameters.AddWithValue("@Category", selectedTransaction.Category?.Name ?? string.Empty);
-        command.Parameters.AddWithValue("@Amount", selectedTransaction.Amount);
-        command.Parameters.AddWithValue("@Date", selectedTransaction.Date.ToString("yyyy-MM-dd"));
-        command.Parameters.AddWithValue("@Recurrence_Span", selectedTransaction.Recurrence?.SelectedSpan ?? 0);
-        command.Parameters.AddWithValue("@Recurrence_Unit", selectedTransaction.Recurrence?.SelectedUnit ?? string.Empty);
+        //remove unwanted conditions
+        conditions.Remove(conditions.First(r => r.Contains("isrecurring")));
 
+        //add conditions associated with class properties
+        if (selectedTransaction.Category?.Name == null)
+          conditions.Add("category IS NULL");
+        else
+          conditions.Add($"category={selectedTransaction.Category.Name}");
+
+        conditions.Add($"recurrence_span={selectedTransaction.Recurrence?.Span ?? 0}");
+        if (selectedTransaction.Recurrence == null)
+          conditions.Add($"recurrence_unit IS NULL");
+        else
+          conditions.Add($"recurrence_unit={selectedTransaction.Recurrence?.Unit ?? "''"}");
+
+        command.CommandText = "DELETE FROM Transactions WHERE " + string.Join(" AND ", conditions);
         int rowsAffected = command.ExecuteNonQuery();
-        result = rowsAffected > 0 ? "Transaction deleted successfully" : "No rows affected. Save failed.";
-      }
 
+        result = rowsAffected > 0 ? "Transaction deleted successfully" : "No rows affected. Delete failed.";
+      }
       return result;
     }
+
     #endregion
 
     #region Categories
@@ -112,11 +158,11 @@ namespace ReturnToStonks
         else //UPDATE
         {
           command.CommandText = "UPDATE Categories SET name=@newName, symbol=@newSymbol WHERE name=@oldName AND symbol=@oldSymbol";
-          command.Parameters.AddWithValue("@oldName", oldCategory.Name);
-          command.Parameters.AddWithValue("@oldSymbol", oldCategory.Symbol);
+          command.Parameters.Add(CreateParameter("@oldName", oldCategory.Name));
+          command.Parameters.Add(CreateParameter("@oldSymbol", oldCategory.Symbol));
         }
-        command.Parameters.AddWithValue("@newName", selectedCategory.Name);
-        command.Parameters.AddWithValue("@newSymbol", selectedCategory.Symbol);
+        command.Parameters.Add(CreateParameter("@newName", selectedCategory.Name));
+        command.Parameters.Add(CreateParameter("@newSymbol", selectedCategory.Symbol));
 
         int rowsAffected = command.ExecuteNonQuery();
         result = rowsAffected > 0 ? "Category saved successfully" : "No rows affected. Save failed.";
@@ -145,7 +191,7 @@ namespace ReturnToStonks
       using var command = _connection.CreateCommand();
       command.CommandText = "SELECT name, symbol FROM Categories WHERE name = @name";
 
-      command.Parameters.AddWithValue("@name", name);
+      command.Parameters.Add(CreateParameter("@name", name));
 
       using var reader = command.ExecuteReader();
 
@@ -161,8 +207,8 @@ namespace ReturnToStonks
 
       using (var command = _connection.CreateCommand())
       {
-        command.CommandText = "DELETE FROM Categories WHERE name=@name";
-        command.Parameters.AddWithValue("@name", selectedCategory.Name);
+        List<string> conditions = GetDeleteConditions(selectedCategory);
+        command.CommandText = "DELETE FROM Categories WHERE " + string.Join(" AND ", conditions);
 
         int rowsAffected = command.ExecuteNonQuery();
         result = rowsAffected > 0 ? "Category deleted successfully" : "No rows affected. Save failed.";

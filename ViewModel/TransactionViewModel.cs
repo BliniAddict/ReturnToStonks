@@ -123,21 +123,17 @@ namespace ReturnToStonks
       if (transaction == null)
         transaction = new Transaction(string.Empty, null, 0, DateTime.Now, false);
       else
+      {
+        if (transaction.Amount < 0)
+          transaction.Amount *= -1;
+        else
+          IsIncome = false;
+
+        transaction.Recurrence ??= new("month", 1);
         _oldTransaction = new Transaction(transaction);
+      }
 
       SelectedTransaction = transaction;
-
-      if (SelectedTransaction.Amount < 0)
-      {
-        SelectedTransaction.Amount *= -1;
-        _oldTransaction.Amount *= -1;
-      }
-      else
-        IsIncome = false;
-
-      if (SelectedTransaction.Recurrence == null)
-        SelectedTransaction.Recurrence = new("month", 1);
-
       GetCategories();
     }
     private void InitCategoryPopup(Category cat = null)

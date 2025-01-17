@@ -2,16 +2,6 @@
 {
   public class Transaction
   {
-    public Transaction(Transaction transaction)
-    {
-      Purpose = transaction.Purpose;
-      Category = transaction.Category == null ? null : new(transaction.Category.Name, transaction.Category.Symbol);
-      Amount = transaction.Amount;
-      Date = transaction.Date;
-      IsRecurring = transaction.IsRecurring;
-      Recurrence = transaction.Recurrence == null ? null : new(transaction.Recurrence.SelectedUnit, transaction.Recurrence.SelectedSpan);
-    }
-
     public Transaction(string purpose, Category? category, double amount, DateTime date, bool isRecurring, Recurrence recurrence = null)
     {
       Purpose = purpose;
@@ -20,6 +10,15 @@
       Date = date;
       IsRecurring = isRecurring;
       Recurrence = recurrence;
+    }
+    public Transaction(Transaction transaction)
+    {
+      Purpose = transaction.Purpose;
+      Category = transaction.Category == null ? null : new(transaction.Category.Name, transaction.Category.Symbol);
+      Amount = transaction.Amount;
+      Date = transaction.Date;
+      IsRecurring = transaction.IsRecurring;
+      Recurrence = transaction.Recurrence == null ? null : new(transaction.Recurrence.Unit, transaction.Recurrence.Span);
     }
 
     public string Purpose { get; set; }

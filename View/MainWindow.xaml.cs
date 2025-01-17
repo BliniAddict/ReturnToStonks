@@ -27,7 +27,10 @@ namespace ReturnToStonks
     private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
       if (sender is DataGrid dataGrid && dataGrid.SelectedItem is Transaction transaction)
-        _viewModel.OpenTransactionWindow(transaction);
+      {
+        if (transaction.Purpose != "Sum =")
+          _viewModel.OpenTransactionWindow(transaction);
+      }
     }
   }
 }

@@ -21,7 +21,7 @@ namespace ReturnToStonks
 
     protected bool ArePropertiesEqual<T>(T obj1, T obj2)
     {
-      if (obj1 == null || obj2 == null)
+      if (obj1 == null ^ obj2 == null)
         return false;
       if ((obj1 == null && obj2 == null) || ReferenceEquals(obj1, obj2))
         return true;

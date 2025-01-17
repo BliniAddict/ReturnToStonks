@@ -16,6 +16,13 @@
           </Setter.Value>
         </Setter>
       </Style>
+      <SolidColorBrush x:Key="PrimaryColor_Dark" Color="#031e98" />
+      <SolidColorBrush x:Key="PrimaryColor_Light" Color="#6778c1" />
+      <SolidColorBrush x:Key="SecondaryColor_Dark" Color="#0132a5" />
+      <SolidColorBrush x:Key="SecondaryColor_Light" Color="#6684c9" />
+      <SolidColorBrush x:Key="TertiaryColor_Dark" Color="#4f89c5" />
+      <SolidColorBrush x:Key="TertiaryColor_Light" Color="#95b8dc" />
+      
       <SolidColorBrush x:Key="PositiveColor" Color="#38d6ca" />
       <SolidColorBrush x:Key="NegativeColor" Color="#d63844"/>
 
@@ -828,21 +835,22 @@
       </Style>
       <!--#endregion-->
 
-
       <!--#region DataGrid-->
       <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" Color="#FF000000"/>
-      <Style TargetType="{x:Type DataGridCell}">
+      <Style x:Key="DataGridCellStyle" TargetType="{x:Type DataGridCell}">
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="FontFamily" Value="Arial"/>
+        <Setter Property="TextBlock.TextAlignment" Value="Right"/>
         <Setter Property="Height" Value="28"/>
-        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="{StaticResource SecondaryColor_Light}"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Template">
           <Setter.Value>
             <ControlTemplate TargetType="{x:Type DataGridCell}">
               <Border Padding="3" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
-                <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Bottom"/>
               </Border>
             </ControlTemplate>
           </Setter.Value>
@@ -865,9 +873,6 @@
             <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
           </MultiTrigger>
-          <Trigger Property="IsEnabled" Value="false">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-          </Trigger>
         </Style.Triggers>
       </Style>
 
@@ -894,14 +899,15 @@
           </Setter.Value>
         </Setter>
       </Style>
-      <Style TargetType="{x:Type DataGrid}">
+      <Style x:Key="DataGridStyle" TargetType="{x:Type DataGrid}">
+        <Setter Property="IsReadOnly" Value="True"/>
         <Setter Property="SelectionMode" Value="Single"/>
         <Setter Property="SelectionUnit" Value="FullRow"/>
         <Setter Property="GridLinesVisibility" Value="None"/>
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        <Setter Property="Background" Value="#f9f9f9"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-        <Setter Property="BorderBrush" Value="#FF688CAF"/>
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="White"/>
+        <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="RowDetailsVisibilityMode" Value="VisibleWhenSelected"/>
         <!--<Setter Property="ScrollViewer.CanContentScroll" Value="true"/>-->
         <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
@@ -954,6 +960,9 @@
           </MultiTrigger>
         </Style.Triggers>
       </Style>
+
+      <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DataGridCellStyle}"/>
+      <Style TargetType="{x:Type DataGrid}" BasedOn="{StaticResource DataGridStyle}"/>
       <!--#endregion-->
     </ResourceDictionary>
   </Application.Resources>

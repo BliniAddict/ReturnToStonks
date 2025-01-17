@@ -21,6 +21,7 @@
     <Grid.RowDefinitions>
       <RowDefinition Height="40"/>
       <RowDefinition/>
+      <RowDefinition Height="28"/>
       <RowDefinition Height="75"/>
     </Grid.RowDefinitions>
 
@@ -34,7 +35,7 @@
     </DataGrid>
     <DataGrid ItemsSource="{Binding Expenses}" MouseDoubleClick="DataGrid_MouseDoubleClick"
               AutoGenerateColumns="False" HeadersVisibility="None"
-              Grid.Column="1" Grid.Row="1">
+              Grid.Column="1" Grid.Row="1">      
       <DataGrid.Columns>
         <DataGridTemplateColumn Width="16">
           <DataGridTemplateColumn.CellTemplate>
@@ -43,23 +44,41 @@
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
-        <DataGridTemplateColumn Width="16">
+        <DataGridTemplateColumn Width="25">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <TextBlock Visibility="{Binding IsRecurring, Converter={StaticResource IsTrueVisibilityConverter}}"
-                         Text="&#10227;" FontSize="20" FontWeight="ExtraBold" HorizontalAlignment="Center" Margin="5,0,-5,0"/>
+                         Text="&#10227;" FontSize="20" FontWeight="ExtraBold" HorizontalAlignment="Right" />
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
         <DataGridTextColumn Binding="{Binding Date, Converter={StaticResource DateOutputConverter}}"/>
-        <DataGridTextColumn Binding="{Binding Purpose}" Width="*"/>
+        <DataGridTextColumn Binding="{Binding Purpose}" Width="*">
+          <DataGridTextColumn.CellStyle>
+            <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DataGridCellStyle}">
+              <Setter Property="TextBlock.TextAlignment" Value="Left"/>
+            </Style>
+          </DataGridTextColumn.CellStyle>
+        </DataGridTextColumn>
         <DataGridTextColumn Binding="{Binding Amount, StringFormat={}{0:C2}}"/>
-      </DataGrid.Columns>
+      </DataGrid.Columns>      
     </DataGrid>
+    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ExpensesSum, StringFormat=Sum: {0:C2} }">
+      <TextBlock.Style>
+        <Style TargetType="{x:Type TextBlock}">
+          <Setter Property="Foreground" Value="White"/>
+          <Setter Property="Background" Value="{StaticResource PrimaryColor_Light}"/>
+          <Setter Property="FontFamily" Value="Arial"/>
+          <Setter Property="FontSize" Value="15"/>
+          <Setter Property="TextAlignment" Value="Right"/>
+          <Setter Property="Margin" Value="0"/>
+          <Setter Property="Padding" Value="5"/>
+        </Style>
+      </TextBlock.Style>
+    </TextBlock>
 
     <!--zukünfitge Transaktionen werden mit visuellen auffälligkeiten (also halb unsichtbar) unter den bereits bezahlten transaktionen dargestellt-->
-    <!--letzten row einfügen, wo alle ausgaben/einnahmen im monat stehen-->
 
-    <Button Content="+ new transaction" Command="{Binding AddTransactionCommand}" Grid.ColumnSpan="2" Grid.Row="2"/>
+    <Button Content="+ new transaction" Command="{Binding AddTransactionCommand}" Grid.ColumnSpan="2" Grid.Row="3"/>
   </Grid>
 </Window>
