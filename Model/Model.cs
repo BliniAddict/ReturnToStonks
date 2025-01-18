@@ -47,7 +47,7 @@ namespace ReturnToStonks
 
 
     #region Transactions
-    public string SaveTransaction(Transaction selectedTransaction, Transaction? oldTransaction)
+    public string SaveTransaction(Transaction selectedTransaction, Transaction? oldTransaction = null)
     {
       string result = string.Empty;
 
@@ -79,13 +79,16 @@ namespace ReturnToStonks
 
       return result;
     }
-    public List<Transaction> GetTransactions()
+    public List<Transaction> GetTransactions(DateTime? minDate = null)
     {
       List<Transaction> res = new();
 
-      using var command = _connection.CreateCommand();
-      command.CommandText = "SELECT purpose, category, amount, date, recurrence_span, recurrence_unit FROM Transactions";
 
+      using var command = _connection.CreateCommand();
+      command.CommandText = $"SELECT purpose, category, amount, date, recurrence_span, recurrence_unit FROM Transactions ";
+
+      if (minDate != null)
+        command.CommandText += $"WHERE date>='{Convert.ToDateTime(minDate).ToString("yyyy-MM-dd")}' ";
       using (var reader = command.ExecuteReader())
       {
         while (reader.Read())
@@ -109,11 +112,11 @@ namespace ReturnToStonks
     public string DeleteTransaction(Transaction selectedTransaction)
     {
       string result = string.Empty;
+
+      List<string> conditions = BuildTransactionEqualsConditions(selectedTransaction);
       using (var command = _connection.CreateCommand())
       {
-        List<string> conditions = BuildTransactionEqualsConditions(selectedTransaction);
         command.CommandText = "DELETE FROM Transactions WHERE " + string.Join(" AND ", conditions);
-
         int rowsAffected = command.ExecuteNonQuery();
         result = rowsAffected > 0 ? "Transaction deleted successfully" : "No rows affected. Delete failed.";
       }
@@ -140,7 +143,7 @@ namespace ReturnToStonks
     #endregion
 
     #region Categories
-    public string SaveCategory(Category selectedCategory, Category? oldCategory)
+    public string SaveCategory(Category selectedCategory, Category? oldCategory = null)
     {
       string result = string.Empty;
 
@@ -200,11 +203,10 @@ namespace ReturnToStonks
     {
       string result = string.Empty;
 
+      List<string> conditions = BuildEqualsConditions(selectedCategory);
       using (var command = _connection.CreateCommand())
       {
-        List<string> conditions = BuildEqualsConditions(selectedCategory);
         command.CommandText = "DELETE FROM Categories WHERE " + string.Join(" AND ", conditions);
-
         int rowsAffected = command.ExecuteNonQuery();
         result = rowsAffected > 0 ? "Category deleted successfully" : "No rows affected. Save failed.";
       }

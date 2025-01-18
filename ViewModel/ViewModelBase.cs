@@ -53,5 +53,18 @@ namespace ReturnToStonks
       }
       return true;
     }
+    protected DateTime CalculateNextDueDate(DateTime baseDate, Recurrence recurrence)
+    {
+      if (recurrence == null) return DateTime.MinValue;
+
+      return recurrence.Unit switch
+      {
+        "day" => baseDate.AddDays(recurrence.Span),
+        "week" => baseDate.AddDays(7 * recurrence.Span),
+        "month" => baseDate.AddMonths(recurrence.Span),
+        "year" => baseDate.AddYears(recurrence.Span),
+        _ => baseDate
+      };
+    }
   }
 }

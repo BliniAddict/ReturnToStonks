@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace ReturnToStonks
 {
@@ -114,5 +115,44 @@ namespace ReturnToStonks
     }
   }
   #endregion
+
+  public class CellBackgroundConverter : IValueConverter
+  {
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+      if (value is DateTime date)
+      {
+        if (date.Month > DateTime.Today.Month)
+          return Application.Current.Resources["TertiaryColor_Light"] as SolidColorBrush;
+      }
+      return Application.Current.Resources["SecondaryColor_Light"] as SolidColorBrush;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+      throw new NotImplementedException();
+    }
+  }
+  public class CellTextDecorationsConverter : IValueConverter
+  {
+    public object Convert(object value, Type targetType, object parameter,
+      CultureInfo culture)
+    {
+      if (value is DateTime date)
+      {
+        if (date >= DateTime.Today)
+        {
+          return TextDecorations.Strikethrough;
+        }
+      }
+      return null;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter,
+      CultureInfo culture)
+    {
+      throw new NotImplementedException();
+    }
+  }
 
 }

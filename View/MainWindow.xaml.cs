@@ -1,13 +1,6 @@
-﻿using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ReturnToStonks
 {
@@ -28,7 +21,7 @@ namespace ReturnToStonks
     {
       if (sender is DataGrid dataGrid && dataGrid.SelectedItem is Transaction transaction)
       {
-        if (transaction.Purpose != "Sum =")
+        if (transaction.Date <= DateTime.Today)
           _viewModel.OpenTransactionWindow(transaction);
       }
     }
