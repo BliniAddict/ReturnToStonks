@@ -104,17 +104,20 @@ namespace ReturnToStonks
       {
         Transaction? futureTr = new(transaction);
         futureTr.Date = CalculateNextDueDate(futureTr.Date, futureTr.Recurrence);
+        futureTr.IsPayed = futureTr.Date <= today;
+
         while (futureTr.Date < new DateTime(today.Year, today.Month + 2, 1))
         {
           if (!newTransactions.Any(a => ArePropertiesEqual(a, futureTr)))
           {
             newTransactions.Add(futureTr);
 
-            if (futureTr.Date <= today)
+            if (futureTr.IsPayed != null && (bool)futureTr.IsPayed)
               _model.SaveTransaction(futureTr);
           }
           futureTr = new(futureTr);
           futureTr.Date = CalculateNextDueDate(futureTr.Date, futureTr.Recurrence);
+          futureTr.IsPayed = futureTr.Date <= today;
         }
       }
       return new ObservableCollection<Transaction>(newTransactions.OrderBy(a => a.Amount).OrderBy(d => d.Date));

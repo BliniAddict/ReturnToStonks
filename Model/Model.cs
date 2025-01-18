@@ -126,7 +126,7 @@ namespace ReturnToStonks
     private List<string> BuildTransactionEqualsConditions(Transaction transaction)
     {
       List<string> conditions = BuildEqualsConditions(transaction);
-      conditions.RemoveAll(c => c.Contains("isrecurring"));
+      conditions.RemoveAll(c => c.Contains("isrecurring") && c.Contains("ispayed"));
 
       //add conditions associated with class properties
       conditions.Add(transaction.Category == null

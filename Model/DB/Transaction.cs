@@ -10,6 +10,7 @@
       Date = date;
       IsRecurring = isRecurring;
       Recurrence = recurrence;
+      IsPayed = date <= DateTime.Today;
     }
     public Transaction(Transaction transaction)
     {
@@ -19,6 +20,7 @@
       Date = transaction.Date;
       IsRecurring = transaction.IsRecurring;
       Recurrence = transaction.Recurrence == null ? null : new(transaction.Recurrence.Unit, transaction.Recurrence.Span);
+      IsPayed = transaction.IsPayed;
     }
 
     public string Purpose { get; set; }
@@ -27,5 +29,6 @@
     public DateTime Date { get; set; }
     public bool IsRecurring { get; set; }
     public Recurrence? Recurrence { get; set; }
+    public bool? IsPayed { get; set; }
   }
 }
