@@ -6,15 +6,17 @@ namespace ReturnToStonks
 {
   public class TransactionViewModel : ViewModelBase
   {
+    private readonly MessageService _messageService;
     private readonly IView _view;
     private readonly IModel _model;
     private Transaction? _oldTransaction;
     private Category? _oldCategory;
 
-    public TransactionViewModel(IView view, IModel model, Transaction? transaction)
+    public TransactionViewModel(IView view, IModel model, MessageService messageService, Transaction? transaction)
     {
       _view = view;
       _model = model;
+      _messageService = messageService;
 
       InitTransactionWindow(transaction);
 
@@ -33,6 +35,8 @@ namespace ReturnToStonks
     public ICommand DeleteCategoryCommand { get; }
 
     #region Properties
+    public string Message { get; set; }
+
     private Transaction _selectedTransaction;
     public Transaction SelectedTransaction
     {
@@ -163,12 +167,15 @@ namespace ReturnToStonks
       if (!SelectedTransaction.IsRecurring)
         SelectedTransaction.Recurrence = null;
 
-      string msg = _model.SaveTransaction(SelectedTransaction, _oldTransaction);
+      Message = _model.SaveTransaction(SelectedTransaction, _oldTransaction);
+      _messageService.ShowMessage(Message, true);
       _view.CloseWindow();
     }
     private void SaveCategory()
     {
-      string msg = _model.SaveCategory(SelectedCategory, _oldCategory);
+      Message = _model.SaveCategory(SelectedCategory, _oldCategory);
+      _messageService.ShowMessage(Message);
+
       _view.CloseCategoryPopup();
       SelectedCategory = Categories[^2];
     }
@@ -194,12 +201,16 @@ namespace ReturnToStonks
       if (!SelectedTransaction.IsRecurring)
         SelectedTransaction.Recurrence = null;
 
-      string msg = _model.DeleteTransaction(SelectedTransaction);
+      Message = _model.DeleteTransaction(SelectedTransaction);
+      _messageService.ShowMessage(Message, true);
+
       _view.CloseWindow();
     }
     private void DeleteCategory()
     {
-      string msg = _model.DeleteCategory(SelectedCategory);
+      Message = _model.DeleteCategory(SelectedCategory);
+      _messageService.ShowMessage(Message);
+
       _view.CloseCategoryPopup();
     }
     #endregion

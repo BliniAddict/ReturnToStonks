@@ -13,7 +13,6 @@
       <local:DateOutputConverter x:Key="DateOutputConverter"/>
       <local:IsTrueVisibilityConverter x:Key="IsTrueVisibilityConverter"/>
       <local:CellBackgroundConverter x:Key="CellBackgroundConverter"/>
-      <!--<local:CellTextDecorationsConverter x:Key="CellTextDecorationsConverter"/>-->
     </Grid.Resources>
     <Grid.ColumnDefinitions>
       <ColumnDefinition/>

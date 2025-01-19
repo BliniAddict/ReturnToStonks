@@ -14,13 +14,15 @@ namespace ReturnToStonks
 {
   public class MainViewModel : ViewModelBase
   {
+    private readonly MessageService _messageService;
     private IView _view;
     private IModel _model;
 
-    public MainViewModel(IView view, IModel model)
+    public MainViewModel(IView view, IModel model, MessageService messageService)
     {
       _view = view;
       _model = model;
+      _messageService = messageService;
 
       GetTransactions();
 
@@ -125,7 +127,7 @@ namespace ReturnToStonks
 
     public void OpenTransactionWindow(Transaction? transaction = null)
     {
-      TransactionWindow newTransaction = new(_model, transaction);
+      TransactionWindow newTransaction = new(_model, _messageService, transaction);
       newTransaction.ShowDialog();
 
       GetTransactions();

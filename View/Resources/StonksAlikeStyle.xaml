@@ -13,15 +13,15 @@
 
   <SolidColorBrush x:Key="PrimaryColor_Dark" Color="#031e98" />
   <SolidColorBrush x:Key="PrimaryColor_Light" Color="#6778c1" />
-  
+
   <SolidColorBrush x:Key="SecondaryColor_Dark" Color="#0132a5" />
   <SolidColorBrush x:Key="SecondaryColor_Light" Color="#6684c9" />
-  
+
   <SolidColorBrush x:Key="TertiaryColor_Dark" Color="#4f89c5" />
   <SolidColorBrush x:Key="TertiaryColor_Light" Color="#95b8dc" />
 
   <SolidColorBrush x:Key="Background_Dark" Color="#010f4c" />
-  <SolidColorBrush x:Key="Background_Light" Color="#dfe9f4" />  
+  <SolidColorBrush x:Key="Background_Light" Color="#dfe9f4" />
 
   <SolidColorBrush x:Key="PositiveColor" Color="#38d6ca" />
   <SolidColorBrush x:Key="NegativeColor" Color="#d63844"/>
@@ -29,7 +29,7 @@
   <Style TargetType="{x:Type Window}">
     <!--<Setter Property="Background" Value="{StaticResource Background_Light}"-->
   </Style>
-  
+
   <!--#region GroupBox-->
   <BorderGapMaskConverter x:Key="BorderGapMaskConverter"/>
   <Style TargetType="{x:Type GroupBox}">
@@ -85,12 +85,12 @@
     </Setter>
   </Style>
   <!--#endregion-->
-  
+
   <!--<Style x:Key="ScrollbarStyle" TargetType="{x:Type ScrollBar}">
         
       </Style>
       <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ScrollbarStyle}"/>-->
-  
+
   <!--#region Combobox-->
   <SolidColorBrush x:Key="TextBox.Static.Background" Color="#FFFFFFFF"/>
   <SolidColorBrush x:Key="ComboBox.Static.Background" Color="Transparent"/>
@@ -856,7 +856,7 @@
     <Setter Property="Margin" Value="0,0,2,0"/>
     <Setter Property="Padding" Value="5"/>
   </Style>
-  
+
   <Style x:Key="CrossedOutRowStyle" TargetType="{x:Type DataGridRow}">
     <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
     <Setter Property="SnapsToDevicePixels" Value="true"/>
@@ -979,6 +979,7 @@
     <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
     <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
     <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling"/>
+    <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel"/>
 
     <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
   </Style>
