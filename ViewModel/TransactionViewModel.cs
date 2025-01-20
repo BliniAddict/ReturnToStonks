@@ -35,7 +35,6 @@ namespace ReturnToStonks
     public ICommand DeleteCategoryCommand { get; }
 
     #region Properties
-    public string Message { get; set; }
 
     private Transaction _selectedTransaction;
     public Transaction SelectedTransaction
@@ -44,7 +43,7 @@ namespace ReturnToStonks
       {
         Transaction? tempTransaction = _oldTransaction == null ? null : new Transaction(_oldTransaction) 
         { Amount = Math.Abs(_oldTransaction.Amount) };
-        IsDeleteTransactionButtonEnabled = ArePropertiesEqual(_selectedTransaction, tempTransaction);
+        IsDeleteTransactionButtonEnabled = Utilities.ArePropertiesEqual(_selectedTransaction, tempTransaction);
 
         return _selectedTransaction;
       }
@@ -73,8 +72,9 @@ namespace ReturnToStonks
       {
         Transaction? tempTransaction = _oldTransaction == null ? null : new Transaction(_oldTransaction)
         { Amount = Math.Abs(_oldTransaction.Amount) };
-        IsDeleteTransactionButtonEnabled = ArePropertiesEqual(_selectedTransaction, tempTransaction);
-        IsDeleteCategoryButtonEnabled = ArePropertiesEqual(_selectedCategory, _oldCategory);
+        IsDeleteTransactionButtonEnabled = Utilities.ArePropertiesEqual(_selectedTransaction, tempTransaction);
+        IsDeleteCategoryButtonEnabled = Utilities.ArePropertiesEqual(_selectedCategory, _oldCategory);
+
         return _selectedCategory;
       }
       set
@@ -164,17 +164,14 @@ namespace ReturnToStonks
       if (!IsIncome)
         SelectedTransaction.Amount *= -1;
 
-      if (!SelectedTransaction.IsRecurring)
-        SelectedTransaction.Recurrence = null;
-
-      Message = _model.SaveTransaction(SelectedTransaction, _oldTransaction);
-      _messageService.ShowMessage(Message, true);
+      string message = _model.SaveTransaction(SelectedTransaction, _oldTransaction);
+      _messageService.ShowMessage(message, true);
       _view.CloseWindow();
     }
     private void SaveCategory()
     {
-      Message = _model.SaveCategory(SelectedCategory, _oldCategory);
-      _messageService.ShowMessage(Message);
+      string message = _model.SaveCategory(SelectedCategory, _oldCategory);
+      _messageService.ShowMessage(message);
 
       _view.CloseCategoryPopup();
       SelectedCategory = Categories[^2];
@@ -201,15 +198,15 @@ namespace ReturnToStonks
       if (!SelectedTransaction.IsRecurring)
         SelectedTransaction.Recurrence = null;
 
-      Message = _model.DeleteTransaction(SelectedTransaction);
-      _messageService.ShowMessage(Message, true);
+      string message = _model.DeleteTransaction(SelectedTransaction);
+      _messageService.ShowMessage(message, true);
 
       _view.CloseWindow();
     }
     private void DeleteCategory()
     {
-      Message = _model.DeleteCategory(SelectedCategory);
-      _messageService.ShowMessage(Message);
+      string message = _model.DeleteCategory(SelectedCategory);
+      _messageService.ShowMessage(message);
 
       _view.CloseCategoryPopup();
     }

@@ -54,7 +54,7 @@ namespace ReturnToStonks.View.Controls
 
       Application.Current.Dispatcher.Invoke(() =>
       {
-        var fadeOutDuration = TimeSpan.FromSeconds(0.5);
+        var fadeOutDuration = TimeSpan.FromSeconds(1);
         var fadeOutAnimation = new System.Windows.Media.Animation.DoubleAnimation(0.8, 0.0, fadeOutDuration);
         fadeOutAnimation.Completed += (s, _) => NotificationMessage = string.Empty;
         this.BeginAnimation(UserControl.OpacityProperty, fadeOutAnimation);

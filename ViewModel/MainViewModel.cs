@@ -105,12 +105,12 @@ namespace ReturnToStonks
       foreach (Transaction transaction in transactions.Where(recurring => recurring.IsRecurring))
       {
         Transaction? futureTr = new(transaction);
-        futureTr.Date = CalculateNextDueDate(futureTr.Date, futureTr.Recurrence);
+        futureTr.Date = Utilities.CalculateNextDueDate(futureTr.Date, futureTr.Recurrence);
         futureTr.IsPayed = futureTr.Date <= today;
 
         while (futureTr.Date < new DateTime(today.Year, today.Month + 2, 1))
         {
-          if (!newTransactions.Any(a => ArePropertiesEqual(a, futureTr)))
+          if (!newTransactions.Any(a => Utilities.ArePropertiesEqual(a, futureTr)))
           {
             newTransactions.Add(futureTr);
 
@@ -118,7 +118,7 @@ namespace ReturnToStonks
               _model.SaveTransaction(futureTr);
           }
           futureTr = new(futureTr);
-          futureTr.Date = CalculateNextDueDate(futureTr.Date, futureTr.Recurrence);
+          futureTr.Date = Utilities.CalculateNextDueDate(futureTr.Date, futureTr.Recurrence);
           futureTr.IsPayed = futureTr.Date <= today;
         }
       }
