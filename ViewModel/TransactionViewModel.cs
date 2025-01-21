@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ReturnToStonks
@@ -41,7 +42,7 @@ namespace ReturnToStonks
     {
       get
       {
-        Transaction? tempTransaction = _oldTransaction == null ? null : new Transaction(_oldTransaction) 
+        Transaction? tempTransaction = _oldTransaction == null ? null : new Transaction(_oldTransaction)
         { Amount = Math.Abs(_oldTransaction.Amount) };
         IsDeleteTransactionButtonEnabled = Utilities.ArePropertiesEqual(_selectedTransaction, tempTransaction);
 
@@ -138,7 +139,7 @@ namespace ReturnToStonks
         if (transaction.Amount < 0)
           transaction.Amount *= -1;
         else
-          IsIncome = false;
+          IsIncome = true;
       }
 
       SelectedTransaction = transaction;
@@ -192,23 +193,30 @@ namespace ReturnToStonks
 
     private void DeleteTransaction()
     {
-      if (!IsIncome)
-        SelectedTransaction.Amount = SelectedTransaction.Amount * -1;
+      string? additionaMessage = SelectedTransaction.IsRecurring ? "Recurring Transactions will also be affected." : null;
+      if (HasUserConfirmed("delete", SelectedTransaction, additionaMessage))
+      {
+        if (!IsIncome)
+          SelectedTransaction.Amount = SelectedTransaction.Amount * -1;
 
-      if (!SelectedTransaction.IsRecurring)
-        SelectedTransaction.Recurrence = null;
+        if (!SelectedTransaction.IsRecurring)
+          SelectedTransaction.Recurrence = null;
 
-      string message = _model.DeleteTransaction(SelectedTransaction);
-      _messageService.ShowMessage(message, true);
+        string message = _model.DeleteTransaction(SelectedTransaction);
+        _messageService.ShowMessage(message, true);
 
-      _view.CloseWindow();
+        _view.CloseWindow();
+      }
     }
     private void DeleteCategory()
     {
-      string message = _model.DeleteCategory(SelectedCategory);
-      _messageService.ShowMessage(message);
+      if (HasUserConfirmed("delete", SelectedCategory))
+      {
+        string message = _model.DeleteCategory(SelectedCategory);
+        _messageService.ShowMessage(message);
 
-      _view.CloseCategoryPopup();
+        _view.CloseCategoryPopup();
+      }
     }
     #endregion
   }

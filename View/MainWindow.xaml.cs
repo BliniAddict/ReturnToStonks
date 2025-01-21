@@ -51,7 +51,7 @@ namespace ReturnToStonks
     {
       if (sender is DataGrid dataGrid && dataGrid.SelectedItem is Transaction transaction)
       {
-        if (transaction.Date <= DateTime.Today)
+        if (transaction.Date <= new DateTime(DateTime.Today.Year, DateTime.Today.Month + 1, 1))
           _viewModel.OpenTransactionWindow(transaction);
       }
     }
