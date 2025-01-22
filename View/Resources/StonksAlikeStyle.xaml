@@ -26,9 +26,9 @@
   <SolidColorBrush x:Key="PositiveColor" Color="#38d6ca" />
   <SolidColorBrush x:Key="NegativeColor" Color="#d63844"/>
 
-  <Style TargetType="{x:Type Window}">
-    <!--<Setter Property="Background" Value="{StaticResource Background_Light}"-->
-  </Style>
+  <!--<Style TargetType="{x:Type Grid}">
+    <Setter Property="Background" Value="{StaticResource Background_Light}"/>
+  </Style>-->
 
   <!--#region GroupBox-->
   <BorderGapMaskConverter x:Key="BorderGapMaskConverter"/>
@@ -129,7 +129,7 @@
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type ToggleButton}">
-          <Border x:Name="templateRoot" CornerRadius="3" Background="{StaticResource ComboBox.Static.Background}" BorderBrush="{StaticResource ComboBox.Static.Border}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+          <Border x:Name="templateRoot" Background="{StaticResource ComboBox.Static.Background}" BorderBrush="{StaticResource ComboBox.Static.Border}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
             <Border x:Name="splitBorder" BorderBrush="Transparent" BorderThickness="1" HorizontalAlignment="Right" Margin="0" SnapsToDevicePixels="true" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}">
               <Path x:Name="arrow" Data="F1 M 0,0 L 2.667,2.66665 L 5.3334,0 L 5.3334,-1.78168 L 2.6667,0.88501 L0,-1.78168 L0,0 Z" Fill="{StaticResource ComboBox.Static.Glyph}" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center"/>
             </Border>
@@ -217,7 +217,7 @@
   </Style>
   <ControlTemplate x:Key="ComboBoxTemplate" TargetType="{x:Type ComboBox}">
     <GroupBox x:Name="groupBox" Header="{TemplateBinding Name}" FontSize="13" Padding="-5" BorderBrush="{TemplateBinding BorderBrush}">
-      <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
+      <Grid x:Name="templateRoot" SnapsToDevicePixels="true" Margin="2">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>
           <ColumnDefinition MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Width="0"/>
@@ -250,10 +250,6 @@
       </Grid>
     </GroupBox>
     <ControlTemplate.Triggers>
-      <Trigger Property="HasDropShadow" SourceName="PART_Popup" Value="true">
-        <Setter Property="Margin" TargetName="shadow" Value="0,0,5,5"/>
-        <Setter Property="Color" TargetName="shadow" Value="#71000000"/>
-      </Trigger>
       <Trigger Property="HasItems" Value="false">
         <Setter Property="Height" TargetName="dropDownBorder" Value="95"/>
       </Trigger>
@@ -275,10 +271,10 @@
   </ControlTemplate>
   <Style TargetType="{x:Type ComboBox}">
     <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-    <Setter Property="Background" Value="{StaticResource ComboBox.Static.Background}"/>
-    <Setter Property="BorderBrush" Value="LightGray"/>
+    <Setter Property="Background" Value="Transparent"/>
     <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"/>
-    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="BorderBrush" Value="LightGray"/>
     <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
     <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
     <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
@@ -390,7 +386,7 @@
   <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#FF7EB4EA"/>
   <SolidColorBrush x:Key="TextBox.Focus.Border" Color="#FF569DE5"/>
   <Style TargetType="{x:Type TextBox}">
-    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+    <Setter Property="Background" Value="Transparent"/>
     <Setter Property="BorderBrush" Value="LightGray"/>
     <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
     <Setter Property="BorderThickness" Value="2"/>
@@ -440,8 +436,7 @@
   <!--#endregion-->
 
   <!--#region DatePicker (& Calendar)-->
-  <Style x:Key="Calendar_MYOWNSTYLE" TargetType="{x:Type Calendar}">
-    <Setter Property="Background" Value="White"/>
+  <Style x:Key="CalendarStyle" TargetType="{x:Type Calendar}">
     <Setter Property="Width" Value="250"/>
     <Setter Property="CalendarDayButtonStyle">
       <Setter.Value>
@@ -638,7 +633,6 @@
     <Setter Property="SelectedDateFormat" Value="Short"/>
     <Setter Property="Background" Value="Transparent"/>
     <Setter Property="BorderBrush" Value="LightGray"/>
-    <Setter Property="BorderThickness" Value="1"/>
     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
     <Setter Property="VerticalContentAlignment" Value="Stretch"/>
 
@@ -647,7 +641,7 @@
     <Setter Property="Margin" Value="2"/>
     <Setter Property="Padding" Value="5"/>
 
-    <Setter Property="CalendarStyle" Value="{StaticResource Calendar_MYOWNSTYLE}"/>
+    <Setter Property="CalendarStyle" Value="{StaticResource CalendarStyle}"/>
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type DatePicker}">
@@ -797,9 +791,6 @@
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type DatePickerTextBox}">
           <Grid>
-            <Grid.Resources>
-              <SolidColorBrush x:Key="WatermarkBrush" Color="#FFAAAAAA"/>
-            </Grid.Resources>
             <VisualStateManager.VisualStateGroups>
               <VisualStateGroup x:Name="CommonStates">
                 <VisualStateGroup.Transitions>
@@ -829,10 +820,10 @@
                 <VisualState x:Name="Focused" />
               </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
-            <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="1" Opacity="1" Padding="{TemplateBinding Padding}">
+            <Border x:Name="Border" BorderThickness="0" Background="{TemplateBinding Background}" CornerRadius="1" Opacity="1" Padding="{TemplateBinding Padding}">
               <Grid x:Name="WatermarkContent" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                <Border x:Name="ContentElement" BorderBrush="#FFFFFFFF" BorderThickness="1"/>
-                <Border x:Name="watermark_decorator" BorderBrush="#FFFFFFFF" BorderThickness="1">
+                <Border x:Name="ContentElement" BorderThickness="0"/>
+                <Border x:Name="watermark_decorator" BorderThickness="0">
                   <ContentControl x:Name="PART_Watermark" Focusable="False" IsHitTestVisible="False" Opacity="0" Padding="2"/>
                 </Border>
                 <ScrollViewer x:Name="PART_ContentHost" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="0" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
@@ -972,16 +963,68 @@
     <Setter Property="Margin" Value="0,0,2,0"/>
     <Setter Property="Background" Value="{StaticResource TertiaryColor_Light}"/>
     <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-    <Setter Property="BorderBrush" Value="White"/>
-    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor_Light}"/>
+    <Setter Property="BorderThickness" Value="2.5"/>
     <Setter Property="RowDetailsVisibilityMode" Value="VisibleWhenSelected"/>
     <Setter Property="ScrollViewer.PanningMode" Value="VerticalOnly"/>
     <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
     <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
     <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling"/>
     <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel"/>
-
     <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+    
+    <Style.Triggers>
+      <DataTrigger Binding="{Binding HasItems, RelativeSource={RelativeSource Self}}" Value="false">
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="DataGrid">
+              <Border BorderBrush="{StaticResource PrimaryColor_Light}" BorderThickness="2.5" Background="{StaticResource TertiaryColor_Light}">
+                <TextBlock Text="No data yet..." Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"
+                           FontFamily="Arial" FontSize="20"/>
+              </Border>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </DataTrigger>
+    </Style.Triggers>
+    <!--<Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type DataGrid}">
+          <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+            <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false">
+              <ScrollViewer.Template>
+                <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="Auto"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="Auto"/>
+                      <RowDefinition Height="*"/>
+                      <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Button Command="{x:Static DataGrid.SelectAllCommand}" Focusable="false" Style="{DynamicResource {ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}}" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.All}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Width="{Binding CellsPanelHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
+                    <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Column="1" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
+                    <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" CanContentScroll="{TemplateBinding CanContentScroll}" Grid.ColumnSpan="2" Grid.Row="1"/>
+                    <ScrollBar x:Name="PART_VerticalScrollBar" Grid.Column="2" Maximum="{TemplateBinding ScrollableHeight}" Orientation="Vertical" Grid.Row="1" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                    <Grid Grid.Column="1" Grid.Row="2">
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{Binding NonFrozenColumnsViewportHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
+                        <ColumnDefinition Width="*"/>
+                      </Grid.ColumnDefinitions>
+                      <ScrollBar x:Name="PART_HorizontalScrollBar" Grid.Column="1" Maximum="{TemplateBinding ScrollableWidth}" Orientation="Horizontal" Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" ViewportSize="{TemplateBinding ViewportWidth}" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
+                    </Grid>
+                  </Grid>
+                </ControlTemplate>
+              </ScrollViewer.Template>
+              <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+            </ScrollViewer>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>-->
   </Style>
 
   <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DataGridCellStyle}"/>

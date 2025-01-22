@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:ReturnToStonks"
              mc:Ignorable="d">
   <GroupBox Header="{Binding Path=Name, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl, AncestorLevel=1}}"
-            FontSize="13" FontFamily="Arial" Margin="2" Padding="-5" Background="White">
+            FontSize="13" FontFamily="Arial" Margin="2" Padding="-5" Background="Transparent">
     <GroupBox.Style>
       <Style TargetType="GroupBox">
         <Setter Property="BorderBrush" Value="LightGray"/>
@@ -17,6 +17,7 @@
         </Style.Triggers>
       </Style>
     </GroupBox.Style>
+    <Border BorderThickness="2" BorderBrush="Transparent" CornerRadius="3">
     <Grid>
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
@@ -28,7 +29,7 @@
                VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right" FontSize="18" FontFamily="Arial" 
                PreviewTextInput="txtValue_PreviewTextInput" MaxLength="9" SnapsToDevicePixels="True" Style="{x:Null}"/>
       
-      <Grid Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,-3,-1,-1" MinWidth="15">
+      <Grid Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,-2,-1,0" MinWidth="15">
         <Grid.RowDefinitions>
           <RowDefinition Height="*"/>
           <RowDefinition Height="*"/>
@@ -36,7 +37,8 @@
         <Button Grid.Row="0" Content="➕" Click="AddButton_Click" Style="{DynamicResource CounterButtonStyle}" />
         <Button Grid.Row="1" Content="➖" Click="SubtractButton_Click" Style="{DynamicResource CounterButtonStyle}" />
       </Grid>
-    </Grid>
+      </Grid>
+    </Border>
   </GroupBox>
 
   <UserControl.Resources>
@@ -45,8 +47,8 @@
       <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
       <Setter Property="HorizontalContentAlignment" Value="Center"/>
       <Setter Property="VerticalContentAlignment" Value="Center"/>
-      <Setter Property="Padding" Value="2"/>
-      <Setter Property="FontSize" Value="14"/>
+      <Setter Property="Padding" Value="2,1.5,2,0"/>
+      <Setter Property="FontSize" Value="13"/>
       <Setter Property="FontFamily" Value="Arial"/>
       <Setter Property="Template">
         <Setter.Value>

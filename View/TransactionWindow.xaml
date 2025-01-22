@@ -30,7 +30,7 @@
               SelectedItem="{Binding SelectedCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
       <ComboBox.ItemTemplate>
         <DataTemplate>
-          <Grid Margin="0,0,0,3">
+          <Grid Margin="0,0,0,3" Background="Transparent">
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="Auto"/>
               <ColumnDefinition SharedSizeGroup="MakeTheLastElementHoverOver"/>
