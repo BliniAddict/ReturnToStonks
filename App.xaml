@@ -8,6 +8,11 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="View/Resources/StonksAlikeStyle.xaml"/>
       </ResourceDictionary.MergedDictionaries>
+      
+      <Style TargetType="{x:Type local:MainWindow}"
+               BasedOn="{StaticResource {x:Type Window}}"/>
+      <Style TargetType="{x:Type local:TransactionWindow}"
+               BasedOn="{StaticResource {x:Type Window}}"/>
     </ResourceDictionary>
   </Application.Resources>
 </Application>

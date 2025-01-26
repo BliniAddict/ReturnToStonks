@@ -8,8 +8,8 @@
   <GroupBox Header="{Binding Path=Name, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl, AncestorLevel=1}}"
             FontSize="13" FontFamily="Arial" Margin="2" Padding="-5" Background="Transparent">
     <GroupBox.Style>
-      <Style TargetType="GroupBox">
-        <Setter Property="BorderBrush" Value="LightGray"/>
+      <Style TargetType="GroupBox" BasedOn="{StaticResource GroupBoxStyle}">
+        <Setter Property="BorderBrush" Value="White"/>
         <Style.Triggers>
           <Trigger Property="IsMouseOver" Value="True">
             <Setter Property="BorderBrush" Value="{StaticResource TextBox.MouseOver.Border}"/>
@@ -53,7 +53,7 @@
       <Setter Property="Template">
         <Setter.Value>
           <ControlTemplate TargetType="{x:Type ButtonBase}">
-            <Border x:Name="border" Background="LightGray" BorderBrush="Transparent" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3" SnapsToDevicePixels="true">
+            <Border x:Name="border" Background="White" BorderBrush="Transparent" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3" SnapsToDevicePixels="true">
               <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
             </Border>
             <ControlTemplate.Triggers>
