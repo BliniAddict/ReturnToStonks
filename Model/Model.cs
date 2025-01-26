@@ -100,15 +100,12 @@ namespace ReturnToStonks
       }
       return rowsAffected > 0 ? "Transaction saved successfully" : "No rows affected. Save failed.";
     }
-    public List<Transaction> GetTransactions(DateTime? minDate = null)
+    public List<Transaction> GetTransactions()
     {
       List<Transaction> res = new();
 
       using var command = _connection.CreateCommand();
       command.CommandText = $"SELECT purpose, category, amount, date, recurrence_span, recurrence_unit FROM Transactions ";
-
-      if (minDate != null)
-        command.CommandText += $"WHERE date>='{Convert.ToDateTime(minDate):yyyy-MM-dd}' ";
 
       using (var reader = command.ExecuteReader())
       {

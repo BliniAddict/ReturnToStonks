@@ -2,7 +2,7 @@
 {
   public interface IModel
   {
-    List<Transaction> GetTransactions(DateTime? minDate = null);
+    List<Transaction> GetTransactions();
     string SaveTransaction(Transaction selectedTransaction, Transaction? oldTransaction = null);
     string DeleteTransaction(Transaction selectedTransaction);
 

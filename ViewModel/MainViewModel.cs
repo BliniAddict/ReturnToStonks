@@ -74,6 +74,36 @@ namespace ReturnToStonks
         OnPropertyChanged();
       }
     }
+
+    private bool _showOneTime = true;
+    public bool ShowOneTime
+    {
+      get => _showOneTime;
+      set
+      {
+        _showOneTime = value;
+        OnPropertyChanged();
+
+        if (!value && !ShowRecurring)
+          ShowRecurring = true;
+        GetTransactions();
+      }
+    }
+
+    private bool _showRecurring = true;
+    public bool ShowRecurring
+    {
+      get => _showRecurring;
+      set
+      {
+        _showRecurring = value;
+        OnPropertyChanged();
+
+        if (!value && !ShowOneTime)
+          ShowOneTime = true;
+        GetTransactions();
+      }
+    }
     #endregion
 
     #region Methods
@@ -82,8 +112,9 @@ namespace ReturnToStonks
       Incomes.Clear();
       Expenses.Clear();
 
-      List<Transaction> transactions = _model.GetTransactions(new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1)).ToList();
-      foreach (Transaction transaction in transactions)
+      List<Transaction> transactions = _model.GetTransactions().ToList();
+      transactions = SetFutureTransactions(transactions).Where(date => date.Date >= Utilities.ThisMonth).ToList();
+      foreach (Transaction transaction in transactions.Where(o => o.IsRecurring != ShowOneTime || o.IsRecurring == ShowRecurring))
       {
         if (transaction.Amount > 0)
           Incomes.Add(transaction);
@@ -92,12 +123,9 @@ namespace ReturnToStonks
       }
       IncomesSum = Incomes.Sum(amount => amount.Amount);
       ExpensesSum = Expenses.Sum(amount => amount.Amount);
-
-      Incomes = SetFutureTransactions(Incomes);
-      Expenses = SetFutureTransactions(Expenses);
     }
 
-    private ObservableCollection<Transaction> SetFutureTransactions(ObservableCollection<Transaction> transactions)
+    private List<Transaction> SetFutureTransactions(List<Transaction> transactions)
     {
       ObservableCollection<Transaction> newTransactions = new ObservableCollection<Transaction>(transactions);
       DateTime today = DateTime.Today;
@@ -122,7 +150,7 @@ namespace ReturnToStonks
           futureTr.IsPayed = futureTr.Date <= today;
         }
       }
-      return new ObservableCollection<Transaction>(newTransactions.OrderBy(a => a.Amount).OrderBy(d => d.Date));
+      return new List<Transaction>(newTransactions.OrderBy(a => a.Amount).OrderBy(d => d.Date));
     }
 
     public void OpenTransactionWindow(Transaction? transaction = null)
