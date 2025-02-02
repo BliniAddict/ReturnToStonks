@@ -123,7 +123,7 @@ namespace ReturnToStonks
     {
       if (DateTime.TryParseExact(value.ToString(), "d", new CultureInfo("en-US"), DateTimeStyles.None, out DateTime date))
       {
-        if (date.Month > DateTime.Today.Month)
+        if (date >= DateTime.Today)
           return Application.Current.Resources["TertiaryColor_Light"] as SolidColorBrush;
       }
       return Application.Current.Resources["SecondaryColor_Light"] as SolidColorBrush;

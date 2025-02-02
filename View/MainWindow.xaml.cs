@@ -20,7 +20,21 @@ namespace ReturnToStonks
     }
 
     public void CloseWindow() => Close();
+    private void ListView_Loaded(object sender, RoutedEventArgs e)
+    {
+      if (sender is ListView list && list.View is GridView gridView)
+      {
+        var semiLastColumn = gridView.Columns[gridView.Columns.Count - 2];
 
+        double availableWidth = list.ActualWidth - SystemParameters.VerticalScrollBarWidth;
+        foreach (var column in gridView.Columns)
+        {
+          if (column != semiLastColumn)
+            availableWidth -= column.ActualWidth;
+        }
+        semiLastColumn.Width = availableWidth;
+      }
+    }
     public void ShowMessage(string message)
     {
       NotificationPopup notification = new()
@@ -49,7 +63,7 @@ namespace ReturnToStonks
 
     private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-      if (sender is System.Windows.Controls.ListView list && list.SelectedItem is Transaction transaction)
+      if (sender is ListView list && list.SelectedItem is Transaction transaction)
       {
         if (transaction.Date <= new DateTime(DateTime.Today.Year, DateTime.Today.Month + 1, 1))
           _viewModel.OpenTransactionWindow(transaction);
