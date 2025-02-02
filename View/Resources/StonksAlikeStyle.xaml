@@ -34,6 +34,11 @@
     <Setter Property="Background" Value="{StaticResource Background_Light}"/>
   </Style>
 
+  <Style x:Key="ScrollbarStyle" TargetType="{x:Type ScrollBar}">
+
+  </Style>
+  <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ScrollbarStyle}"/>
+
   <!--#region GroupBox-->
   <BorderGapMaskConverter x:Key="BorderGapMaskConverter"/>
   <Style x:Key="GroupBoxStyle" TargetType="{x:Type GroupBox}">
@@ -92,10 +97,175 @@
   <Style TargetType="{x:Type GroupBox}" BasedOn="{StaticResource GroupBoxStyle}"/>
   <!--#endregion-->
 
-  <!--<Style x:Key="ScrollbarStyle" TargetType="{x:Type ScrollBar}">
-        
-      </Style>
-      <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ScrollbarStyle}"/>-->
+  <!--#region Expander-->
+  <SolidColorBrush x:Key="Expander.Static.Circle.Stroke" Color="#FF333333"/>
+  <SolidColorBrush x:Key="Expander.Static.Circle.Fill" Color="#FFFFFFFF"/>
+  <SolidColorBrush x:Key="Expander.Static.Arrow.Stroke" Color="#FF333333"/>
+  <SolidColorBrush x:Key="Expander.MouseOver.Circle.Stroke" Color="#FF5593FF"/>
+  <SolidColorBrush x:Key="Expander.MouseOver.Circle.Fill" Color="#FFF3F9FF"/>
+  <SolidColorBrush x:Key="Expander.MouseOver.Arrow.Stroke" Color="#FF000000"/>
+  <SolidColorBrush x:Key="Expander.Pressed.Circle.Stroke" Color="#FF3C77DD"/>
+  <SolidColorBrush x:Key="Expander.Pressed.Circle.Fill" Color="#FFD9ECFF"/>
+  <SolidColorBrush x:Key="Expander.Pressed.Arrow.Stroke" Color="#FF000000"/>
+  <SolidColorBrush x:Key="Expander.Disabled.Circle.Stroke" Color="#FFBCBCBC"/>
+  <SolidColorBrush x:Key="Expander.Disabled.Circle.Fill" Color="#FFE6E6E6"/>
+  <SolidColorBrush x:Key="Expander.Disabled.Arrow.Stroke" Color="#FF707070"/>
+  <Style x:Key="ExpanderHeaderFocusVisual">
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate>
+          <Border>
+            <Rectangle Margin="0" StrokeDashArray="1 2" Stroke="Black" SnapsToDevicePixels="true" StrokeThickness="1"/>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="ExpanderDownHeaderStyle" TargetType="{x:Type ToggleButton}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ToggleButton}">
+          <Border Padding="{TemplateBinding Padding}">
+            <Grid Background="Transparent" SnapsToDevicePixels="False">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="19"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <ContentPresenter Grid.Column="1" HorizontalAlignment="Left" Margin="4,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="True" VerticalAlignment="Center"/>
+            </Grid>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="ExpanderUpHeaderStyle" TargetType="{x:Type ToggleButton}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ToggleButton}">
+          <Border Padding="{TemplateBinding Padding}">
+            <Grid Background="Transparent" SnapsToDevicePixels="False">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="19"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <Grid>
+                <Grid.LayoutTransform>
+                  <TransformGroup>
+                    <TransformGroup.Children>
+                      <TransformCollection>
+                        <RotateTransform Angle="180"/>
+                      </TransformCollection>
+                    </TransformGroup.Children>
+                  </TransformGroup>
+                </Grid.LayoutTransform>
+              </Grid>
+              <ContentPresenter Grid.Column="1" HorizontalAlignment="Left" Margin="4,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="True" VerticalAlignment="Center"/>
+            </Grid>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="ExpanderLeftHeaderStyle" TargetType="{x:Type ToggleButton}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ToggleButton}">
+          <Border Padding="{TemplateBinding Padding}">
+            <Grid Background="Transparent" SnapsToDevicePixels="False">
+              <Grid.RowDefinitions>
+                <RowDefinition Height="19"/>
+                <RowDefinition Height="*"/>
+              </Grid.RowDefinitions>
+              <Grid>
+                <Grid.LayoutTransform>
+                  <TransformGroup>
+                    <TransformGroup.Children>
+                      <TransformCollection>
+                        <RotateTransform Angle="90"/>
+                      </TransformCollection>
+                    </TransformGroup.Children>
+                  </TransformGroup>
+                </Grid.LayoutTransform>
+              </Grid>
+              <ContentPresenter HorizontalAlignment="Center" Margin="0,4,0,0" RecognizesAccessKey="True" Grid.Row="1" SnapsToDevicePixels="True" VerticalAlignment="Top"/>
+            </Grid>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="ExpanderRightHeaderStyle" TargetType="{x:Type ToggleButton}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ToggleButton}">
+          <Border Padding="{TemplateBinding Padding}">
+            <Grid Background="Transparent" SnapsToDevicePixels="False">
+              <Grid.RowDefinitions>
+                <RowDefinition Height="19"/>
+                <RowDefinition Height="*"/>
+              </Grid.RowDefinitions>
+              <Grid>
+                <Grid.LayoutTransform>
+                  <TransformGroup>
+                    <TransformGroup.Children>
+                      <TransformCollection>
+                        <RotateTransform Angle="-90"/>
+                      </TransformCollection>
+                    </TransformGroup.Children>
+                  </TransformGroup>
+                </Grid.LayoutTransform>
+              </Grid>
+              <ContentPresenter HorizontalAlignment="Center" Margin="0,4,0,0" RecognizesAccessKey="True" Grid.Row="1" SnapsToDevicePixels="True" VerticalAlignment="Top"/>
+            </Grid>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style TargetType="{x:Type Expander}">
+    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+    <Setter Property="BorderBrush" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type Expander}">
+          <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3" SnapsToDevicePixels="true">
+            <DockPanel>
+              <ToggleButton x:Name="HeaderSite" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" DockPanel.Dock="Top" FontStretch="{TemplateBinding FontStretch}" Foreground="{TemplateBinding Foreground}" FocusVisualStyle="{StaticResource ExpanderHeaderFocusVisual}" FontStyle="{TemplateBinding FontStyle}" FontFamily="{TemplateBinding FontFamily}" FontWeight="{TemplateBinding FontWeight}" FontSize="{TemplateBinding FontSize}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" Margin="1" MinWidth="0" MinHeight="0" Padding="{TemplateBinding Padding}" Style="{StaticResource ExpanderDownHeaderStyle}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+              <ContentPresenter x:Name="ExpandSite" DockPanel.Dock="Bottom" Focusable="false" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Visibility="Collapsed"/>
+            </DockPanel>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsExpanded" Value="true">
+              <Setter Property="Visibility" TargetName="ExpandSite" Value="Visible"/>
+            </Trigger>
+            <Trigger Property="ExpandDirection" Value="Right">
+              <Setter Property="DockPanel.Dock" TargetName="ExpandSite" Value="Right"/>
+              <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Left"/>
+              <Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource ExpanderRightHeaderStyle}"/>
+            </Trigger>
+            <Trigger Property="ExpandDirection" Value="Up">
+              <Setter Property="DockPanel.Dock" TargetName="ExpandSite" Value="Top"/>
+              <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Bottom"/>
+              <Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource ExpanderUpHeaderStyle}"/>
+            </Trigger>
+            <Trigger Property="ExpandDirection" Value="Left">
+              <Setter Property="DockPanel.Dock" TargetName="ExpandSite" Value="Left"/>
+              <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Right"/>
+              <Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource ExpanderLeftHeaderStyle}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+              <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <!--#endregion-->
 
   <!--#region Combobox-->
   <SolidColorBrush x:Key="TextBox.Static.Background" Color="#FFFFFFFF"/>
@@ -840,7 +1010,7 @@
   </Style>
   <!--#endregion-->
 
-  <!--#region DataGrid-->
+  <!--#region ListView-->
   <Style x:Key="DataGridTextBlockStyle" TargetType="{x:Type TextBlock}">
     <Setter Property="Foreground" Value="White"/>
     <Setter Property="Background" Value="{StaticResource PrimaryColor_Light}"/>
@@ -851,6 +1021,7 @@
     <Setter Property="Margin" Value="0,0,2,0"/>
     <Setter Property="Padding" Value="5"/>
   </Style>
+
 
   <Style x:Key="CrossedOutRowStyle" TargetType="{x:Type DataGridRow}">
     <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
@@ -892,15 +1063,40 @@
     </Setter>
   </Style>
 
+  <GroupStyle x:Key="GroupStyle">
+    <GroupStyle.ContainerStyle>
+      <Style TargetType="{x:Type GroupItem}">
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type GroupItem}">
+              <Border BorderBrush="White" BorderThickness="0,1,0,0">
+                <Expander IsExpanded="True">
+                  <Expander.Header>
+                    <TextBlock Text="{Binding Path=Name}"
+                             FontSize="15" FontFamily="Arial" FontWeight="Bold" 
+                             Foreground="White"/>
+                  </Expander.Header>
+                  <Expander.Content>
+                    <ItemsPresenter />
+                  </Expander.Content>
+                </Expander>
+              </Border>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+    </GroupStyle.ContainerStyle>
+  </GroupStyle>
+
   <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" Color="#FF000000"/>
   <Style x:Key="DataGridCellStyle" TargetType="{x:Type DataGridCell}">
     <Setter Property="FontSize" Value="15"/>
     <Setter Property="FontFamily" Value="Arial"/>
     <Setter Property="FontWeight" Value="SemiBold"/>
     <Setter Property="TextBlock.TextAlignment" Value="Right"/>
-    <Setter Property="Height" Value="28"/>
+    <Setter Property="Height" Value="23"/>
     <Setter Property="Foreground" Value="White"/>
-    <Setter Property="Background" Value="{StaticResource SecondaryColor_Light}"/>
+    <!--<Setter Property="Background" Value="{StaticResource SecondaryColor_Light}"/>-->
     <Setter Property="BorderBrush" Value="Transparent"/>
     <Setter Property="BorderThickness" Value="0"/>
     <Setter Property="Template">
@@ -976,7 +1172,6 @@
     <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling"/>
     <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel"/>
     <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
-    
     <Style.Triggers>
       <DataTrigger Binding="{Binding HasItems, RelativeSource={RelativeSource Self}}" Value="false">
         <Setter Property="Template">
@@ -991,44 +1186,6 @@
         </Setter>
       </DataTrigger>
     </Style.Triggers>
-    <!--<Setter Property="Template">
-      <Setter.Value>
-        <ControlTemplate TargetType="{x:Type DataGrid}">
-          <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
-            <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false">
-              <ScrollViewer.Template>
-                <ControlTemplate TargetType="{x:Type ScrollViewer}">
-                  <Grid>
-                    <Grid.ColumnDefinitions>
-                      <ColumnDefinition Width="Auto"/>
-                      <ColumnDefinition Width="*"/>
-                      <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                      <RowDefinition Height="Auto"/>
-                      <RowDefinition Height="*"/>
-                      <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Button Command="{x:Static DataGrid.SelectAllCommand}" Focusable="false" Style="{DynamicResource {ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}}" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.All}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Width="{Binding CellsPanelHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-                    <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Column="1" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-                    <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" CanContentScroll="{TemplateBinding CanContentScroll}" Grid.ColumnSpan="2" Grid.Row="1"/>
-                    <ScrollBar x:Name="PART_VerticalScrollBar" Grid.Column="2" Maximum="{TemplateBinding ScrollableHeight}" Orientation="Vertical" Grid.Row="1" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
-                    <Grid Grid.Column="1" Grid.Row="2">
-                      <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="{Binding NonFrozenColumnsViewportHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-                        <ColumnDefinition Width="*"/>
-                      </Grid.ColumnDefinitions>
-                      <ScrollBar x:Name="PART_HorizontalScrollBar" Grid.Column="1" Maximum="{TemplateBinding ScrollableWidth}" Orientation="Horizontal" Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" ViewportSize="{TemplateBinding ViewportWidth}" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
-                    </Grid>
-                  </Grid>
-                </ControlTemplate>
-              </ScrollViewer.Template>
-              <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-            </ScrollViewer>
-          </Border>
-        </ControlTemplate>
-      </Setter.Value>
-    </Setter>-->
   </Style>
 
   <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DataGridCellStyle}"/>

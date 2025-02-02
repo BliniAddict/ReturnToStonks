@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
         xmlns:local="clr-namespace:ReturnToStonks"
-        xmlns:i="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core"
+        xmlns:i="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core" xmlns:componentmodel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
   <TabControl>
@@ -17,6 +17,33 @@
     
     <TabItem Header="Transactions">
       <Grid>
+        <Grid.Resources>
+          <CollectionViewSource x:Key="GroupedExpenses" Source="{Binding Expenses}">
+            <CollectionViewSource.GroupDescriptions>
+              <PropertyGroupDescription PropertyName="Date" Converter="{StaticResource DateOutputConverter}"/>
+            </CollectionViewSource.GroupDescriptions>
+          </CollectionViewSource>
+
+          <GroupStyle x:Key="TransactionsGroupStyle">
+            <GroupStyle.ContainerStyle>
+              <Style TargetType="{x:Type GroupItem}">
+                <Setter Property="Template">
+                  <Setter.Value>
+                    <ControlTemplate>
+                      <Expander IsExpanded="True" Background="{Binding Name, Converter={StaticResource CellBackgroundConverter}}">
+                        <Expander.Header>
+                          <TextBlock Text="{Binding Name}" FontSize="15" FontFamily="Arial" FontWeight="Bold" 
+                                         Foreground="White" VerticalAlignment="Bottom" />
+                        </Expander.Header>
+                        <ItemsPresenter />
+                      </Expander>
+                    </ControlTemplate>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </GroupStyle.ContainerStyle>
+          </GroupStyle>
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
           <ColumnDefinition/>
           <ColumnDefinition/>
@@ -25,7 +52,7 @@
           <RowDefinition Height="40"/>
           <RowDefinition/>
           <RowDefinition Height="28"/>
-          <RowDefinition Height="75"/>
+          <RowDefinition Height="70"/>
         </Grid.RowDefinitions>
 
         <Label Content="Incomes" Grid.Column="0"/>
@@ -69,42 +96,73 @@
         </DataGrid>
         <TextBlock Text="{Binding IncomesSum, StringFormat=Sum: {0:C2}}" Grid.Row="2" Style="{StaticResource DataGridTextBlockStyle}"/>
 
-        <DataGrid ItemsSource="{Binding Expenses}" MouseDoubleClick="DataGrid_MouseDoubleClick"
-              Grid.Column="1" Grid.Row="1">
-          <DataGrid.Columns>
-            <DataGridTemplateColumn Width="16">
-              <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                  <emoji:TextBlock Text="{Binding Category.Symbol}" Margin="0,0,-5,1"/>
-                </DataTemplate>
-              </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
-            <DataGridTemplateColumn Width="25">
-              <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                  <TextBlock Visibility="{Binding IsRecurring, Converter={StaticResource IsTrueVisibilityConverter}}"
-                         Text="&#10227;" FontSize="20" FontWeight="ExtraBold" HorizontalAlignment="Right" />
-                </DataTemplate>
-              </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
-            <DataGridTextColumn Binding="{Binding Date, Converter={StaticResource DateOutputConverter}}"/>
-            <DataGridTextColumn Binding="{Binding Purpose}" Width="*">
-              <DataGridTextColumn.CellStyle>
-                <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DataGridCellStyle}">
-                  <Setter Property="TextBlock.TextAlignment" Value="Left"/>
-                  <Setter Property="Background" Value="{Binding Date, Converter={StaticResource CellBackgroundConverter}}"/>
-                </Style>
-              </DataGridTextColumn.CellStyle>
-            </DataGridTextColumn>
-            <DataGridTextColumn Binding="{Binding Amount, StringFormat={}{0:C2}}"/>
-          </DataGrid.Columns>
-
-          <DataGrid.CellStyle>
-            <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DataGridCellStyle}">
-              <Setter Property="Background" Value="{Binding Date, Converter={StaticResource CellBackgroundConverter}}"/>
+        <ListView ItemsSource="{Binding Source={StaticResource GroupedExpenses}}" Grid.Column="1" Grid.Row="1" 
+                  MouseDoubleClick="DataGrid_MouseDoubleClick" Background="{StaticResource TertiaryColor_Light}" BorderThickness="0">
+          <ListView.GroupStyle>
+            <StaticResource ResourceKey="TransactionsGroupStyle"/>
+          </ListView.GroupStyle>
+          <ListView.Resources>
+            <Style TargetType="ListViewItem">
+              <Setter Property="FontFamily" Value="Arial"/>
+              <Setter Property="FontSize" Value="15"/>
+              <Setter Property="FontWeight" Value="SemiBold"/>
+              <Setter Property="Foreground" Value="White"/>
+              <Setter Property="Template">
+                <Setter.Value>
+                  <ControlTemplate TargetType="ListViewItem">
+                    <Border Name="ItemBorder" CornerRadius="0" Background="Transparent">
+                      <GridViewRowPresenter />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                      <Trigger Property="IsMouseOver" Value="True">
+                        <Setter TargetName="ItemBorder" Property="Background" Value="LightBlue" />
+                      </Trigger>
+                    </ControlTemplate.Triggers>
+                  </ControlTemplate>
+                </Setter.Value>
+              </Setter>
             </Style>
-          </DataGrid.CellStyle>
-        </DataGrid>
+          </ListView.Resources>
+          
+          <ListView.View>
+            <GridView>
+              <GridView.ColumnHeaderContainerStyle>
+                <Style TargetType="GridViewColumnHeader">
+                  <Setter Property="Visibility" Value="Visible"/>
+                </Style>
+              </GridView.ColumnHeaderContainerStyle>
+
+              <GridViewColumn>
+                <GridViewColumn.CellTemplate>
+                  <DataTemplate>
+                    <emoji:TextBlock Text="{Binding Category.Symbol}"/>
+                  </DataTemplate>
+                </GridViewColumn.CellTemplate>
+              </GridViewColumn>
+              <GridViewColumn>
+                <GridViewColumn.CellTemplate>
+                  <DataTemplate>
+                    <TextBlock Visibility="{Binding IsRecurring, Converter={StaticResource IsTrueVisibilityConverter}}"
+                         Text="&#10227;" FontSize="20" FontWeight="ExtraBold" Margin="0,-1,0,0"/>
+                  </DataTemplate>
+                </GridViewColumn.CellTemplate>
+              </GridViewColumn>
+              <GridViewColumn DisplayMemberBinding="{Binding Purpose}"/>
+              <GridViewColumn DisplayMemberBinding="{Binding Amount, StringFormat={}{0:C2}}"/>
+            </GridView>
+          </ListView.View>
+        </ListView>
+        <!--
+        - Strich über gefertigte Transaktionen
+        - amount muss rechtsgebunden sein
+        - entweder amount oder purpose soll den restlichen platz einnehmen
+        -->
+        
+        
+        
+        
+        
+        
         <TextBlock Text="{Binding ExpensesSum, StringFormat=Sum: {0:C2}}" Grid.Row="2" Grid.Column="1" Style="{StaticResource DataGridTextBlockStyle}"/>
 
         <WrapPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="3">

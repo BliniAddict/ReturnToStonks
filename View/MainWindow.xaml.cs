@@ -49,7 +49,7 @@ namespace ReturnToStonks
 
     private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-      if (sender is DataGrid dataGrid && dataGrid.SelectedItem is Transaction transaction)
+      if (sender is System.Windows.Controls.ListView list && list.SelectedItem is Transaction transaction)
       {
         if (transaction.Date <= new DateTime(DateTime.Today.Year, DateTime.Today.Month + 1, 1))
           _viewModel.OpenTransactionWindow(transaction);

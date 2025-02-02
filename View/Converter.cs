@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -120,7 +121,7 @@ namespace ReturnToStonks
   {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-      if (value is DateTime date)
+      if (DateTime.TryParseExact(value.ToString(), "d", new CultureInfo("en-US"), DateTimeStyles.None, out DateTime date))
       {
         if (date.Month > DateTime.Today.Month)
           return Application.Current.Resources["TertiaryColor_Light"] as SolidColorBrush;
