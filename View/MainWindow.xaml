@@ -5,9 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
         xmlns:local="clr-namespace:ReturnToStonks"
-        xmlns:i="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core" xmlns:componentmodel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        xmlns:i="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core" 
+        xmlns:componentmodel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+  <Grid>
   <TabControl>
     <TabControl.Resources>
       <local:DateOutputConverter x:Key="DateOutputConverter"/>
@@ -63,8 +65,8 @@
         <Label Content="Incomes" Grid.Column="0"/>
         <Label Content="Expenses" Grid.Column="1"/>
 
-        <ListView ItemsSource="{Binding Source={StaticResource GroupedIncomes}}" Loaded="ListView_Loaded"
-                  MouseDoubleClick="DataGrid_MouseDoubleClick" Grid.Column="0" Grid.Row="1">
+        <ListView ItemsSource="{Binding Source={StaticResource GroupedIncomes}}" Loaded="TransactionViews_Loaded"
+                  MouseDoubleClick="TransactionView_MouseDoubleClick" Grid.Column="0" Grid.Row="1">
           <ListView.GroupStyle>
             <StaticResource ResourceKey="TransactionsGroupStyle"/>
           </ListView.GroupStyle>
@@ -92,8 +94,8 @@
         </ListView>
         <TextBlock Text="{Binding IncomesSum, StringFormat=Sum: {0:C2}}" Grid.Row="2" Style="{StaticResource DataGridTextBlockStyle}"/>
 
-        <ListView ItemsSource="{Binding Source={StaticResource GroupedExpenses}}" Loaded="ListView_Loaded"
-                  MouseDoubleClick="DataGrid_MouseDoubleClick" Grid.Column="1" Grid.Row="1">
+        <ListView ItemsSource="{Binding Source={StaticResource GroupedExpenses}}" Loaded="TransactionViews_Loaded"
+                  MouseDoubleClick="TransactionView_MouseDoubleClick" Grid.Column="1" Grid.Row="1">
           <ListView.GroupStyle>
             <StaticResource ResourceKey="TransactionsGroupStyle"/>
           </ListView.GroupStyle>
@@ -143,5 +145,6 @@
         <Button Grid.Row="1"/>
       </Grid>
     </TabItem>
-  </TabControl>
+    </TabControl>
+  </Grid>
 </Window>

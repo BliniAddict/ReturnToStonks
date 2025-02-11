@@ -113,7 +113,7 @@ namespace ReturnToStonks
       Expenses.Clear();
 
       List<Transaction> transactions = _model.GetTransactions().ToList();
-      transactions = SetFutureTransactions(transactions).Where(date => date.Date >= Utilities.ThisMonth).ToList();
+      transactions = SetFutureTransactions(transactions).Where(date => date.Date >= Utilities.ThisMonth.AddMonths(-1)).ToList();
       foreach (Transaction transaction in transactions.Where(o => o.IsRecurring != ShowOneTime || o.IsRecurring == ShowRecurring))
       {
         if (transaction.Amount > 0)
@@ -127,7 +127,7 @@ namespace ReturnToStonks
 
     private List<Transaction> SetFutureTransactions(List<Transaction> transactions)
     {
-      ObservableCollection<Transaction> newTransactions = new ObservableCollection<Transaction>(transactions);
+      ObservableCollection<Transaction> newTransactions = new(transactions);
       DateTime today = DateTime.Today;
 
       foreach (Transaction transaction in transactions.Where(recurring => recurring.IsRecurring))

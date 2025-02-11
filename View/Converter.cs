@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
@@ -16,10 +10,7 @@ namespace ReturnToStonks
   #region Input
   public class MonetaryInputConverter : IValueConverter
   {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-      return value;
-    }
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => value;
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
@@ -76,10 +67,7 @@ namespace ReturnToStonks
       return values[0];
     }
 
-    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-    {
-      return new object[] { value };
-    }
+    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) => new object[] { value };
   }
   #endregion
 
@@ -117,6 +105,7 @@ namespace ReturnToStonks
   }
   #endregion
 
+  #region Color
   public class CellBackgroundConverter : IValueConverter
   {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -134,4 +123,5 @@ namespace ReturnToStonks
       throw new NotImplementedException();
     }
   }
+  #endregion
 }

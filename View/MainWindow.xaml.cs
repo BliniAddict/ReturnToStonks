@@ -1,6 +1,7 @@
-﻿using ReturnToStonks.View.Controls;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace ReturnToStonks
@@ -8,7 +9,7 @@ namespace ReturnToStonks
   public partial class MainWindow : Window, IView
   {
     private MainViewModel _viewModel;
-    private MessageService _messageService;
+    public readonly MessageService _messageService;
     public MainWindow()
     {
       InitializeComponent();
@@ -19,11 +20,11 @@ namespace ReturnToStonks
       DataContext = _viewModel;
     }
 
-    public void CloseWindow() => Close();
-    private void ListView_Loaded(object sender, RoutedEventArgs e)
+    private async void TransactionViews_Loaded(object sender, RoutedEventArgs e)
     {
       if (sender is ListView list && list.View is GridView gridView)
       {
+        //make "purpose"-column width="*" since writing it in xaml is not accepted
         var semiLastColumn = gridView.Columns[gridView.Columns.Count - 2];
 
         double availableWidth = list.ActualWidth - SystemParameters.VerticalScrollBarWidth;
@@ -33,35 +34,25 @@ namespace ReturnToStonks
             availableWidth -= column.ActualWidth;
         }
         semiLastColumn.Width = availableWidth;
-      }
-    }
-    public void ShowMessage(string message)
-    {
-      NotificationPopup notification = new()
-      {
-        Width = 300,
-        HorizontalAlignment = HorizontalAlignment.Center,
-        VerticalAlignment = VerticalAlignment.Bottom,
-        Margin = new Thickness(0, 0, 0, 50)
-      };
 
-      if (Content is Grid grid)
-      {
-        grid.Children.Add(notification);
-        grid.Children[^1].SetValue(Grid.ColumnSpanProperty, 10);
-        grid.Children[^1].SetValue(Grid.RowSpanProperty, 10);
-
-        notification.ShowMessage(message);
-
-        // Optional: Nach einer kurzen Zeit entfernen
-        Task.Delay(3000).ContinueWith(_ =>
+        if (list.Items.Count > 0)
         {
-          grid.Dispatcher.Invoke(() => { grid.Children.Remove(notification); });
-        });
+          //scroll to today
+          string todayDate = DateTime.Today.ToString("d", new CultureInfo("en-US"));
+          var todayGroup = list.Items.Groups
+            .OfType<CollectionViewGroup>()
+            .FirstOrDefault(g => g.Name is string date && date == todayDate);
+
+          if (todayGroup != null)
+          {
+            list.SelectedItem = todayGroup.Items[0];
+            list.ScrollIntoView(todayGroup.Items[0]);
+            list.Focus();
+          }
+        }
       }
     }
-
-    private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    private void TransactionView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
       if (sender is ListView list && list.SelectedItem is Transaction transaction)
       {

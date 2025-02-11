@@ -21,10 +21,10 @@ namespace ReturnToStonks
 
       InitTransactionWindow(transaction);
 
-      SaveTransactionCommand = new RelayCommand(SaveTransaction);
+      SaveTransactionCommand = new RelayCommand<Window>(SaveTransaction);
       SaveCategoryCommand = new RelayCommand(SaveCategory);
       ChangeCategoryCommand = new RelayCommand<Category>(InitCategoryPopup);
-      DeleteTransactionCommand = new RelayCommand(DeleteTransaction);
+      DeleteTransactionCommand = new RelayCommand<Window>(DeleteTransaction);
       DeleteCategoryCommand = new RelayCommand(DeleteCategory);
     }
 
@@ -158,7 +158,7 @@ namespace ReturnToStonks
       _view.OpenCategoryPopup();
     }
 
-    private void SaveTransaction()
+    private void SaveTransaction(Window window)
     {
       SelectedTransaction.Category = SelectedCategory;
 
@@ -167,7 +167,7 @@ namespace ReturnToStonks
 
       string message = _model.SaveTransaction(SelectedTransaction, _oldTransaction);
       _messageService.ShowMessage(message, true);
-      _view.CloseWindow();
+      _view.CloseWindow(window);
     }
     private void SaveCategory()
     {
@@ -191,7 +191,7 @@ namespace ReturnToStonks
       Categories.Add(new Category("Add new category", " ✚"));
     }
 
-    private void DeleteTransaction()
+    private void DeleteTransaction(Window window)
     {
       string? additionaMessage = SelectedTransaction.IsRecurring ? "Recurring Transactions will also be affected." : null;
       if (HasUserConfirmed("delete", SelectedTransaction, additionaMessage))
@@ -205,7 +205,7 @@ namespace ReturnToStonks
         string message = _model.DeleteTransaction(SelectedTransaction);
         _messageService.ShowMessage(message, true);
 
-        _view.CloseWindow();
+        _view.CloseWindow(window);
       }
     }
     private void DeleteCategory()
