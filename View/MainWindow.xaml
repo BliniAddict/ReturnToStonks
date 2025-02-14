@@ -10,141 +10,150 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
   <Grid>
-  <TabControl>
-    <TabControl.Resources>
-      <local:DateOutputConverter x:Key="DateOutputConverter"/>
-      <local:IsTrueVisibilityConverter x:Key="IsTrueVisibilityConverter"/>
-      <local:CellBackgroundConverter x:Key="CellBackgroundConverter"/>
-    </TabControl.Resources>
-    
-    <TabItem Header="Transactions">
-      <Grid>
-        <Grid.Resources>
-          <CollectionViewSource x:Key="GroupedIncomes" Source="{Binding Incomes}">
-            <CollectionViewSource.GroupDescriptions>
-              <PropertyGroupDescription PropertyName="Date" Converter="{StaticResource DateOutputConverter}"/>
-            </CollectionViewSource.GroupDescriptions>
-          </CollectionViewSource>
-          <CollectionViewSource x:Key="GroupedExpenses" Source="{Binding Expenses}">
-            <CollectionViewSource.GroupDescriptions>
-              <PropertyGroupDescription PropertyName="Date" Converter="{StaticResource DateOutputConverter}"/>
-            </CollectionViewSource.GroupDescriptions>
-          </CollectionViewSource>
+    <TabControl>
+      <TabControl.Resources>
+        <local:DateOutputConverter x:Key="DateOutputConverter"/>
+        <local:IsTrueVisibilityConverter x:Key="IsTrueVisibilityConverter"/>
+        <local:CellBackgroundConverter x:Key="CellBackgroundConverter"/>
+      </TabControl.Resources>
 
-          <GroupStyle x:Key="TransactionsGroupStyle">
-            <GroupStyle.ContainerStyle>
-              <Style TargetType="{x:Type GroupItem}">
-                <Setter Property="Template">
-                  <Setter.Value>
-                    <ControlTemplate>
-                      <Expander IsExpanded="True" Background="{Binding Name, Converter={StaticResource CellBackgroundConverter}}">
-                        <Expander.Header>
-                          <TextBlock Text="{Binding Name}" FontSize="15" FontFamily="Arial" FontWeight="Bold" 
+      <TabItem Header="Transactions">
+        <Grid>
+          <Grid.Resources>
+            <CollectionViewSource x:Key="GroupedIncomes" Source="{Binding Incomes}">
+              <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Date" Converter="{StaticResource DateOutputConverter}"/>
+              </CollectionViewSource.GroupDescriptions>
+            </CollectionViewSource>
+            <CollectionViewSource x:Key="GroupedExpenses" Source="{Binding Expenses}">
+              <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Date" Converter="{StaticResource DateOutputConverter}"/>
+              </CollectionViewSource.GroupDescriptions>
+            </CollectionViewSource>
+
+            <GroupStyle x:Key="TransactionsGroupStyle">
+              <GroupStyle.ContainerStyle>
+                <Style TargetType="{x:Type GroupItem}">
+                  <Setter Property="Template">
+                    <Setter.Value>
+                      <ControlTemplate>
+                        <Expander IsExpanded="True" Background="{Binding Name, Converter={StaticResource CellBackgroundConverter}}">
+                          <Expander.Header>
+                            <TextBlock Text="{Binding Name}" FontSize="15" FontFamily="Arial" FontWeight="Bold" 
                                          Foreground="White" VerticalAlignment="Bottom" />
-                        </Expander.Header>
-                        <ItemsPresenter />
-                      </Expander>
-                    </ControlTemplate>
-                  </Setter.Value>
-                </Setter>
-              </Style>
-            </GroupStyle.ContainerStyle>
-          </GroupStyle>
-        </Grid.Resources>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition/>
-          <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-          <RowDefinition Height="40"/>
-          <RowDefinition/>
-          <RowDefinition Height="28"/>
-          <RowDefinition Height="70"/>
-        </Grid.RowDefinitions>
+                          </Expander.Header>
+                          <ItemsPresenter />
+                        </Expander>
+                      </ControlTemplate>
+                    </Setter.Value>
+                  </Setter>
+                </Style>
+              </GroupStyle.ContainerStyle>
+            </GroupStyle>
+          </Grid.Resources>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="70"/>
+          </Grid.RowDefinitions>
 
-        <Label Content="Incomes" Grid.Column="0"/>
-        <Label Content="Expenses" Grid.Column="1"/>
+          <Label Content="Incomes" Grid.Column="0"/>
+          <Label Content="Expenses" Grid.Column="1"/>
 
-        <ListView ItemsSource="{Binding Source={StaticResource GroupedIncomes}}" Loaded="TransactionViews_Loaded"
+          <ListView ItemsSource="{Binding Source={StaticResource GroupedIncomes}}" Loaded="TransactionViews_Loaded"
                   MouseDoubleClick="TransactionView_MouseDoubleClick" Grid.Column="0" Grid.Row="1">
-          <ListView.GroupStyle>
-            <StaticResource ResourceKey="TransactionsGroupStyle"/>
-          </ListView.GroupStyle>
-          <ListView.View>
-            <GridView>
-              <GridViewColumn>
-                <GridViewColumn.CellTemplate>
-                  <DataTemplate>
-                    <emoji:TextBlock Text="{Binding Category.Symbol}"/>
-                  </DataTemplate>
-                </GridViewColumn.CellTemplate>
-              </GridViewColumn>
-              <GridViewColumn>
-                <GridViewColumn.CellTemplate>
-                  <DataTemplate>
-                    <TextBlock Visibility="{Binding IsRecurring, Converter={StaticResource IsTrueVisibilityConverter}}"
+            <ListView.GroupStyle>
+              <StaticResource ResourceKey="TransactionsGroupStyle"/>
+            </ListView.GroupStyle>
+            <ListView.View>
+              <GridView>
+                <GridViewColumn>
+                  <GridViewColumn.CellTemplate>
+                    <DataTemplate>
+                      <emoji:TextBlock Text="{Binding Category.Symbol}"/>
+                    </DataTemplate>
+                  </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn>
+                  <GridViewColumn.CellTemplate>
+                    <DataTemplate>
+                      <TextBlock Visibility="{Binding IsRecurring, Converter={StaticResource IsTrueVisibilityConverter}}"
                          Text="&#10227;" FontSize="20" FontWeight="ExtraBold" Margin="0,-1,0,0"/>
-                  </DataTemplate>
-                </GridViewColumn.CellTemplate>
-              </GridViewColumn>
-              <GridViewColumn DisplayMemberBinding="{Binding Purpose}"/>
-              <GridViewColumn DisplayMemberBinding="{Binding Amount, StringFormat={}{0:C2}}"/>
-            </GridView>
-          </ListView.View>
-        </ListView>
-        <TextBlock Text="{Binding IncomesSum, StringFormat=Sum: {0:C2}}" Grid.Row="2" Style="{StaticResource DataGridTextBlockStyle}"/>
+                    </DataTemplate>
+                  </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn DisplayMemberBinding="{Binding Purpose}"/>
+                <GridViewColumn DisplayMemberBinding="{Binding Amount, StringFormat={}{0:C2}}"/>
+              </GridView>
+            </ListView.View>
+          </ListView>
+          <TextBlock Text="{Binding IncomesSum, StringFormat=Sum: {0:C2}}" Grid.Row="2" Style="{StaticResource DataGridTextBlockStyle}"/>
 
-        <ListView ItemsSource="{Binding Source={StaticResource GroupedExpenses}}" Loaded="TransactionViews_Loaded"
+          <ListView ItemsSource="{Binding Source={StaticResource GroupedExpenses}}" Loaded="TransactionViews_Loaded"
                   MouseDoubleClick="TransactionView_MouseDoubleClick" Grid.Column="1" Grid.Row="1">
-          <ListView.GroupStyle>
-            <StaticResource ResourceKey="TransactionsGroupStyle"/>
-          </ListView.GroupStyle>
-          <ListView.View>
-            <GridView>
-              <GridViewColumn>
-                <GridViewColumn.CellTemplate>
-                  <DataTemplate>
-                    <emoji:TextBlock Text="{Binding Category.Symbol}"/>
-                  </DataTemplate>
-                </GridViewColumn.CellTemplate>
-              </GridViewColumn>
-              <GridViewColumn>
-                <GridViewColumn.CellTemplate>
-                  <DataTemplate>
-                    <TextBlock Visibility="{Binding IsRecurring, Converter={StaticResource IsTrueVisibilityConverter}}"
+            <ListView.GroupStyle>
+              <StaticResource ResourceKey="TransactionsGroupStyle"/>
+            </ListView.GroupStyle>
+            <ListView.View>
+              <GridView>
+                <GridViewColumn>
+                  <GridViewColumn.CellTemplate>
+                    <DataTemplate>
+                      <emoji:TextBlock Text="{Binding Category.Symbol}"/>
+                    </DataTemplate>
+                  </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn>
+                  <GridViewColumn.CellTemplate>
+                    <DataTemplate>
+                      <TextBlock Visibility="{Binding IsRecurring, Converter={StaticResource IsTrueVisibilityConverter}}"
                          Text="&#10227;" FontSize="20" FontWeight="ExtraBold" Margin="0,-1,0,0"/>
-                  </DataTemplate>
-                </GridViewColumn.CellTemplate>
-              </GridViewColumn>
-              <GridViewColumn DisplayMemberBinding="{Binding Purpose}"/>
-              <GridViewColumn DisplayMemberBinding="{Binding Amount, StringFormat={}{0:C2}}"/>
-            </GridView>
-          </ListView.View>
-        </ListView>
-        <TextBlock Text="{Binding ExpensesSum, StringFormat=Sum: {0:C2}}" Grid.Row="2" Grid.Column="1" Style="{StaticResource DataGridTextBlockStyle}"/>
+                    </DataTemplate>
+                  </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn DisplayMemberBinding="{Binding Purpose}"/>
+                <GridViewColumn DisplayMemberBinding="{Binding Amount, StringFormat={}{0:C2}}"/>
+              </GridView>
+            </ListView.View>
+          </ListView>
+          <TextBlock Text="{Binding ExpensesSum, StringFormat=Sum: {0:C2}}" Grid.Row="2" Grid.Column="1" Style="{StaticResource DataGridTextBlockStyle}"/>
 
-        <WrapPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="3">
-          <local:ToggleSwitch CheckedText="Show  one-time" IsChecked="{Binding ShowOneTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UncheckedText="Don't show one-time"/>
-          <local:ToggleSwitch CheckedText="Show recurring" IsChecked="{Binding ShowRecurring, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UncheckedText="Don't show recurring"/>
-        </WrapPanel>
-        <Button Content="+ new transaction" Command="{Binding AddTransactionCommand}" Grid.Column="1" Grid.Row="3"/>
-      </Grid>
-    </TabItem>
-    
-    <TabItem Header="Debts">
-      <Grid>
-        <Grid.RowDefinitions>
-          <RowDefinition/>
-          <RowDefinition Height="75"/>
-        </Grid.RowDefinitions>
+          <WrapPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="3">
+            <local:ToggleSwitch CheckedText="Show  one-time" IsChecked="{Binding ShowOneTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UncheckedText="Don't show one-time"/>
+            <local:ToggleSwitch CheckedText="Show recurring" IsChecked="{Binding ShowRecurring, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UncheckedText="Don't show recurring"/>
+          </WrapPanel>
+          <Button Content="+ new transaction" Command="{Binding AddTransactionCommand}" Grid.Column="1" Grid.Row="3"/>
+        </Grid>
+      </TabItem>
 
-        <DataGrid >
-          
-        </DataGrid>
+      <TabItem Header="Debts">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="75"/>
+          </Grid.RowDefinitions>
 
-        <Button Grid.Row="1"/>
-      </Grid>
-    </TabItem>
+          <ListView>
+            <ListView.View>
+              <GridView>
+
+              </GridView>
+            </ListView.View>
+          </ListView>
+
+          <Button Content="+ new debt" Command="{Binding AddDebtCommand}" Grid.Row="2" Grid.ColumnSpan="2"/>
+        </Grid>
+      </TabItem>
     </TabControl>
   </Grid>
 </Window>

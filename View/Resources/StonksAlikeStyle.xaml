@@ -460,6 +460,7 @@
     <Setter Property="FontSize" Value="18"/>
     <Setter Property="VerticalContentAlignment" Value="Center"/>
     <Setter Property="Margin" Value="2"/>
+    <Setter Property="Height" Value="50"/>
     <Setter Property="Template" Value="{StaticResource ComboBoxTemplate}"/>
     <Style.Triggers>
       <Trigger Property="IsEditable" Value="true">
@@ -575,6 +576,7 @@
     <Setter Property="FontFamily" Value="Arial"/>
     <Setter Property="Margin" Value="2"/>
     <Setter Property="Padding" Value="5"/>
+    <Setter Property="Height" Value="50"/>
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type TextBoxBase}">
@@ -814,6 +816,7 @@
     <Setter Property="FontFamily" Value="Arial"/>
     <Setter Property="Margin" Value="2"/>
     <Setter Property="Padding" Value="5"/>
+    <Setter Property="Height" Value="50"/>
 
     <Setter Property="CalendarStyle" Value="{StaticResource CalendarStyle}"/>
     <Setter Property="Template">

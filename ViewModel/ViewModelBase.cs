@@ -13,12 +13,15 @@ namespace ReturnToStonks
 {
   public class ViewModelBase : INotifyPropertyChanged
   {
+    #region PropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
 
     protected void OnPropertyChanged([CallerMemberName] string name = null)
     {
       PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
+    #endregion
+
 
     protected bool HasUserConfirmed<T>(string option, T type, string? additionalMessage = null)
     {

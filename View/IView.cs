@@ -6,7 +6,11 @@ namespace ReturnToStonks
 {
   public interface IView
   {
-    void CloseWindow(Window window) => window.Close();
+    void CloseWindow()
+    {
+      if (this is Window window)
+        window.Close();
+    }
     void ShowMessage(string message)
     {
       if (this is Window window && window.Content is Grid grid)

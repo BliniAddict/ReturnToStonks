@@ -13,6 +13,8 @@
                BasedOn="{StaticResource {x:Type Window}}"/>
       <Style TargetType="{x:Type local:TransactionWindow}"
                BasedOn="{StaticResource {x:Type Window}}"/>
+      <Style TargetType="{x:Type local:DebtWindow}"
+               BasedOn="{StaticResource {x:Type Window}}"/>
     </ResourceDictionary>
   </Application.Resources>
 </Application>

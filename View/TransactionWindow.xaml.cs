@@ -35,7 +35,7 @@ namespace ReturnToStonks
         if (btn.Name == "CancelNewCategory")
           CloseCategoryPopup();
         else
-          ((IView)this).CloseWindow(this);
+          ((IView)this).CloseWindow();
       }
     }
   }

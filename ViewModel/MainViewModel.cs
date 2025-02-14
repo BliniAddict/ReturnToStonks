@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows.Input;
 
 namespace ReturnToStonks
@@ -27,9 +28,11 @@ namespace ReturnToStonks
       GetTransactions();
 
       AddTransactionCommand = new RelayCommand<Transaction?>(OpenTransactionWindow);
+      AddDebtCommand = new RelayCommand<Debt?>(OpenDebtWindow);
     }
 
     public ICommand AddTransactionCommand { get; }
+    public ICommand AddDebtCommand { get; }
 
     #region Properties
     private ObservableCollection<Transaction> _incomes { get; set; } = new ObservableCollection<Transaction>();
@@ -107,6 +110,19 @@ namespace ReturnToStonks
     #endregion
 
     #region Methods
+    public void OpenTransactionWindow(Transaction? transaction = null)
+    {
+      TransactionWindow newTransaction = new(_model, _messageService, transaction);
+      newTransaction.ShowDialog();
+
+      GetTransactions();
+    }
+    public void OpenDebtWindow(Debt? debt = null)
+    {
+      DebtWindow newDebt = new(_model, _messageService, debt);
+      newDebt.ShowDialog();
+    }
+
     private void GetTransactions()
     {
       Incomes.Clear();
@@ -124,7 +140,6 @@ namespace ReturnToStonks
       IncomesSum = Incomes.Sum(amount => amount.Amount);
       ExpensesSum = Expenses.Sum(amount => amount.Amount);
     }
-
     private List<Transaction> SetFutureTransactions(List<Transaction> transactions)
     {
       ObservableCollection<Transaction> newTransactions = new(transactions);
@@ -151,14 +166,6 @@ namespace ReturnToStonks
         }
       }
       return new List<Transaction>(newTransactions.OrderBy(a => a.Amount).OrderBy(d => d.Date));
-    }
-
-    public void OpenTransactionWindow(Transaction? transaction = null)
-    {
-      TransactionWindow newTransaction = new(_model, _messageService, transaction);
-      newTransaction.ShowDialog();
-
-      GetTransactions();
     }
     #endregion
   }

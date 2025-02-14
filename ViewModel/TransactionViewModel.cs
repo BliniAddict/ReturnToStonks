@@ -10,6 +10,7 @@ namespace ReturnToStonks
     private readonly MessageService _messageService;
     private readonly IView _view;
     private readonly IModel _model;
+
     private Transaction? _oldTransaction;
     private Category? _oldCategory;
 
@@ -21,10 +22,10 @@ namespace ReturnToStonks
 
       InitTransactionWindow(transaction);
 
-      SaveTransactionCommand = new RelayCommand<Window>(SaveTransaction);
+      SaveTransactionCommand = new RelayCommand(SaveTransaction);
       SaveCategoryCommand = new RelayCommand(SaveCategory);
       ChangeCategoryCommand = new RelayCommand<Category>(InitCategoryPopup);
-      DeleteTransactionCommand = new RelayCommand<Window>(DeleteTransaction);
+      DeleteTransactionCommand = new RelayCommand(DeleteTransaction);
       DeleteCategoryCommand = new RelayCommand(DeleteCategory);
     }
 
@@ -158,7 +159,7 @@ namespace ReturnToStonks
       _view.OpenCategoryPopup();
     }
 
-    private void SaveTransaction(Window window)
+    private void SaveTransaction()
     {
       SelectedTransaction.Category = SelectedCategory;
 
@@ -167,7 +168,7 @@ namespace ReturnToStonks
 
       string message = _model.SaveTransaction(SelectedTransaction, _oldTransaction);
       _messageService.ShowMessage(message, true);
-      _view.CloseWindow(window);
+      _view.CloseWindow();
     }
     private void SaveCategory()
     {
@@ -191,7 +192,7 @@ namespace ReturnToStonks
       Categories.Add(new Category("Add new category", " ✚"));
     }
 
-    private void DeleteTransaction(Window window)
+    private void DeleteTransaction()
     {
       string? additionaMessage = SelectedTransaction.IsRecurring ? "Recurring Transactions will also be affected." : null;
       if (HasUserConfirmed("delete", SelectedTransaction, additionaMessage))
@@ -205,7 +206,7 @@ namespace ReturnToStonks
         string message = _model.DeleteTransaction(SelectedTransaction);
         _messageService.ShowMessage(message, true);
 
-        _view.CloseWindow(window);
+        _view.CloseWindow();
       }
     }
     private void DeleteCategory()
