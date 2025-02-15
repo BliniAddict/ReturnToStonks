@@ -7,18 +7,13 @@ namespace ReturnToStonks
 {
   public class TransactionViewModel : ViewModelBase
   {
-    private readonly MessageService _messageService;
-    private readonly IView _view;
-    private readonly IModel _model;
-
     private Transaction? _oldTransaction;
-    private Category? _oldCategory;
 
     public TransactionViewModel(IView view, IModel model, MessageService messageService, Transaction? transaction)
     {
-      _view = view;
-      _model = model;
-      _messageService = messageService;
+      base.view = view;
+      base.model = model;
+      base.messageService = messageService;
 
       InitTransactionWindow(transaction);
 
@@ -37,7 +32,6 @@ namespace ReturnToStonks
     public ICommand DeleteCategoryCommand { get; }
 
     #region Properties
-
     private Transaction _selectedTransaction;
     public Transaction SelectedTransaction
     {
@@ -53,39 +47,6 @@ namespace ReturnToStonks
       {
         _selectedTransaction = value;
         OnPropertyChanged();
-      }
-    }
-
-    public ObservableCollection<Category> _categories;
-    public ObservableCollection<Category> Categories
-    {
-      get => _categories;
-      set
-      {
-        _categories = value;
-        OnPropertyChanged();
-      }
-    }
-
-    private Category? _selectedCategory;
-    public Category? SelectedCategory
-    {
-      get
-      {
-        Transaction? tempTransaction = _oldTransaction == null ? null : new Transaction(_oldTransaction)
-        { Amount = Math.Abs(_oldTransaction.Amount) };
-        IsDeleteTransactionButtonEnabled = Utilities.ArePropertiesEqual(_selectedTransaction, tempTransaction);
-        IsDeleteCategoryButtonEnabled = Utilities.ArePropertiesEqual(_selectedCategory, _oldCategory);
-
-        return _selectedCategory;
-      }
-      set
-      {
-        _selectedCategory = value;
-        OnPropertyChanged();
-
-        if (value?.Symbol == " ✚")
-          InitCategoryPopup();
       }
     }
 
@@ -146,18 +107,6 @@ namespace ReturnToStonks
       SelectedTransaction = transaction;
       GetCategories();
     }
-    private void InitCategoryPopup(Category cat = null)
-    {
-      if (cat != null) //change (not yet) selected category
-      {
-        _oldCategory = new Category(cat.Name, cat.Symbol);
-        SelectedCategory = cat;
-      }
-      else if (SelectedCategory?.Symbol == " ✚") //new category
-        SelectedCategory = new Category(string.Empty, "❓");
-
-      _view.OpenCategoryPopup();
-    }
 
     private void SaveTransaction()
     {
@@ -166,32 +115,10 @@ namespace ReturnToStonks
       if (!IsIncome)
         SelectedTransaction.Amount *= -1;
 
-      string message = _model.SaveTransaction(SelectedTransaction, _oldTransaction);
-      _messageService.ShowMessage(message, true);
-      _view.CloseWindow();
+      string message = model.SaveTransaction(SelectedTransaction, _oldTransaction);
+      messageService.ShowMessage(message, true);
+      view.CloseWindow();
     }
-    private void SaveCategory()
-    {
-      string message = _model.SaveCategory(SelectedCategory, _oldCategory);
-      _messageService.ShowMessage(message);
-
-      _view.CloseCategoryPopup();
-      SelectedCategory = Categories[^2];
-    }
-
-    public void GetCategories()
-    {
-      Categories = new ObservableCollection<Category>();
-      foreach (Category category in _model.GetCategories())
-        Categories.Add(category);
-
-      _oldCategory = null;
-      if (SelectedTransaction.Category != null)
-        SelectedCategory = Categories.FirstOrDefault(name => SelectedTransaction.Category.Name == name.Name);
-
-      Categories.Add(new Category("Add new category", " ✚"));
-    }
-
     private void DeleteTransaction()
     {
       string? additionaMessage = SelectedTransaction.IsRecurring ? "Recurring Transactions will also be affected." : null;
@@ -203,21 +130,29 @@ namespace ReturnToStonks
         if (!SelectedTransaction.IsRecurring)
           SelectedTransaction.Recurrence = null;
 
-        string message = _model.DeleteTransaction(SelectedTransaction);
-        _messageService.ShowMessage(message, true);
+        string message = model.DeleteTransaction(SelectedTransaction);
+        messageService.ShowMessage(message, true);
 
-        _view.CloseWindow();
+        view.CloseWindow();
       }
     }
-    private void DeleteCategory()
-    {
-      if (HasUserConfirmed("delete", SelectedCategory))
-      {
-        string message = _model.DeleteCategory(SelectedCategory);
-        _messageService.ShowMessage(message);
 
-        _view.CloseCategoryPopup();
-      }
+    public override void GetCategories()
+    {
+      base.GetCategories();
+      if (SelectedTransaction.Category != null)
+        SelectedCategory = Categories.FirstOrDefault(name => SelectedTransaction.Category.Name == name.Name);
+    }
+    public override void CheckIfCategoryChanged()
+    {
+      Transaction? tempTransaction = _oldTransaction == null ? null : new Transaction(_oldTransaction)
+      {
+        Amount = Math.Abs(_oldTransaction.Amount),
+        Category = _selectedCategory
+      };
+
+      IsDeleteTransactionButtonEnabled = Utilities.ArePropertiesEqual(_selectedTransaction, tempTransaction);
+      IsDeleteCategoryButtonEnabled = Utilities.ArePropertiesEqual(_selectedCategory, OldCategory);
     }
     #endregion
   }

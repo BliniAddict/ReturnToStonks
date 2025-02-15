@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -13,6 +14,10 @@ namespace ReturnToStonks
 {
   public class ViewModelBase : INotifyPropertyChanged
   {
+    protected IView view;
+    protected IModel model;
+    protected MessageService messageService;
+
     #region PropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -22,6 +27,79 @@ namespace ReturnToStonks
     }
     #endregion
 
+    #region Category
+    protected Category? OldCategory;
+
+    public ObservableCollection<Category> _categories;
+    public ObservableCollection<Category> Categories
+    {
+      get => _categories;
+      set
+      {
+        _categories = value;
+        OnPropertyChanged();
+      }
+    }
+
+
+    protected Category? _selectedCategory;
+    public Category? SelectedCategory
+    {
+      get => _selectedCategory;
+      set
+      {
+        _selectedCategory = value;
+        OnPropertyChanged();
+
+        if (value?.Symbol == " ✚")
+          InitCategoryPopup();
+        CheckIfCategoryChanged();
+      }
+    }
+
+    public virtual void CheckIfCategoryChanged() { }
+    public virtual void GetCategories()
+    {
+      Categories = new ObservableCollection<Category>();
+      foreach (Category category in model.GetCategories())
+        Categories.Add(category);
+
+      OldCategory = null;
+      Categories.Add(new Category("Add new category", " ✚"));    
+    }
+
+    protected void InitCategoryPopup(Category cat = null)
+    {
+      if (cat != null) //change (not yet) selected category
+      {
+        OldCategory = new Category(cat.Name, cat.Symbol);
+        SelectedCategory = cat;
+      }
+      else if (SelectedCategory?.Symbol == " ✚") //new category
+        SelectedCategory = new Category(string.Empty, "❓");
+
+      view.OpenCategoryPopup();
+    }
+
+    protected void SaveCategory()
+    {
+      string message = model.SaveCategory(SelectedCategory, OldCategory);
+      messageService.ShowMessage(message);
+
+      view.CloseCategoryPopup();
+      SelectedCategory = Categories[^2];
+    }
+    protected void DeleteCategory()
+    {
+      if (HasUserConfirmed("delete", SelectedCategory))
+      {
+        string message = model.DeleteCategory(SelectedCategory);
+        messageService.ShowMessage(message);
+
+        view.CloseCategoryPopup();
+      }
+    }
+    #endregion
 
     protected bool HasUserConfirmed<T>(string option, T type, string? additionalMessage = null)
     {
