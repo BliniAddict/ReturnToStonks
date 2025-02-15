@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace ReturnToStonks
@@ -45,7 +38,11 @@ namespace ReturnToStonks
     protected Category? _selectedCategory;
     public Category? SelectedCategory
     {
-      get => _selectedCategory;
+      get
+      {
+        CheckIfCategoryChanged();
+        return _selectedCategory;
+      }
       set
       {
         _selectedCategory = value;
@@ -53,7 +50,17 @@ namespace ReturnToStonks
 
         if (value?.Symbol == " ✚")
           InitCategoryPopup();
-        CheckIfCategoryChanged();
+      }
+    }
+
+    private bool _isDeleteCategoryButtonEnabled;
+    public bool IsDeleteCategoryButtonEnabled
+    {
+      get => _isDeleteCategoryButtonEnabled;
+      set
+      {
+        _isDeleteCategoryButtonEnabled = value;
+        OnPropertyChanged();
       }
     }
 

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ReturnToStonks"
         xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
-        mc:Ignorable="d"  Height="260" Width="500"
+        mc:Ignorable="d"  Height="260" Width="450"
         WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
   <Window.Resources>
     <local:MonetaryInputConverter x:Key="MonetaryInputConverter"/>
@@ -22,42 +22,48 @@
     <Grid.ColumnDefinitions>
       <ColumnDefinition/>
       <ColumnDefinition/>
-      <ColumnDefinition/>
     </Grid.ColumnDefinitions>
 
+    <ComboBox x:Name="Person">
 
-    <TextBox x:Name="Purpose" Text="{Binding SelectedDebt.Purpose, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
-    <TextBox x:Name="Amount" Text="{Binding SelectedDebt.Amount, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:C2}, Converter={StaticResource MonetaryInputConverter}}"
-             HorizontalContentAlignment="Right" Grid.Row="1" Grid.Column="1"/>
-    <local:ToggleSwitch IsChecked="{Binding IsOwedToMe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                        CheckedText="Owed to me" UncheckedText="I owe" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left"/>
-
-
-    <DatePicker x:Name="Due__date" SelectedDate="{Binding SelectedDebt.Date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1"/>
-    <ComboBox x:Name="Category" Grid.Row="2" VerticalContentAlignment="Bottom" ItemsSource="{Binding Categories, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-              SelectedItem="{Binding SelectedCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-      <ComboBox.ItemTemplate>
-        <DataTemplate>
-          <Grid Margin="0,0,0,3" Background="Transparent">
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="Auto"/>
-              <ColumnDefinition SharedSizeGroup="MakeTheLastElementHoverOver"/>
-            </Grid.ColumnDefinitions>
-            <emoji:TextBlock Text="{Binding Symbol}" FontSize="15" Margin="0,3,5,2"/>
-            <TextBlock Text="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
-            <Button Command="{Binding DataContext.ChangeCategoryCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}"
-              Name="ChangeCategoryButton" Content="✎" Height="25" Margin="10,0,0,0" HorizontalAlignment="Right" Grid.Column="1">
-              <Button.Visibility>
-                <MultiBinding Converter="{StaticResource ComboboxButtonVisibilityConverter}">
-                  <Binding Path="Symbol"/>
-                  <Binding Path="IsMouseOver" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
-                </MultiBinding>
-              </Button.Visibility>
-            </Button>
-          </Grid>
-        </DataTemplate>
-      </ComboBox.ItemTemplate>
     </ComboBox>
+    <TextBox x:Name="Purpose" Text="{Binding SelectedDebt.Purpose, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.ColumnSpan="2"/>
+
+    <DockPanel Grid.Row="1" Grid.ColumnSpan="2" LastChildFill="True">
+      <local:ToggleSwitch IsChecked="{Binding IsOwedToMe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                        CheckedText="Owed to me" UncheckedText="I owe" HorizontalAlignment="Left"/>
+      <TextBox x:Name="Amount" Text="{Binding SelectedDebt.Amount, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:C2}, Converter={StaticResource MonetaryInputConverter}}"
+             HorizontalContentAlignment="Right"/>
+    </DockPanel>
+
+
+    <UniformGrid Columns="2" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right">      
+      <DatePicker x:Name="Due__date" SelectedDate="{Binding SelectedDebt.Due_date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+      <ComboBox x:Name="Category" Grid.Column="1" VerticalContentAlignment="Bottom" ItemsSource="{Binding Categories, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+              SelectedItem="{Binding SelectedCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <ComboBox.ItemTemplate>
+          <DataTemplate>
+            <Grid Margin="0,0,0,3" Background="Transparent">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition SharedSizeGroup="MakeTheLastElementHoverOver"/>
+              </Grid.ColumnDefinitions>
+              <emoji:TextBlock Text="{Binding Symbol}" FontSize="15" Margin="0,3,5,2"/>
+              <TextBlock Text="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
+              <Button Command="{Binding DataContext.ChangeCategoryCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}"
+              Name="ChangeCategoryButton" Content="✎" Height="25" Margin="10,0,0,0" HorizontalAlignment="Right" Grid.Column="1">
+                <Button.Visibility>
+                  <MultiBinding Converter="{StaticResource ComboboxButtonVisibilityConverter}">
+                    <Binding Path="Symbol"/>
+                    <Binding Path="IsMouseOver" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
+                  </MultiBinding>
+                </Button.Visibility>
+              </Button>
+            </Grid>
+          </DataTemplate>
+        </ComboBox.ItemTemplate>
+      </ComboBox>
+    </UniformGrid>
     <Popup x:Name="NewCategoryPopup" Placement="Bottom" PlacementTarget="{Binding ElementName=Category}">
       <Grid Background="{StaticResource Background_Light}">
         <Grid.RowDefinitions>

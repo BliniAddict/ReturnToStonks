@@ -1,6 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using System.Collections.ObjectModel;
-using System.Windows;
 using System.Windows.Input;
 
 namespace ReturnToStonks
@@ -17,19 +15,19 @@ namespace ReturnToStonks
 
       InitTransactionWindow(transaction);
 
-      SaveTransactionCommand = new RelayCommand(SaveTransaction);
       SaveCategoryCommand = new RelayCommand(SaveCategory);
       ChangeCategoryCommand = new RelayCommand<Category>(InitCategoryPopup);
-      DeleteTransactionCommand = new RelayCommand(DeleteTransaction);
       DeleteCategoryCommand = new RelayCommand(DeleteCategory);
+
+      SaveTransactionCommand = new RelayCommand(SaveTransaction);
+      DeleteTransactionCommand = new RelayCommand(DeleteTransaction);
     }
-
-    public ICommand SaveTransactionCommand { get; }
-    public ICommand DeleteTransactionCommand { get; }
-
     public ICommand SaveCategoryCommand { get; }
     public ICommand ChangeCategoryCommand { get; }
     public ICommand DeleteCategoryCommand { get; }
+
+    public ICommand SaveTransactionCommand { get; }
+    public ICommand DeleteTransactionCommand { get; }
 
     #region Properties
     private Transaction _selectedTransaction;
@@ -76,16 +74,7 @@ namespace ReturnToStonks
       }
     }
 
-    private bool _isDeleteCategoryButtonEnabled;
-    public bool IsDeleteCategoryButtonEnabled
-    {
-      get => _isDeleteCategoryButtonEnabled;
-      set
-      {
-        _isDeleteCategoryButtonEnabled = value;
-        OnPropertyChanged();
-      }
-    }
+
     #endregion
 
     #region Methods
