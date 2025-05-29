@@ -20,7 +20,7 @@
       if (showOnMainWindow && _views.Count > 1)
         _views.Remove(_views.LastOrDefault());
 
-      _views.LastOrDefault().ShowMessage(message);
+      _views.LastOrDefault().ShowToastMessage(message);
     }
   }
 }

@@ -11,7 +11,7 @@ namespace ReturnToStonks
       if (this is Window window)
         window.Close();
     }
-    void ShowMessage(string message)
+    void ShowToastMessage(string message)
     {
       if (this is Window window && window.Content is Grid grid)
       {
