@@ -2,19 +2,63 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ReturnToStonks"
+             xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
              StartupUri="View/MainWindow.xaml">
-  <Application.Resources>
-    <ResourceDictionary>
-      <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="View/Resources/StonksAlikeStyle.xaml"/>
-      </ResourceDictionary.MergedDictionaries>
-      
-      <Style TargetType="{x:Type local:MainWindow}"
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="View/Resources/StonksAlikeStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="{x:Type local:MainWindow}"
                BasedOn="{StaticResource {x:Type Window}}"/>
-      <Style TargetType="{x:Type local:TransactionWindow}"
+            <Style TargetType="{x:Type local:TransactionWindow}"
                BasedOn="{StaticResource {x:Type Window}}"/>
-      <Style TargetType="{x:Type local:DebtWindow}"
+            <Style TargetType="{x:Type local:DebtWindow}"
                BasedOn="{StaticResource {x:Type Window}}"/>
-    </ResourceDictionary>
-  </Application.Resources>
+
+
+            <local:ComboboxButtonVisibilityConverter x:Key="ComboboxButtonVisibilityConverter"/>
+
+            <DataTemplate x:Key="CategoryComboboxTemplate">
+                <Grid Margin="0,0,0,3" Background="Transparent">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition SharedSizeGroup="MakeTheLastElementHoverOver"/>
+                    </Grid.ColumnDefinitions>
+                    <emoji:TextBlock Text="{Binding Symbol}" FontSize="15" Margin="0,3,5,2"/>
+                    <TextBlock Text="{Binding Name}" Grid.Column="1" VerticalAlignment="Center" Width="175"/>
+                    <Button Command="{Binding DataContext.ChangeCategoryCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}"
+                            Name="ChangeCategoryButton" Content="✎" Height="25" Margin="10,0,0,0" HorizontalAlignment="Right" Grid.Column="1">
+                        <Button.Visibility>
+                            <MultiBinding Converter="{StaticResource ComboboxButtonVisibilityConverter}">
+                                <Binding Path="Symbol"/>
+                                <Binding Path="IsMouseOver" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
+                            </MultiBinding>
+                        </Button.Visibility>
+                    </Button>
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="PersonComboboxTemplate">
+                <Grid Margin="0,0,0,3" Background="Transparent">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition SharedSizeGroup="MakeTheLastElementHoverOver"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{Binding Last_Name}" FontSize="15" Margin="0,3,5,2"/>
+                    <TextBlock Text="{Binding First_Name}" Grid.Column="1" VerticalAlignment="Center" Width="175"/>
+                    <Button Command="{Binding DataContext.ChangePersonCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}"
+                            Name="ChangeCategoryButton" Content="✎" Height="25" Margin="10,0,0,0" HorizontalAlignment="Right" Grid.Column="1">
+                        <Button.Visibility>
+                            <MultiBinding Converter="{StaticResource ComboboxButtonVisibilityConverter}">
+                                <Binding Path="Last_Name"/>
+                                <Binding Path="IsMouseOver" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
+                            </MultiBinding>
+                        </Button.Visibility>
+                    </Button>
+                </Grid>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>

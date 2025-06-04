@@ -4,103 +4,83 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ReturnToStonks"
-        xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
-        mc:Ignorable="d"  Height="260" Width="450"
+        xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf" 
+        mc:Ignorable="d" Height="260" Width="450"
+        d:DataContext="{d:DesignInstance Type=local:DebtViewModel}"
         WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-  <Window.Resources>
-    <local:MonetaryInputConverter x:Key="MonetaryInputConverter"/>
-    <local:ComboboxButtonVisibilityConverter x:Key="ComboboxButtonVisibilityConverter"/>
-    <local:IsTrueVisibilityConverter x:Key="IsTrueVisibilityConverter"/>
-  </Window.Resources>
-  <Grid>
-    <Grid.RowDefinitions>
-      <RowDefinition/>
-      <RowDefinition/>
-      <RowDefinition/>
-      <RowDefinition Height="60"/>
-    </Grid.RowDefinitions>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition/>
-      <ColumnDefinition/>
-    </Grid.ColumnDefinitions>
-
-    <ComboBox x:Name="Person">
-
-    </ComboBox>
-    <TextBox x:Name="Purpose" Text="{Binding SelectedDebt.Purpose, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.ColumnSpan="2"/>
-
-    <DockPanel Grid.Row="1" Grid.ColumnSpan="2" LastChildFill="True">
-      <local:ToggleSwitch IsChecked="{Binding IsOwedToMe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                        CheckedText="Owed to me" UncheckedText="I owe" HorizontalAlignment="Left"/>
-      <TextBox x:Name="Amount" Text="{Binding SelectedDebt.Amount, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:C2}, Converter={StaticResource MonetaryInputConverter}}"
-             HorizontalContentAlignment="Right"/>
-    </DockPanel>
-
-
-    <UniformGrid Columns="2" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right">      
-      <DatePicker x:Name="Due__date" SelectedDate="{Binding SelectedDebt.Due_date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-      <ComboBox x:Name="Category" Grid.Column="1" VerticalContentAlignment="Bottom" ItemsSource="{Binding Categories, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-              SelectedItem="{Binding SelectedCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-        <ComboBox.ItemTemplate>
-          <DataTemplate>
-            <Grid Margin="0,0,0,3" Background="Transparent">
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition SharedSizeGroup="MakeTheLastElementHoverOver"/>
-              </Grid.ColumnDefinitions>
-              <emoji:TextBlock Text="{Binding Symbol}" FontSize="15" Margin="0,3,5,2"/>
-              <TextBlock Text="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
-              <Button Command="{Binding DataContext.ChangeCategoryCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}"
-              Name="ChangeCategoryButton" Content="✎" Height="25" Margin="10,0,0,0" HorizontalAlignment="Right" Grid.Column="1">
-                <Button.Visibility>
-                  <MultiBinding Converter="{StaticResource ComboboxButtonVisibilityConverter}">
-                    <Binding Path="Symbol"/>
-                    <Binding Path="IsMouseOver" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
-                  </MultiBinding>
-                </Button.Visibility>
-              </Button>
-            </Grid>
-          </DataTemplate>
-        </ComboBox.ItemTemplate>
-      </ComboBox>
-    </UniformGrid>
-    <Popup x:Name="NewCategoryPopup" Placement="Bottom" PlacementTarget="{Binding ElementName=Category}">
-      <Grid Background="{StaticResource Background_Light}">
+    <Window.Resources>
+        <local:MonetaryInputConverter x:Key="MonetaryInputConverter"/>
+        <local:ComboboxButtonVisibilityConverter x:Key="ComboboxButtonVisibilityConverter"/>
+        <local:IsTrueVisibilityConverter x:Key="IsTrueVisibilityConverter"/>
+    </Window.Resources>
+    <Grid Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
-          <RowDefinition Height="45"/>
-          <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="Auto"/>
-          <ColumnDefinition Width="200"/>
-        </Grid.ColumnDefinitions>
-        <emoji:Picker Selection="{Binding SelectedCategory.Symbol, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="30" Margin="10,8,0,0"/>
-        <TextBox Text="{Binding SelectedCategory.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="Name" Margin="10,0,10,0" Grid.Column="1"/>
-
-        <Grid Height="45" Grid.Row="1" Grid.ColumnSpan="2">
-          <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-          </Grid.ColumnDefinitions>
-          <Grid.Resources>
-            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonStyle}">
-              <Setter Property="FontSize" Value="17"/>
-              <Setter Property="Margin" Value="9"/>
-            </Style>
-          </Grid.Resources>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
 
-          <Button Content="&#x1F5D1;" Command="{Binding DeleteCategoryCommand}" IsEnabled="{Binding IsDeleteCategoryButtonEnabled}" Width="35" HorizontalAlignment="Left"/>
-          <Button Content="Save" Command="{Binding SaveCategoryCommand}" Grid.Column="1" Width="60"/>
-          <Button Content="Cancel" Click="CancelButton_Click" Name="CancelNewCategory" Grid.Column="2" Width="60"/>
-        </Grid>
-      </Grid>
-    </Popup>
+        <ComboBox Tag="Person" ItemsSource="{Binding Persons, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedItem="{Binding SelectedPerson, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemTemplate="{StaticResource PersonComboboxTemplate}">
 
+        </ComboBox>
+        <TextBox x:Name="Purpose" Text="{Binding SelectedDebt.Purpose, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.ColumnSpan="2"/>
 
-    <Button Command="{Binding DeleteDebtCommand}" Content="&#x1F5D1;" IsEnabled="{Binding IsDeleteDebtButtonEnabled}"
+        <DockPanel Grid.Row="1" Grid.ColumnSpan="2" LastChildFill="True">
+            <local:ToggleSwitch IsChecked="{Binding IsOwedToMe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                        CheckedText="Owed to me" UncheckedText="I owe" HorizontalAlignment="Left"/>
+            <TextBox x:Name="Amount" Text="{Binding SelectedDebt.Amount, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:C2}, Converter={StaticResource MonetaryInputConverter}}"
+             HorizontalContentAlignment="Right"/>
+        </DockPanel>
+
+        <UniformGrid Columns="2" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right">
+            <DatePicker x:Name="Due__date" SelectedDate="{Binding SelectedDebt.Due_date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <ComboBox x:Name="Category" Tag="Category" Grid.Column="1" VerticalContentAlignment="Bottom" ItemsSource="{Binding Categories, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+              SelectedItem="{Binding SelectedCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemTemplate="{StaticResource CategoryComboboxTemplate}"/>
+        </UniformGrid>
+        <Popup x:Name="NewCategoryPopup" Placement="Bottom" PlacementTarget="{Binding ElementName=Category}">
+            <Grid Background="{StaticResource Background_Light}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="45"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+                <emoji:Picker Selection="{Binding SelectedCategory.Symbol, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="30" Margin="10,8,0,0"/>
+                <TextBox Text="{Binding SelectedCategory.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="Name" Margin="10,0,10,0" Height="46" Grid.Column="1"/>
+
+                <Grid Height="45" Grid.Row="1" Grid.ColumnSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.Resources>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonStyle}">
+                            <Setter Property="FontSize" Value="17"/>
+                            <Setter Property="Margin" Value="9"/>
+                        </Style>
+                    </Grid.Resources>
+
+                    <Button Content="&#x1F5D1;" Command="{Binding DeleteCategoryCommand}" IsEnabled="{Binding IsDeleteCategoryButtonEnabled}" Width="35" HorizontalAlignment="Left"/>
+                    <Button Content="Save" Command="{Binding SaveCategoryCommand}" Grid.Column="1" Width="60"/>
+                    <Button Content="Cancel" Click="CancelButton_Click" Name="CancelNewCategory" Grid.Column="2" Width="60"/>
+                </Grid>
+            </Grid>
+        </Popup>
+
+        <Button Command="{Binding DeleteDebtCommand}" Content="&#x1F5D1;" IsEnabled="{Binding IsDeleteDebtButtonEnabled}"
             Grid.Row="3" Width="40" HorizontalAlignment="Left"/>
-    <Button Content="Save" Command="{Binding SaveDebtCommand}" Grid.Row="3" Grid.Column="1"/>
-    <Button Content="Cancel" Click="CancelButton_Click" Grid.Row="3" Grid.Column="2"/>
-  </Grid>
+        <UniformGrid Columns="2" Grid.Row="3" Grid.ColumnSpan="2" Width="300" HorizontalAlignment="Right">
+            <Button Content="Save" Command="{Binding SaveDebtCommand}" Grid.Column="0"/>
+            <Button Content="Cancel" Click="CancelButton_Click" Grid.Column="1"/>
+        </UniformGrid>
+    </Grid>
 </Window>

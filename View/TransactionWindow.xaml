@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:ReturnToStonks"
         xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
         mc:Ignorable="d" Height="260" Width="500"
+        d:DataContext="{d:DesignInstance Type=local:TransactionViewModel}"
         WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <local:MonetaryInputConverter x:Key="MonetaryInputConverter"/>
@@ -28,29 +29,7 @@
 
         <TextBox Tag="Purpose" Text="{Binding SelectedTransaction.Purpose, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2"/>
         <ComboBox Tag="Category" x:Name="Category" Grid.Column="2" VerticalContentAlignment="Bottom" ItemsSource="{Binding Categories, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-              SelectedItem="{Binding SelectedCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid Margin="0,0,0,3" Background="Transparent">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition SharedSizeGroup="MakeTheLastElementHoverOver"/>
-                        </Grid.ColumnDefinitions>
-                        <emoji:TextBlock Text="{Binding Symbol}" FontSize="15" Margin="0,3,5,2"/>
-                        <TextBlock Text="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
-                        <Button Command="{Binding DataContext.ChangeCategoryCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}"
-              Name="ChangeCategoryButton" Content="✎" Height="25" Margin="10,0,0,0" HorizontalAlignment="Right" Grid.Column="1">
-                            <Button.Visibility>
-                                <MultiBinding Converter="{StaticResource ComboboxButtonVisibilityConverter}">
-                                    <Binding Path="Symbol"/>
-                                    <Binding Path="IsMouseOver" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
-                                </MultiBinding>
-                            </Button.Visibility>
-                        </Button>
-                    </Grid>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+              SelectedItem="{Binding SelectedCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  ItemTemplate="{StaticResource CategoryComboboxTemplate}"/>
         <Popup x:Name="NewCategoryPopup" Placement="Bottom" PlacementTarget="{Binding ElementName=Category}">
             <Grid Background="{StaticResource Background_Light}">
                 <Grid.RowDefinitions>
