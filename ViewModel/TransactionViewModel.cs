@@ -132,7 +132,7 @@ namespace ReturnToStonks
       if (SelectedTransaction.Category != null)
         SelectedCategory = Categories.FirstOrDefault(name => SelectedTransaction.Category.Name == name.Name);
     }
-    public override void CheckIfCategoryChanged()
+    public override void CheckIfPropertyChanged()
     {
       Transaction? tempTransaction = _oldTransaction == null ? null : new Transaction(_oldTransaction)
       {

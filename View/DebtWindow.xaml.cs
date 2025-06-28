@@ -17,14 +17,18 @@ namespace ReturnToStonks
             _messageService.RegisterView(this);
             DataContext = _viewModel;
         }
-        public void OpenCategoryPopup()
-        {
-            NewCategoryPopup.IsOpen = true;
-        }
+        public void OpenCategoryPopup() => NewCategoryPopup.IsOpen = true;
         public void CloseCategoryPopup()
         {
             NewCategoryPopup.IsOpen = false;
             _viewModel.GetCategories();
+        }
+
+        public void OpenPersonPopup() => NewPersonPopup.IsOpen = true;
+        public void ClosePersonPopup()
+        {
+            NewPersonPopup.IsOpen = false;
+            _viewModel.GetPersons();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -33,9 +37,12 @@ namespace ReturnToStonks
             {
                 if (btn.Name == "CancelNewCategory")
                     CloseCategoryPopup();
+                else if (btn.Name == "CancelNewPerson")
+                    ClosePersonPopup();
                 else
                     ((IView)this).CloseWindow();
             }
         }
+
     }
 }

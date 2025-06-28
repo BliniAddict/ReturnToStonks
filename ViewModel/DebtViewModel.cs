@@ -11,6 +11,7 @@ namespace ReturnToStonks
 {
     class DebtViewModel : ViewModelBase
     {
+        private Person? _oldPerson;
         private Debt? _oldDebt;
 
         public DebtViewModel(IView view, IModel model, MessageService messageService, Debt? debt)
@@ -21,6 +22,10 @@ namespace ReturnToStonks
 
             InitDebtWindow();
 
+            ChangePersonCommand = new RelayCommand<Person>(InitPersonPopup);
+            SavePersonCommand = new RelayCommand(SavePerson);
+            DeletePersonCommand = new RelayCommand(DeletePerson);
+
             ChangeCategoryCommand = new RelayCommand<Category>(InitCategoryPopup);
             SaveCategoryCommand = new RelayCommand(SaveCategory);
             DeleteCategoryCommand = new RelayCommand(DeleteCategory);
@@ -29,12 +34,18 @@ namespace ReturnToStonks
             DeleteDebtCommand = new RelayCommand(DeleteDebt);
         }
 
+        #region Commands
+        public ICommand SavePersonCommand { get; }
+        public ICommand ChangePersonCommand { get; }
+        public ICommand DeletePersonCommand { get; }
+
         public ICommand SaveCategoryCommand { get; }
         public ICommand ChangeCategoryCommand { get; }
         public ICommand DeleteCategoryCommand { get; }
 
         public ICommand SaveDebtCommand { get; }
         public ICommand DeleteDebtCommand { get; }
+        #endregion
 
         #region Properties
         private Debt _selectedDebt;
@@ -47,8 +58,6 @@ namespace ReturnToStonks
                 OnPropertyChanged();
             }
         }
-
-
 
         public ObservableCollection<Person> _persons;
         public ObservableCollection<Person> Persons
@@ -64,10 +73,28 @@ namespace ReturnToStonks
         private Person _selectedPerson;
         public Person SelectedPerson
         {
-            get => _selectedPerson;
+            get
+            {
+                CheckIfPropertyChanged();
+                return _selectedPerson;
+            }
             set
             {
                 _selectedPerson = value;
+                OnPropertyChanged();
+
+                if (value?.Last_Name == " ✚")
+                    InitPersonPopup();
+            }
+        }
+
+        private bool _isDeletePersonButtonEnabled;
+        public bool IsDeletePersonButtonEnabled
+        {
+            get => _isDeletePersonButtonEnabled;
+            set
+            {
+                _isDeletePersonButtonEnabled = value;
                 OnPropertyChanged();
             }
         }
@@ -95,50 +122,84 @@ namespace ReturnToStonks
         }
         #endregion
 
-        private void InitDebtWindow(Debt? transaction = null)
+        #region Methods
+        private void InitDebtWindow(Debt? debt = null)
         {
-            if (transaction == null)
-                transaction = new Debt(null, string.Empty, null, 0.0, DateTime.Now);
+            if (debt == null)
+                debt = new Debt(null, string.Empty, null, 0.0, DateTime.Now);
             else
             {
-                _oldDebt = new Debt(transaction);
+                _oldDebt = new Debt(debt);
 
-                if (transaction.Amount < 0)
-                    transaction.Amount *= -1;
+                if (debt.Amount < 0)
+                    debt.Amount *= -1;
                 else
                     IsOwedToMe = true;
             }
 
-            SelectedDebt = transaction;
+            SelectedDebt = debt;
             GetPersons();
             GetCategories();
+        }
+        private void InitPersonPopup(Person per = null)
+        {
+            if (per != null) //change (not yet) selected person
+            {
+                _oldPerson = new Person(per);
+                SelectedPerson = per;
+            }
+            else if (SelectedPerson?.Last_Name == " ✚") //new person
+                SelectedPerson = new Person();
+
+            view.OpenPersonPopup();
         }
 
         private void SaveDebt()
         {
             throw new NotImplementedException();
         }
+        private void SavePerson()
+        {
+            string message = model.SavePerson(SelectedPerson, _oldPerson);
+            messageService.ShowMessage(message);
+
+            view.ClosePersonPopup();
+            SelectedPerson = Persons[^2];
+        }
 
         private void DeleteDebt()
         {
             throw new NotImplementedException();
         }
-
-
-        public override void CheckIfCategoryChanged()
+        private void DeletePerson()
         {
-            IsDeleteCategoryButtonEnabled = Utilities.ArePropertiesEqual(_selectedCategory, OldCategory);
+            if (HasUserConfirmed("delete", SelectedPerson))
+            {
+                string message = model.DeletePerson(SelectedPerson);
+                messageService.ShowMessage(message);
+
+                view.ClosePersonPopup();
+            }
         }
 
-        internal void GetPersons()
-        {
 
+        public void GetPersons()
+        {
             Persons = new ObservableCollection<Person>();
-            //foreach (Person person in model.GetPersons())
-            //    Persons.Add(person);
+            foreach (Person person in model.GetPersons())
+                Persons.Add(person);
 
             OldCategory = null;
             Persons.Add(new Person("Add new person", " ✚", string.Empty, string.Empty));
         }
+        public override void CheckIfPropertyChanged()
+        {
+
+
+            IsDeletePersonButtonEnabled = Utilities.ArePropertiesEqual(_selectedPerson, _oldPerson);
+            IsDeleteCategoryButtonEnabled = Utilities.ArePropertiesEqual(_selectedCategory, OldCategory);
+        }
+
+        #endregion
     }
 }

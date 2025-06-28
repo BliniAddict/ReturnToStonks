@@ -38,5 +38,8 @@ namespace ReturnToStonks
 
     virtual void CloseCategoryPopup() { }
     virtual void OpenCategoryPopup() { }
-  }
+
+        virtual void OpenPersonPopup() { }
+        virtual void ClosePersonPopup() { }
+    }
 }

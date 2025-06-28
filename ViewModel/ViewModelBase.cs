@@ -40,7 +40,7 @@ namespace ReturnToStonks
     {
       get
       {
-        CheckIfCategoryChanged();
+        CheckIfPropertyChanged();
         return _selectedCategory;
       }
       set
@@ -64,7 +64,7 @@ namespace ReturnToStonks
       }
     }
 
-    public virtual void CheckIfCategoryChanged() { }
+    public virtual void CheckIfPropertyChanged() { }
     public virtual void GetCategories()
     {
       Categories = new ObservableCollection<Category>();
@@ -79,7 +79,7 @@ namespace ReturnToStonks
     {
       if (cat != null) //change (not yet) selected category
       {
-        OldCategory = new Category(cat.Name, cat.Symbol);
+        OldCategory = new Category(cat);
         SelectedCategory = cat;
       }
       else if (SelectedCategory?.Symbol == " ✚") //new category
