@@ -46,7 +46,7 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition SharedSizeGroup="MakeTheLastElementHoverOver"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="{Binding Last_Name}" FontSize="15" Margin="0,3,5,2"/>
+                    <TextBlock Text="{Binding Last_Name}" Margin="0,3,5,2"/>
                     <TextBlock Text="{Binding First_Name}" Grid.Column="1" VerticalAlignment="Center" Width="175"/>
                     <Button Command="{Binding DataContext.ChangePersonCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}"
                             Name="ChangeCategoryButton" Content="✎" Height="25" Margin="10,0,0,0" HorizontalAlignment="Right" Grid.Column="1">
