@@ -78,7 +78,7 @@ namespace ReturnToStonks
     {
       if (values.Length == 2 && values[0] is string symbol && values[1] is bool isMouseOver)
       {
-        if (symbol != " ✚" && isMouseOver)
+        if (!symbol.Contains("✚") && isMouseOver)
           return Visibility.Visible;
       }
       return Visibility.Collapsed;

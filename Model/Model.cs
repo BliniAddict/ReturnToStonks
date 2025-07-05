@@ -211,6 +211,56 @@ namespace ReturnToStonks
         }
         #endregion
 
+        #region Debts
+
+        public string SaveDebt(Debt selectedDebt, Debt? oldDebt)
+        {
+            int rowsAffected = 0;
+
+            using (var command = _connection.CreateCommand())
+            {
+                if (oldDebt != null)
+                {
+                    List<string> setConditions = BuildDebtEqualsConditions(selectedDebt);
+                    List<string> whereConditions = BuildDebtEqualsConditions(oldDebt);
+
+                    command.CommandText = $"UPDATE Transactions " +
+                      $"SET {string.Join(", ", setConditions)} ".Replace(" IS ", "=") +
+                      $"WHERE {string.Join(" AND ", whereConditions)}";
+
+                    rowsAffected = command.ExecuteNonQuery();
+                }
+                else
+                {
+                    command.CommandText = "INSERT INTO Debts (purpose, first_name, last_name, category, amount, due_date) " +
+                    "VALUES (@newPurpose, @newFirst_name, @newLast_name, @newCategory, @newAmount, @newDue_date)";
+
+                    command.Parameters.Add(CreateParameter("@newPurpose", selectedDebt.Purpose));
+                    command.Parameters.Add(CreateParameter("@newFirst_name", selectedDebt.Person?.Name));
+                    command.Parameters.Add(CreateParameter("@newCategory", selectedDebt.Category?.Name));
+                    command.Parameters.Add(CreateParameter("@newAmount", selectedDebt.Amount));
+                    command.Parameters.Add(CreateParameter("@newDue_date", selectedDebt.Due_date.ToString("yyyy-MM-dd")));
+
+                    rowsAffected = command.ExecuteNonQuery();
+                }
+            }
+            return rowsAffected > 0 ? "Debt saved successfully" : "No rows affected. Save failed.";
+        }
+
+        private static List<string> BuildDebtEqualsConditions(Debt debt)
+        {
+            List<string> conditions = BuildEqualsConditions(debt);
+            //conditions.RemoveAll(c => c.Contains("isrecurring") | c.Contains("ispayed") | c.Contains("date"));
+
+            //add conditions associated with class properties
+            conditions.Add(debt.Category == null
+                ? "category IS NULL"
+                : $"category='{debt.Category.Name}'");
+
+            return conditions;
+        }
+        #endregion
+
         #region Categories
         public string SaveCategory(Category selectedCategory, Category? oldCategory = null)
         {
@@ -295,10 +345,9 @@ namespace ReturnToStonks
             {
                 if (oldPerson == null) //INSERT
                 {
-                    command.CommandText = "INSERT INTO Persons (first_name, last_name, contact_method, contact_id) " +
-                                          "VALUES (@newFirst_name, @newLast_name, @newContact_method, @newContact_id)";
-                    command.Parameters.Add(CreateParameter("@newFirst_name", selectedPerson.First_Name));
-                    command.Parameters.Add(CreateParameter("@newLast_name", selectedPerson.Last_Name));
+                    command.CommandText = "INSERT INTO Persons (name, contact_method, contact_id) " +
+                                          "VALUES (@newName, @newContact_method, @newContact_id)";
+                    command.Parameters.Add(CreateParameter("@newName", selectedPerson.Name));
                     command.Parameters.Add(CreateParameter("@newContact_method", selectedPerson.Contact_Method));
                     command.Parameters.Add(CreateParameter("@newContact_id", selectedPerson.Contact_ID));
                 }
@@ -321,7 +370,7 @@ namespace ReturnToStonks
             List<Person> res = new();
 
             using var command = _connection.CreateCommand();
-            command.CommandText = "SELECT first_name, last_name, contact_method, contact_id FROM Persons";
+            command.CommandText = "SELECT name, contact_method, contact_id FROM Persons";
 
             using (var reader = command.ExecuteReader())
             {
@@ -329,8 +378,7 @@ namespace ReturnToStonks
                     res.Add(new Person(
                         reader.IsDBNull(0) ? null : reader.GetString(0),
                         reader.IsDBNull(1) ? null : reader.GetString(1),
-                        reader.IsDBNull(2) ? null : reader.GetString(2),
-                        reader.IsDBNull(3) ? null : reader.GetString(3)
+                        reader.IsDBNull(2) ? null : reader.GetString(2)
                         ));
             }
 

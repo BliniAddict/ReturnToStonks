@@ -12,7 +12,7 @@
     }
     public Debt(Debt debt)
     {
-      Person = debt.Person == null ? null : new(debt.Person.First_Name, debt.Person.Last_Name, debt.Person.Contact_Method, debt.Person.Contact_ID);
+      Person = debt.Person == null ? null : new(debt.Person.Name, debt.Person.Contact_Method, debt.Person.Contact_ID);
       Purpose = debt.Purpose;
       Category = debt.Category == null ? null : new(debt.Category.Name, debt.Category.Symbol);
       Amount = debt.Amount;

@@ -39,8 +39,7 @@
                     <ColumnDefinition Width="150"/>
                     <ColumnDefinition Width="200"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Text="{Binding SelectedPerson.First_Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="First Name" Margin="10,0,0,0" Height="46" />
-                <TextBox Text="{Binding SelectedPerson.Last_Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Last Name" Margin="10,0,10,0" Height="46" Grid.Column="1"/>
+                <TextBox Text="{Binding SelectedPerson.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Name" Margin="10,0,0,0" Height="46" Grid.ColumnSpan="2"/>
 
                 <TextBox Text="{Binding SelectedPerson.Contact_Method, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Main Contact Method" Margin="10,0,0,0" Height="46" Grid.Row="1"/>
                 <TextBox Text="{Binding SelectedPerson.Contact_ID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="Number / ID" Margin="10,0,10,0" Height="46" Grid.Row="1" Grid.Column="1"/>

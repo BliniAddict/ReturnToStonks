@@ -83,7 +83,7 @@ namespace ReturnToStonks
                 _selectedPerson = value;
                 OnPropertyChanged();
 
-                if (value?.Last_Name == " ✚")
+                if (value?.Name == "✚ Add new person")
                     InitPersonPopup();
             }
         }
@@ -148,7 +148,7 @@ namespace ReturnToStonks
                 _oldPerson = new Person(per);
                 SelectedPerson = per;
             }
-            else if (SelectedPerson?.Last_Name == " ✚") //new person
+            else if (SelectedPerson?.Name == "✚ Add new person") //new person
                 SelectedPerson = new Person();
 
             view.OpenPersonPopup();
@@ -156,7 +156,14 @@ namespace ReturnToStonks
 
         private void SaveDebt()
         {
-            throw new NotImplementedException();
+            SelectedDebt.Category = SelectedCategory;
+
+            if (!IsOwedToMe)
+                SelectedDebt.Amount *= -1;
+
+            string message = model.SaveDebt(SelectedDebt, _oldDebt);
+            messageService.ShowMessage(message, true);
+            view.CloseWindow();
         }
         private void SavePerson()
         {
@@ -190,7 +197,7 @@ namespace ReturnToStonks
                 Persons.Add(person);
 
             OldCategory = null;
-            Persons.Add(new Person("Add new person", " ✚", string.Empty, string.Empty));
+            Persons.Add(new Person("✚ Add new person", string.Empty, string.Empty));
         }
         public override void CheckIfPropertyChanged()
         {

@@ -6,6 +6,8 @@
         string SaveTransaction(Transaction selectedTransaction, Transaction? oldTransaction = null);
         string DeleteTransaction(Transaction selectedTransaction);
 
+        string SaveDebt(Debt selectedDebt, Debt? oldDebt);
+
         List<Category> GetCategories();
         Category GetCategory(string name);
         string SaveCategory(Category selectedCategory, Category? oldCategory = null);
