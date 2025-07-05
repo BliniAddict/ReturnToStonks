@@ -19,6 +19,7 @@ namespace ReturnToStonks
             _connection.Open();
         }
 
+        #region HelperMethods
         private static SqliteParameter CreateParameter(string name, object? value)
         {
             return new SqliteParameter(name, value ?? DBNull.Value);
@@ -47,25 +48,37 @@ namespace ReturnToStonks
             }
             return conditions;
         }
-        private static string BuildFutureDateEqualsConditions(Transaction transaction)
+
+        private static string BuildFutureDateEqualsConditions<T>(T classType)
         {
             List<string> dateConditions = new();
 
-            if (transaction.Recurrence != null)
+            //get date-relevant Properties
+            Type type = classType.GetType();
+            PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            var recurrenceProperty = properties.FirstOrDefault(name => name.Name == "Recurrence");
+            Recurrence? recurrence = (Recurrence?)recurrenceProperty?.GetValue(classType);
+
+            var dateProperty = properties.FirstOrDefault(name => name.Name == "Date");
+            DateTime? date = (DateTime?)dateProperty?.GetValue(classType);
+
+            if (recurrence != null && date != null)
             {
-                DateTime nextDate = Utilities.CalculateNextDueDate(transaction.Date, transaction.Recurrence);
-                while (nextDate <= DateTime.Today)
+                DateTime nextDate = Utilities.CalculateNextDueDate((DateTime)date, recurrence);
+                while (nextDate <= Utilities.In2Months)
                 {
                     dateConditions.Add($"date='{nextDate:yyyy-MM-dd}'");
-                    nextDate = Utilities.CalculateNextDueDate(nextDate, transaction.Recurrence);
+                    nextDate = Utilities.CalculateNextDueDate(nextDate, recurrence);
                 }
             }
+
             if (dateConditions.Count > 0)
                 return " OR " + string.Join(" OR ", dateConditions);
             else
                 return string.Empty;
         }
-        //TODO: make method usable for all db-classes
+        #endregion
 
         #region Transactions
         public string SaveTransaction(Transaction selectedTransaction, Transaction? oldTransaction = null)
@@ -171,7 +184,7 @@ namespace ReturnToStonks
         private int ChangeRecurringTransactions(Transaction transaction, Transaction oldTransaction)
         {
             int rowsAffected = 0;
-            List<string> propsToIgnore = new() { nameof(transaction.Date) };
+            List<string> propsToIgnore = new() { nameof(transaction.Date), nameof(transaction.IsPayed) };
 
             List<Transaction> affectedRows = GetTransactions().Where(a =>
                   a.Date != oldTransaction.Date &&
@@ -224,7 +237,7 @@ namespace ReturnToStonks
                     List<string> setConditions = BuildDebtEqualsConditions(selectedDebt);
                     List<string> whereConditions = BuildDebtEqualsConditions(oldDebt);
 
-                    command.CommandText = $"UPDATE Transactions " +
+                    command.CommandText = $"UPDATE Debts " +
                       $"SET {string.Join(", ", setConditions)} ".Replace(" IS ", "=") +
                       $"WHERE {string.Join(" AND ", whereConditions)}";
 
@@ -232,11 +245,11 @@ namespace ReturnToStonks
                 }
                 else
                 {
-                    command.CommandText = "INSERT INTO Debts (purpose, first_name, last_name, category, amount, due_date) " +
-                    "VALUES (@newPurpose, @newFirst_name, @newLast_name, @newCategory, @newAmount, @newDue_date)";
+                    command.CommandText = "INSERT INTO Debts (purpose, name, category, amount, due_date) " +
+                    "VALUES (@newPurpose, @newName, @newCategory, @newAmount, @newDue_date)";
 
                     command.Parameters.Add(CreateParameter("@newPurpose", selectedDebt.Purpose));
-                    command.Parameters.Add(CreateParameter("@newFirst_name", selectedDebt.Person?.Name));
+                    command.Parameters.Add(CreateParameter("@newName", selectedDebt.Person?.Name));
                     command.Parameters.Add(CreateParameter("@newCategory", selectedDebt.Category?.Name));
                     command.Parameters.Add(CreateParameter("@newAmount", selectedDebt.Amount));
                     command.Parameters.Add(CreateParameter("@newDue_date", selectedDebt.Due_date.ToString("yyyy-MM-dd")));
@@ -250,7 +263,6 @@ namespace ReturnToStonks
         private static List<string> BuildDebtEqualsConditions(Debt debt)
         {
             List<string> conditions = BuildEqualsConditions(debt);
-            //conditions.RemoveAll(c => c.Contains("isrecurring") | c.Contains("ispayed") | c.Contains("date"));
 
             //add conditions associated with class properties
             conditions.Add(debt.Category == null
@@ -384,7 +396,6 @@ namespace ReturnToStonks
 
             return res;
         }
-
 
         public string DeletePerson(Person selectedPerson)
         {

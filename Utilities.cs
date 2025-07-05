@@ -6,6 +6,7 @@ namespace ReturnToStonks
   public class Utilities
   {
     public static DateTime ThisMonth = new(DateTime.Now.Year, DateTime.Now.Month, 1);
+    public static DateTime In2Months = new DateTime(DateTime.Now.Year, DateTime.Now.Month + 2, 1);
     public static bool ArePropertiesEqual<T>(T obj1, T obj2, List<string> ignoredProperties = null)
     {
       if (obj1 == null ^ obj2 == null)

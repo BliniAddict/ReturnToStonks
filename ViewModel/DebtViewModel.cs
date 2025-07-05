@@ -156,6 +156,7 @@ namespace ReturnToStonks
 
         private void SaveDebt()
         {
+            SelectedDebt.Person = SelectedPerson;
             SelectedDebt.Category = SelectedCategory;
 
             if (!IsOwedToMe)
