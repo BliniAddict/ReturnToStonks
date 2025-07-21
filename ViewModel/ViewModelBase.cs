@@ -98,7 +98,7 @@ namespace ReturnToStonks
     }
     protected void DeleteCategory()
     {
-      if (HasUserConfirmed("delete", SelectedCategory))
+      if (messageService.HasUserConfirmed("delete", SelectedCategory))
       {
         string message = model.DeleteCategory(SelectedCategory);
         messageService.ShowMessage(message);
@@ -107,18 +107,5 @@ namespace ReturnToStonks
       }
     }
     #endregion
-
-    protected bool HasUserConfirmed<T>(string option, T type, string? additionalMessage = null)
-    {
-      string caption = "Warning";
-      MessageBoxButton button = MessageBoxButton.YesNo;
-      MessageBoxImage icon = MessageBoxImage.Warning;
-      string messageBoxText = $"Are you sure you want to {option} this {type.GetType().Name}?";
-      if (!string.IsNullOrWhiteSpace(additionalMessage))
-        messageBoxText += "\n" + additionalMessage;
-
-      string res = MessageBox.Show(messageBoxText, caption, button, icon).ToString();
-      return res.ToLower() == "yes";
-    }
   }
 }

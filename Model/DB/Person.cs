@@ -2,7 +2,7 @@
 {
     public class Person
     {
-        public Person(string? name, string? contact_Method, string? contact_ID)
+        public Person(string name, string? contact_Method, string? contact_ID)
         {
             Name = name;
             Contact_Method = contact_Method;
@@ -18,9 +18,10 @@
 
         public Person()
         {
+            Name = string.Empty;
         }
 
-        public string? Name { get; set; }
+        public string Name { get; set; }
         public string? Contact_Method { get; set; }
         public string? Contact_ID { get; set; }
     }

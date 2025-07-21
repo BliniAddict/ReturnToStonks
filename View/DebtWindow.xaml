@@ -73,9 +73,9 @@
         </DockPanel>
 
         <UniformGrid Columns="2" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right">
-            <DatePicker Tag="Due-date" SelectedDate="{Binding SelectedDebt.Due_date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <DatePicker Tag="Due-date" SelectedDate="{Binding SelectedDebt.Due_date, Mode=TwoWay, TargetNullValue='', UpdateSourceTrigger=PropertyChanged}" IsTodayHighlighted="True"/>
             <ComboBox x:Name="Category" Tag="Category" Grid.Column="1" VerticalContentAlignment="Bottom" ItemsSource="{Binding Categories, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-              SelectedItem="{Binding SelectedCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemTemplate="{StaticResource CategoryComboboxTemplate}"/>
+              SelectedItem="{Binding SelectedCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemTemplate="{StaticResource CategoryComboboxTemplate}" Width="175"/>
         </UniformGrid>
         <Popup x:Name="NewCategoryPopup" Placement="Bottom" PlacementTarget="{Binding ElementName=Category}">
             <Grid Background="{StaticResource Background_Light}">

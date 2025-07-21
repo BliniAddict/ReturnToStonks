@@ -25,6 +25,7 @@ namespace ReturnToStonks
             _model = model;
             _messageService = messageService;
 
+            GetDebts();
             GetTransactions();
 
             AddTransactionCommand = new RelayCommand<Transaction?>(OpenTransactionWindow);
@@ -35,6 +36,7 @@ namespace ReturnToStonks
         public ICommand AddDebtCommand { get; }
 
         #region Properties
+        #region Transactions
         private ObservableCollection<Transaction> _incomes { get; set; } = new ObservableCollection<Transaction>();
         public ObservableCollection<Transaction> Incomes
         {
@@ -109,6 +111,41 @@ namespace ReturnToStonks
         }
         #endregion
 
+        #region Debts
+        private ObservableCollection<Person> _people { get; set; } = new ObservableCollection<Person>();
+        public ObservableCollection<Person> People
+        {
+            get => _people;
+            set
+            {
+                _people = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ObservableCollection<Debt> _debtPendingToOthers { get; set; } = new ObservableCollection<Debt>();
+        public ObservableCollection<Debt> DebtPendingToOthers
+        {
+            get => _debtPendingToOthers;
+            set
+            {
+                _debtPendingToOthers = value;
+                OnPropertyChanged();
+            }
+        }
+        private ObservableCollection<Debt> _debtPendingToMe { get; set; } = new ObservableCollection<Debt>();
+        public ObservableCollection<Debt> DebtPendingToMe
+        {
+            get => _debtPendingToMe;
+            set
+            {
+                _debtPendingToMe = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+        #endregion
+
         #region Methods
         public void OpenTransactionWindow(Transaction? transaction = null)
         {
@@ -121,6 +158,8 @@ namespace ReturnToStonks
         {
             DebtWindow newDebt = new(_model, _messageService, debt);
             newDebt.ShowDialog();
+
+            GetDebts();
         }
 
         private void GetTransactions()
@@ -137,8 +176,8 @@ namespace ReturnToStonks
                 else
                     Expenses.Add(transaction);
             }
-            IncomesSum = Incomes.Sum(amount => amount.Amount);
-            ExpensesSum = Expenses.Sum(amount => amount.Amount);
+            IncomesSum = Incomes.Where(paid => paid.Date <= DateTime.Today).Sum(amount => amount.Amount);
+            ExpensesSum = Expenses.Where(paid => paid.Date <= DateTime.Today).Sum(amount => amount.Amount);
         }
         private List<Transaction> SetFutureTransactions(List<Transaction> transactions)
         {
@@ -167,6 +206,25 @@ namespace ReturnToStonks
                 }
             }
             return new List<Transaction>(newTransactions.OrderBy(a => a.Amount).OrderBy(d => d.Date));
+        }
+
+        private void GetDebts()
+        {
+            DebtPendingToOthers.Clear();
+            DebtPendingToMe.Clear();
+            People.Clear();
+
+            List<Debt> debts = _model.GetDebts().ToList();
+
+            foreach (Debt debt in debts)
+            {
+                if (debt.Amount < 0)
+                    DebtPendingToOthers.Add(debt);
+                else
+                    DebtPendingToMe.Add(debt);
+            }
+            foreach (Person person in _model.GetPersons())
+                People.Add(person);
         }
         #endregion
     }

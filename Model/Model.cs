@@ -22,6 +22,13 @@ namespace ReturnToStonks
         #region HelperMethods
         private static SqliteParameter CreateParameter(string name, object? value)
         {
+            if (value is DateTime? || value is DateTime)
+            {
+                DateTime? date = (DateTime?)value;
+                if (date.HasValue)
+                    return new SqliteParameter(name, date.Value.ToString("yyyy-MM-dd"));
+            }
+
             return new SqliteParameter(name, value ?? DBNull.Value);
         }
 
@@ -104,7 +111,7 @@ namespace ReturnToStonks
                     command.Parameters.Add(CreateParameter("@newPurpose", selectedTransaction.Purpose));
                     command.Parameters.Add(CreateParameter("@newCategory", selectedTransaction.Category?.Name));
                     command.Parameters.Add(CreateParameter("@newAmount", selectedTransaction.Amount));
-                    command.Parameters.Add(CreateParameter("@newDate", selectedTransaction.Date.ToString("yyyy-MM-dd")));
+                    command.Parameters.Add(CreateParameter("@newDate", selectedTransaction.Date));
                     command.Parameters.Add(CreateParameter("@newRecurrence_Span", selectedTransaction.Recurrence?.Span ?? 0));
                     command.Parameters.Add(CreateParameter("@newRecurrence_Unit", selectedTransaction.Recurrence?.Unit));
 
@@ -225,7 +232,6 @@ namespace ReturnToStonks
         #endregion
 
         #region Debts
-
         public string SaveDebt(Debt selectedDebt, Debt? oldDebt)
         {
             int rowsAffected = 0;
@@ -252,12 +258,59 @@ namespace ReturnToStonks
                     command.Parameters.Add(CreateParameter("@newName", selectedDebt.Person?.Name));
                     command.Parameters.Add(CreateParameter("@newCategory", selectedDebt.Category?.Name));
                     command.Parameters.Add(CreateParameter("@newAmount", selectedDebt.Amount));
-                    command.Parameters.Add(CreateParameter("@newDue_date", selectedDebt.Due_date.ToString("yyyy-MM-dd")));
+                    command.Parameters.Add(CreateParameter("@newDue_date", selectedDebt.Due_date));
 
                     rowsAffected = command.ExecuteNonQuery();
                 }
             }
             return rowsAffected > 0 ? "Debt saved successfully" : "No rows affected. Save failed.";
+        }
+        public List<Debt> GetDebts()
+        {
+            List<Debt> res = new();
+            List<Debt> addedLater = new();
+
+            using var command = _connection.CreateCommand();
+            command.CommandText = $"SELECT purpose, name, category, amount, due_date FROM Debts ORDER BY due_date";
+
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Debt de = new(
+                      reader.GetString(0),
+                      reader.IsDBNull(1) ? null : GetPerson(reader.GetString(1)),
+                      reader.IsDBNull(2) ? null : GetCategory(reader.GetString(2)),
+                      reader.GetDouble(3),
+                      reader.IsDBNull(4) ? null : DateTime.ParseExact(reader.GetString(4), "yyyy-MM-dd", CultureInfo.InvariantCulture));
+
+                    if (de.Due_date != null)
+                        res.Add(de);
+                    else
+                        addedLater.Add(de);
+                }
+            }
+
+            res.AddRange(addedLater);
+
+            return res;
+        }
+        public string DeleteDebt(Debt selectedDebt)
+        {
+            int rowsAffected = 0;
+
+            List<string> conditions = BuildDebtEqualsConditions(selectedDebt);
+            using (var command = _connection.CreateCommand())
+            {
+                command.CommandText = "DELETE FROM Debts WHERE " + string.Join(" AND ", conditions);
+                rowsAffected += command.ExecuteNonQuery();
+            }
+
+
+            if (rowsAffected == 1)
+                return "Debt deleted successfully.";
+            else
+                return "No rows affected. Delete failed.";
         }
 
         private static List<string> BuildDebtEqualsConditions(Debt debt)
@@ -315,7 +368,7 @@ namespace ReturnToStonks
 
             return res;
         }
-        public Category GetCategory(string name)
+        private Category GetCategory(string name)
         {
             using var command = _connection.CreateCommand();
             command.CommandText = "SELECT name, symbol FROM Categories WHERE name = @name";
@@ -377,6 +430,24 @@ namespace ReturnToStonks
             return result;
         }
 
+        private Person GetPerson(string name)
+        {
+            using var command = _connection.CreateCommand();
+            command.CommandText = "SELECT name, contact_method, contact_id FROM Persons WHERE name = @name";
+
+            command.Parameters.Add(CreateParameter("@name", name));
+
+            using var reader = command.ExecuteReader();
+
+            if (reader.Read())
+                return new Person(
+                        reader.IsDBNull(0) ? null : reader.GetString(0),
+                        reader.IsDBNull(1) ? null : reader.GetString(1),
+                        reader.IsDBNull(2) ? null : reader.GetString(2)
+                        );
+
+            return null;
+        }
         public List<Person> GetPersons()
         {
             List<Person> res = new();

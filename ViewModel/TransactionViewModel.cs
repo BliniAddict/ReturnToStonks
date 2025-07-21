@@ -111,7 +111,7 @@ namespace ReturnToStonks
     private void DeleteTransaction()
     {
       string? additionaMessage = SelectedTransaction.IsRecurring ? "Recurring Transactions will also be affected." : null;
-      if (HasUserConfirmed("delete", SelectedTransaction, additionaMessage))
+      if (messageService.HasUserConfirmed("delete", SelectedTransaction, additionaMessage))
       {
         if (!IsIncome)
           SelectedTransaction.Amount = SelectedTransaction.Amount * -1;

@@ -1,10 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace ReturnToStonks
@@ -20,7 +15,7 @@ namespace ReturnToStonks
             base.view = view;
             base.model = model;
 
-            InitDebtWindow();
+            InitDebtWindow(debt);
 
             ChangePersonCommand = new RelayCommand<Person>(InitPersonPopup);
             SavePersonCommand = new RelayCommand(SavePerson);
@@ -51,7 +46,14 @@ namespace ReturnToStonks
         private Debt _selectedDebt;
         public Debt SelectedDebt
         {
-            get => _selectedDebt;
+            get
+            {
+                Debt? tempTransaction = _oldDebt == null ? null : new Debt(_oldDebt)
+                { Amount = Math.Abs(_oldDebt.Amount) };
+                IsDeleteDebtButtonEnabled = Utilities.ArePropertiesEqual(_selectedDebt, tempTransaction);
+
+                return _selectedDebt;
+            }
             set
             {
                 _selectedDebt = value;
@@ -126,7 +128,7 @@ namespace ReturnToStonks
         private void InitDebtWindow(Debt? debt = null)
         {
             if (debt == null)
-                debt = new Debt(null, string.Empty, null, 0.0, DateTime.Now);
+                debt = new Debt(string.Empty, null, null, 0.0);
             else
             {
                 _oldDebt = new Debt(debt);
@@ -138,6 +140,7 @@ namespace ReturnToStonks
             }
 
             SelectedDebt = debt;
+
             GetPersons();
             GetCategories();
         }
@@ -177,11 +180,20 @@ namespace ReturnToStonks
 
         private void DeleteDebt()
         {
-            throw new NotImplementedException();
+            if (messageService.HasUserConfirmed("delete", SelectedDebt))
+            {
+                if (!IsOwedToMe)
+                    SelectedDebt.Amount = SelectedDebt.Amount * -1;
+
+                string message = model.DeleteDebt(SelectedDebt);
+                messageService.ShowMessage(message, true);
+
+                view.CloseWindow();
+            }
         }
         private void DeletePerson()
         {
-            if (HasUserConfirmed("delete", SelectedPerson))
+            if (messageService.HasUserConfirmed("delete", SelectedPerson))
             {
                 string message = model.DeletePerson(SelectedPerson);
                 messageService.ShowMessage(message);
@@ -199,15 +211,31 @@ namespace ReturnToStonks
 
             OldCategory = null;
             Persons.Add(new Person("✚ Add new person", string.Empty, string.Empty));
+
+            if (SelectedDebt.Person != null)
+                SelectedPerson = Persons.FirstOrDefault(name => SelectedDebt.Person.Name == name.Name);
         }
+
+        public override void GetCategories()
+        {
+            base.GetCategories();
+            if (SelectedDebt.Category != null)
+                SelectedCategory = Categories.FirstOrDefault(name => SelectedDebt.Category.Name == name.Name);
+        }
+
         public override void CheckIfPropertyChanged()
         {
+            Debt? tempDebt = _oldDebt == null ? null : new Debt(_oldDebt)
+            {
+                Amount = Math.Abs(_oldDebt.Amount),
+                Person = _selectedPerson,
+                Category = _selectedCategory
+            };
 
-
+            IsDeleteDebtButtonEnabled = Utilities.ArePropertiesEqual(_selectedDebt, tempDebt);
             IsDeletePersonButtonEnabled = Utilities.ArePropertiesEqual(_selectedPerson, _oldPerson);
             IsDeleteCategoryButtonEnabled = Utilities.ArePropertiesEqual(_selectedCategory, OldCategory);
         }
-
         #endregion
     }
 }
